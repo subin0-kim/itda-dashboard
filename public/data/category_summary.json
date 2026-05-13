@@ -3,151 +3,151 @@
     {
       "district_code": "11150",
       "district_name": "양천구",
-      "score": 61.341,
+      "score": 60.785,
       "rank": 1
     },
     {
       "district_code": "11110",
       "district_name": "노원구",
-      "score": 54.614,
+      "score": 53.63,
       "rank": 2
     },
     {
-      "district_code": "11140",
-      "district_name": "마포구",
-      "score": 54.201,
+      "district_code": "11190",
+      "district_name": "영등포구",
+      "score": 53.583,
       "rank": 3
     },
     {
       "district_code": "11160",
       "district_name": "강서구",
-      "score": 53.966,
+      "score": 53.199,
       "rank": 4
-    },
-    {
-      "district_code": "11190",
-      "district_name": "영등포구",
-      "score": 53.917,
-      "rank": 5
     },
     {
       "district_code": "11070",
       "district_name": "중랑구",
-      "score": 53.899,
+      "score": 52.631,
+      "rank": 5
+    },
+    {
+      "district_code": "11240",
+      "district_name": "송파구",
+      "score": 52.172,
       "rank": 6
     },
     {
       "district_code": "11250",
       "district_name": "강동구",
-      "score": 53.807,
+      "score": 52.12,
       "rank": 7
-    },
-    {
-      "district_code": "11240",
-      "district_name": "송파구",
-      "score": 53.627,
-      "rank": 8
-    },
-    {
-      "district_code": "11120",
-      "district_name": "은평구",
-      "score": 52.347,
-      "rank": 9
     },
     {
       "district_code": "11060",
       "district_name": "동대문구",
-      "score": 51.853,
-      "rank": 10
+      "score": 50.001,
+      "rank": 8
     },
     {
       "district_code": "11050",
       "district_name": "광진구",
-      "score": 50.462,
-      "rank": 11
+      "score": 49.626,
+      "rank": 9
     },
     {
       "district_code": "11200",
       "district_name": "동작구",
-      "score": 50.262,
+      "score": 48.719,
+      "rank": 10
+    },
+    {
+      "district_code": "11100",
+      "district_name": "도봉구",
+      "score": 48.391,
+      "rank": 11
+    },
+    {
+      "district_code": "11120",
+      "district_name": "은평구",
+      "score": 47.732,
       "rank": 12
     },
     {
-      "district_code": "11080",
-      "district_name": "성북구",
-      "score": 49.475,
+      "district_code": "11170",
+      "district_name": "구로구",
+      "score": 46.558,
       "rank": 13
     },
     {
       "district_code": "11230",
       "district_name": "강남구",
-      "score": 49.219,
+      "score": 46.199,
       "rank": 14
     },
     {
-      "district_code": "11100",
-      "district_name": "도봉구",
-      "score": 48.641,
+      "district_code": "11140",
+      "district_name": "마포구",
+      "score": 45.995,
       "rank": 15
     },
     {
-      "district_code": "11170",
-      "district_name": "구로구",
-      "score": 48.273,
+      "district_code": "11080",
+      "district_name": "성북구",
+      "score": 45.735,
       "rank": 16
-    },
-    {
-      "district_code": "11040",
-      "district_name": "성동구",
-      "score": 45.334,
-      "rank": 17
     },
     {
       "district_code": "11220",
       "district_name": "서초구",
-      "score": 45.123,
+      "score": 44.665,
+      "rank": 17
+    },
+    {
+      "district_code": "11040",
+      "district_name": "성동구",
+      "score": 44.342,
       "rank": 18
     },
     {
       "district_code": "11210",
       "district_name": "관악구",
-      "score": 43.063,
+      "score": 40.574,
       "rank": 19
     },
     {
       "district_code": "11090",
       "district_name": "강북구",
-      "score": 42.803,
+      "score": 39.985,
       "rank": 20
     },
     {
       "district_code": "11130",
       "district_name": "서대문구",
-      "score": 40.363,
+      "score": 39.475,
       "rank": 21
-    },
-    {
-      "district_code": "11180",
-      "district_name": "금천구",
-      "score": 40.061,
-      "rank": 22
-    },
-    {
-      "district_code": "11030",
-      "district_name": "용산구",
-      "score": 36.877,
-      "rank": 23
     },
     {
       "district_code": "11020",
       "district_name": "중구",
-      "score": 36.849,
+      "score": 36.761,
+      "rank": 22
+    },
+    {
+      "district_code": "11180",
+      "district_name": "금천구",
+      "score": 36.706,
+      "rank": 23
+    },
+    {
+      "district_code": "11030",
+      "district_name": "용산구",
+      "score": 34.326,
       "rank": 24
     },
     {
       "district_code": "11010",
       "district_name": "종로구",
-      "score": 26.621,
+      "score": 26.374,
       "rank": 25
     }
   ],

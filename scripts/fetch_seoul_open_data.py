@@ -148,7 +148,7 @@ def write_hospital_outputs(rows: list[dict[str, Any]], report: list[str]) -> Non
         record = {"name": name, "longitude": lon, "latitude": lat, "source_name": "TbHospitalInfo"}
         if "소아청소년" in name or "소아과" in name:
             pediatric.append(record)
-        if "종합병원" in duty_div or "상급종합" in duty_div or "대학병원" in info:
+        if "종합병원" in duty_div or "상급종합" in duty_div:
             general.append(record)
         if "가정의학" in name:
             family_medicine.append(record)

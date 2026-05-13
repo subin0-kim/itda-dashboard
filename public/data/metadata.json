@@ -112,7 +112,7 @@
       "fallback_formula": "leisure_without_large_retail"
     }
   ],
-  "generated_at": "2026-05-13T12:34:16.138954+00:00",
+  "generated_at": "2026-05-13T12:43:48.267755+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -179,7 +179,7 @@
     "leisure.library_culture": 1246,
     "leisure.park": 132,
     "medical.family_medicine": 242,
-    "medical.general_hospital": 91,
+    "medical.general_hospital": 61,
     "medical.pediatric_clinic": 533
   },
   "excluded_records_summary": {
@@ -189,8 +189,8 @@
       "excluded_records": 0
     },
     "general_hospital": {
-      "input_records": 93,
-      "used_records": 93,
+      "input_records": 61,
+      "used_records": 61,
       "excluded_records": 0
     },
     "family_medicine": {
@@ -233,7 +233,7 @@
       "used_records": 1266,
       "excluded_records": 0
     },
-    "facility_duplicates_removed": 36
+    "facility_duplicates_removed": 34
   },
   "facility_types_without_distance": [
     "large_retail_optional"
