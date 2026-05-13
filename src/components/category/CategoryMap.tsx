@@ -160,6 +160,10 @@ export function CategoryMap({
 
       instance.setPaintProperty(CATEGORY_DISTRICT_FILL_LAYER_ID, "fill-color", getMapLibreScoreExpression(categoryId));
       instance.setPaintProperty(CATEGORY_GRID_FILL_LAYER_ID, "fill-color", getMapLibreScoreExpression(categoryId));
+      if (instance.getLayer(CATEGORY_FACILITY_LAYER_ID)) {
+        instance.setLayoutProperty(CATEGORY_FACILITY_LAYER_ID, "visibility", "visible");
+        instance.moveLayer(CATEGORY_FACILITY_LAYER_ID);
+      }
       setLayerVisibility(instance, viewMode, grids.features.length > 0);
       const bounds = getGeoJsonBounds(districtData);
       if (bounds) instance.fitBounds(bounds, { padding: 32, duration: 0, maxZoom: 11 });
@@ -335,6 +339,7 @@ function setLayerVisibility(map: maplibregl.Map, viewMode: CategoryMapViewMode, 
   setVisibility(map, CATEGORY_DISTRICT_FILL_LAYER_ID, viewMode === "district");
   setVisibility(map, CATEGORY_GRID_FILL_LAYER_ID, viewMode === "grid" && hasGrid);
   setVisibility(map, CATEGORY_GRID_LINE_LAYER_ID, viewMode === "grid" && hasGrid);
+  setVisibility(map, CATEGORY_FACILITY_LAYER_ID, true);
 }
 
 function setVisibility(map: maplibregl.Map, layerId: string, visible: boolean) {

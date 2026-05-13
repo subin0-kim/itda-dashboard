@@ -140,6 +140,7 @@ export function DistrictDetailPage() {
 
       <div className="grid gap-6 xl:grid-cols-[1fr_360px]">
         <DistrictGridMap
+          key={`${district.district_code || district.district_name}-${categoryId}`}
           boundary={districtBoundary}
           grids={gridCollection}
           facilities={facilityCollection}

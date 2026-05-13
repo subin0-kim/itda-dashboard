@@ -111,6 +111,7 @@ export function CategoryDetailPage() {
         <div className="space-y-6">
           {isDataReady(districtBoundaries) ? (
             <CategoryMap
+              key={categoryIdValue}
               categoryId={categoryIdValue}
               viewMode={viewMode}
               onViewModeChange={setViewMode}

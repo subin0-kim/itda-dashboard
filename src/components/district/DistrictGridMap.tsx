@@ -135,6 +135,10 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       instance.setPaintProperty(DISTRICT_GRID_FILL_LAYER_ID, "fill-color", getMapLibreScoreExpression(categoryId));
       setVisibility(instance, DISTRICT_GRID_FILL_LAYER_ID, hasGrid);
       setVisibility(instance, DISTRICT_GRID_LINE_LAYER_ID, hasGrid);
+      if (instance.getLayer(DISTRICT_FACILITY_LAYER_ID)) {
+        instance.setLayoutProperty(DISTRICT_FACILITY_LAYER_ID, "visibility", "visible");
+        instance.moveLayer(DISTRICT_FACILITY_LAYER_ID);
+      }
 
       const bounds = getBoundsForMap(boundary);
       if (bounds) instance.fitBounds(bounds, { padding: 36, duration: 0, maxZoom: 13 });
