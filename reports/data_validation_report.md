@@ -48,7 +48,11 @@
 - dist_large_retail_optional: 10028
 
 ## Living Weight Summary
-- aggregation_method: simple_average
-- living_weight_status: unavailable
-- living_weight: null=10028, zero=0, out_of_range=0
+- aggregation_method: living_weighted_average
+- living_weight_status: applied
+- living_weight: null=0, zero=3107, low_under_0.05=0, valid=10028, low_or_zero_ratio=0.309832, out_of_range=0
+- park_area_ratio > 0 grid count: 4911
+- green_area_ratio > 0 grid count: 5482
+- river_area_ratio > 0 grid count: 0
+- forest_mountain_area_ratio > 0 grid count: 0
 - park facility(leisure 도착지) count: 132

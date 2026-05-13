@@ -112,7 +112,7 @@
       "fallback_formula": "leisure_without_large_retail"
     }
   ],
-  "generated_at": "2026-05-13T03:50:42.763708+00:00",
+  "generated_at": "2026-05-13T12:34:16.138954+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -297,23 +297,41 @@
     "grid_stroller_score": 0,
     "stroller_score": 0
   },
-  "origin_destination_role_note": "공원은 여가 카테고리의 도착지로 계속 사용합니다. 공원 내부 격자는 생활 출발지로 보기 어려워 구별 평균 산정 시 LivingWeight를 낮게 적용하거나 제외합니다.",
-  "aggregation_method": "simple_average",
-  "living_weight_status": "unavailable",
-  "living_weight_method": "no_land_use_data_simple_average_fallback",
-  "living_weight_source_datasets": [],
-  "living_weight_skipped_sources": [
-    "zoning",
-    "parks",
-    "rivers",
-    "forest_mountain"
+  "origin_destination_role_note": "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다.",
+  "aggregation_method": "living_weighted_average",
+  "living_weight_status": "applied",
+  "living_weight_method": "urban_living_area_ratio_v1",
+  "living_weight_source_datasets": [
+    {
+      "name": "서울시 용도지역(도시지역) 공간정보",
+      "provider": "서울 데이터 허브 또는 서울 열린데이터광장",
+      "raw_file": "data/raw/land_use/UQ111_용도지역(도시지역)_202602/shp파일/UPIS_C_UQ111.shp",
+      "source_url": null,
+      "role": "zoning",
+      "used": true
+    },
+    {
+      "name": "서울시 생활권계획 시설(공원) 공간정보",
+      "provider": "서울 데이터 허브 또는 서울 열린데이터광장",
+      "raw_file": "data/raw/land_use/UPIS_SHP_ZON216_서울시 생활권 계획(공원) 공간정보/UPIS_SHP_ZON216.shp",
+      "source_url": null,
+      "role": "parks_origin_mask",
+      "used": true
+    }
   ],
+  "living_weight_skipped_sources": [
+    "land_cover_optional",
+    "rivers_optional",
+    "forest_mountain_optional"
+  ],
+  "unknown_living_weight_ratio": 0.0447,
+  "zero_living_weight_grid_count": 3107,
   "living_weight_limitations": [
-    "용도지역, 공원 폴리곤, 하천, 산지/임야 등 토지이용 공간데이터가 data/raw/land_use/ 아래에 없어 LivingWeight를 계산하지 않았습니다.",
-    "구별 점수는 simple_average로 계산되며 공원·녹지·하천·산지가 많은 자치구의 점수가 부당하게 낮아질 가능성이 있습니다."
+    "LivingWeight는 250m 격자 내 용도지역·공원·하천·산지 폴리곤 면적 비율로 산출한 1차 근사 지표입니다.",
+    "데이터 누락 면적은 unknown_area_ratio로 기록되며 LivingWeight 산정에서는 제외됩니다."
   ],
   "district_count": 25,
-  "district_score_aggregation": "simple_mean_of_grid_scores",
+  "district_score_aggregation": "living_weighted_mean_of_grid_scores",
   "benchmark_logic": "higher_overall_score_and_strong_weak_category_simple_v1",
   "raw_inventory_summary": {
     "pediatric_clinic": {

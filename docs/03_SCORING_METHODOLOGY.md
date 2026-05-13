@@ -159,7 +159,7 @@ LivingWeight(g) = UrbanLivingArea(g) / GridArea(g)
 - 공원 내부 250m 격자는 실제 거주/생활 출발지로 보기 어려우므로 구별 평균 산정 시 LivingWeight를 0 또는 낮은 값으로 처리한다.
 - 녹지지역, 하천 내부, 산지/임야 내부 격자는 LivingWeight = 0으로 처리한다.
 
-용도지역/공원/하천/산지/임야 폴리곤 공간데이터가 없으면 LivingWeight를 계산하지 않고 단순 평균(`aggregation_method = simple_average`)을 사용한다. 실제 적용 결과는 `metadata.json`의 `aggregation_method`, `living_weight_status`, `living_weight_source_datasets`에 기록한다.
+용도지역/공원/토지피복도/하천/산지/임야 폴리곤 공간데이터가 없으면 LivingWeight를 계산하지 않고 단순 평균(`aggregation_method = simple_average`)을 사용한다. 실제 적용 결과는 `metadata.json`의 `aggregation_method`, `living_weight_status`, `living_weight_source_datasets`에 기록한다. 현재 산출물은 실제 용도지역 shapefile과 생활권계획 공원 shapefile을 사용해 `living_weighted_average`를 적용한다.
 
 영유아 수요 가중치 데이터(추가 옵션)가 없으면 위 LivingWeight 기반 가중 평균 또는 단순 평균을 사용한다.
 

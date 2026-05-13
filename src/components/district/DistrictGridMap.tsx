@@ -293,6 +293,7 @@ function gridTooltipHtml(props: Record<string, unknown>, categoryLabel: string) 
       <strong>${escapeHtml(readString(props.grid_id) || "격자 ID 없음")}</strong><br/>
       ${categoryLabel}: ${formatPopupScore(props.selected_score)}<br/>
       통합: ${formatPopupScore(props.overall_score)}<br/>
+      ${formatLivingWeight(props.living_weight)}
       의료: ${formatPopupScore(props.medical_score)}<br/>
       행정: ${formatPopupScore(props.admin_score)}<br/>
       교육: ${formatPopupScore(props.education_score)}<br/>
@@ -318,6 +319,12 @@ function formatPopupScore(value: unknown) {
   if (typeof value === "number" && Number.isFinite(value)) return `${value.toFixed(1)}점`;
   if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value))) return `${Number(value).toFixed(1)}점`;
   return "계산 불가";
+}
+
+function formatLivingWeight(value: unknown) {
+  const numeric = typeof value === "number" ? value : typeof value === "string" && value.trim() !== "" ? Number(value) : NaN;
+  if (!Number.isFinite(numeric)) return "";
+  return `생활 출발지 가중치: ${numeric.toFixed(2)}<br/>`;
 }
 
 function escapeHtml(value: string) {

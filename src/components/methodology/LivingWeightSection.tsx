@@ -16,7 +16,7 @@ export function LivingWeightSection({ metadata }: LivingWeightSectionProps) {
   const note =
     typeof metadata?.origin_destination_role_note === "string" && metadata.origin_destination_role_note.trim()
       ? metadata.origin_destination_role_note
-      : "공원은 여가 카테고리의 주요 목적지로 계속 사용합니다. 다만 공원 내부 격자는 실제 주거·생활 출발지로 보기 어렵기 때문에, 구별 평균 산정 시 LivingWeight를 낮게 적용하거나 제외합니다.";
+      : "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다.";
 
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-4">

@@ -377,7 +377,9 @@ DistrictStrollerScore(d) = Σ GridStrollerScore(g) × LivingWeight(g) / Σ Livin
 
 데이터 의존성:
 
-- 용도지역, 공원 폴리곤, 하천, 산지/임야 폴리곤 등 토지이용 공간데이터를 `data/raw/land_use/` 아래에 배치한다.
+- 용도지역, 공원 폴리곤, 토지피복도, 하천/수계, 산지/임야 폴리곤 등 토지이용 공간데이터를 `data/raw/land_use/` 아래에 배치한다.
+- 설정 키는 `config/data_config.yaml`의 `land_use.zoning`, `land_use.parks_origin_mask`, `land_use.land_cover_optional`, `land_use.rivers_optional`, `land_use.forest_mountain_optional`이다.
+- 현재 산출물은 실제 용도지역 shapefile과 생활권계획 공원 shapefile을 사용해 `living_weighted_average`를 적용한다.
 - 모든 토지이용 데이터가 없으면 LivingWeight를 계산하지 않고 구별 점수는 `simple_average` fallback을 사용한다.
 - 실제 적용 결과는 `public/data/metadata.json`의 `aggregation_method`(`living_weighted_average` / `simple_average`)와 `living_weight_status`(`applied` / `unavailable`)로 확인한다.
 

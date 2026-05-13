@@ -25,7 +25,13 @@ from common import (
 )
 
 
-LAND_USE_ROLES = ["zoning", "parks", "rivers", "forest_mountain"]
+LAND_USE_ROLE_ALIASES = {
+    "zoning": ("zoning",),
+    "parks_origin_mask": ("parks_origin_mask", "parks"),
+    "land_cover_optional": ("land_cover_optional",),
+    "rivers_optional": ("rivers_optional", "rivers"),
+    "forest_mountain_optional": ("forest_mountain_optional", "forest_mountain"),
+}
 LIVING_WEIGHT_METHOD_APPLIED = "urban_living_area_ratio_v1"
 LIVING_WEIGHT_METHOD_UNAVAILABLE = "no_land_use_data_simple_average_fallback"
 
@@ -53,14 +59,18 @@ def calculate_living_weight(config_path: str) -> None:
     living_cfg = config.get("living_weight") or {}
     weights_cfg = (living_cfg.get("weights") or {})
     included_keywords = list(living_cfg.get("included_zoning_keywords") or [])
-    excluded_keywords = list(living_cfg.get("low_or_zero_weight_keywords") or [])
+    excluded_keywords = list(
+        living_cfg.get("excluded_or_zero_keywords")
+        or living_cfg.get("low_or_zero_weight_keywords")
+        or []
+    )
 
     loaded_sources: dict[str, dict] = {}
     skipped_sources: list[str] = []
     source_datasets: list[dict] = []
 
-    for role in LAND_USE_ROLES:
-        src = land_use_cfg.get(role) if isinstance(land_use_cfg, dict) else None
+    for role, aliases in LAND_USE_ROLE_ALIASES.items():
+        src = _get_land_use_source(land_use_cfg, aliases)
         if not isinstance(src, dict):
             continue
         raw_path = src.get("path")
@@ -71,7 +81,10 @@ def calculate_living_weight(config_path: str) -> None:
             skipped_sources.append(role)
             continue
         try:
-            gdf = gpd.read_file(resolved)
+            read_kwargs = {}
+            if src.get("encoding"):
+                read_kwargs["encoding"] = src["encoding"]
+            gdf = gpd.read_file(resolved, **read_kwargs)
             if gdf.empty:
                 skipped_sources.append(role)
                 continue
@@ -113,8 +126,7 @@ def calculate_living_weight(config_path: str) -> None:
     metadata_updates: dict = {
         "preprocessing_scripts": ["05_calculate_living_weight.py"],
         "origin_destination_role_note": (
-            "공원은 여가 카테고리의 도착지로 계속 사용합니다. 공원 내부 격자는 생활 출발지로 보기 어려워 "
-            "구별 평균 산정 시 LivingWeight를 낮게 적용하거나 제외합니다."
+            "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다."
         ),
     }
 
@@ -141,9 +153,9 @@ def calculate_living_weight(config_path: str) -> None:
 
     # --- Compute living_weight using available land-use polygons. ---
     role_to_ratio_column = {
-        "parks": "park_area_ratio",
-        "rivers": "river_area_ratio",
-        "forest_mountain": "forest_mountain_area_ratio",
+        "parks_origin_mask": "park_area_ratio",
+        "rivers_optional": "river_area_ratio",
+        "forest_mountain_optional": "forest_mountain_area_ratio",
     }
 
     grid_geom = grid_analysis.set_geometry("geometry")
@@ -166,6 +178,28 @@ def calculate_living_weight(config_path: str) -> None:
                     "industrial": "industrial_area_ratio",
                     "green": "green_area_ratio",
                     "park": "park_area_ratio",
+                }.get(class_name, "unknown_area_ratio")
+                area_series = _per_grid_area_ratio(grid_geom, subset)
+                grid_analysis[area_col] = _coalesce_sum(grid_analysis[area_col], area_series)
+        elif role == "land_cover_optional":
+            category_col = payload["config"].get("category_column", "land_cover_category")
+            if category_col not in gdf.columns:
+                print(
+                    f"[warn] 토지피복도 데이터에 카테고리 컬럼 '{category_col}'이 없어 land_cover 분류를 건너뜁니다."
+                )
+                continue
+            categorized = _classify_land_cover(gdf, category_col, included_keywords, excluded_keywords)
+            for class_name, subset in categorized.items():
+                if subset.empty:
+                    continue
+                area_col = {
+                    "residential": "residential_area_ratio",
+                    "commercial": "commercial_area_ratio",
+                    "industrial": "industrial_area_ratio",
+                    "green": "green_area_ratio",
+                    "park": "park_area_ratio",
+                    "river": "river_area_ratio",
+                    "forest_mountain": "forest_mountain_area_ratio",
                 }.get(class_name, "unknown_area_ratio")
                 area_series = _per_grid_area_ratio(grid_geom, subset)
                 grid_analysis[area_col] = _coalesce_sum(grid_analysis[area_col], area_series)
@@ -253,18 +287,52 @@ def _classify_zoning(gdf, category_col, included_keywords, excluded_keywords):
     return classes
 
 
+def _classify_land_cover(gdf, category_col, included_keywords, excluded_keywords):
+    """Bucket land-cover polygons by keyword without inventing missing classes."""
+    values = gdf[category_col].astype(str)
+    class_keywords = {
+        "residential": [kw for kw in ["주거", "시가", "대지"] if kw in included_keywords or kw in {"주거", "시가", "대지"}],
+        "commercial": [kw for kw in ["상업"] if kw in included_keywords or kw == "상업"],
+        "industrial": [kw for kw in ["공업", "준공업"] if kw in included_keywords or kw in {"공업", "준공업"}],
+        "green": [kw for kw in excluded_keywords if "녹지" in kw],
+        "park": [kw for kw in excluded_keywords if "공원" in kw],
+        "river": [kw for kw in excluded_keywords if "하천" in kw],
+        "forest_mountain": [kw for kw in excluded_keywords if any(token in kw for token in ["임야", "산지", "산림"])],
+    }
+    classes: dict[str, object] = {}
+    for class_name, keywords in class_keywords.items():
+        if not keywords:
+            continue
+        mask = values.apply(lambda value, kws=keywords: any(kw in value for kw in kws))
+        if mask.any():
+            classes[class_name] = gdf.loc[mask].copy()
+    return classes
+
+
+def _get_land_use_source(land_use_cfg, aliases):
+    if not isinstance(land_use_cfg, dict):
+        return None
+    for alias in aliases:
+        value = land_use_cfg.get(alias)
+        if isinstance(value, dict):
+            return value
+    return None
+
+
 def _per_grid_area_ratio(grid_geom, polygons):
     import geopandas as gpd  # noqa: F401
 
     grid_local = grid_geom[["grid_id", "geometry", "grid_area"]].copy()
     overlay = gpd.overlay(grid_local, polygons[["geometry"]], how="intersection", keep_geom_type=False)
     if overlay.empty:
-        return _empty_series(grid_local["grid_id"])
+        return _empty_series(grid_local.index)
     overlay["area"] = overlay.geometry.area
     summed = overlay.groupby("grid_id")["area"].sum()
     grid_area = grid_local.set_index("grid_id")["grid_area"]
     ratio = (summed / grid_area).fillna(0.0).clip(0.0, 1.0)
-    return ratio.reindex(grid_local["grid_id"]).fillna(0.0)
+    aligned = ratio.reindex(grid_local["grid_id"]).fillna(0.0)
+    aligned.index = grid_local.index
+    return aligned
 
 
 def _empty_series(index_values):

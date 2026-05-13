@@ -30,15 +30,24 @@ def aggregate_district_scores(config_path: str) -> None:
 
     has_family_medicine = "family_medicine_score" in grid.columns and not grid["family_medicine_score"].isna().all()
 
-    living_weight_series = _load_living_weight(config, grid)
+    living_weight_table = _load_living_weight(config, grid)
     living_weight_status = "unavailable"
     aggregation_method = "simple_average"
     living_weighted_flag = False
-    if living_weight_series is not None:
+    if living_weight_table is not None:
+        living_weight_series = living_weight_table["living_weight"]
         valid_weights = living_weight_series.fillna(0)
         if (valid_weights > 0).any():
             grid = grid.copy()
             grid["__living_weight"] = valid_weights.to_numpy()
+            for ratio_col in [
+                "park_area_ratio",
+                "green_area_ratio",
+                "river_area_ratio",
+                "forest_mountain_area_ratio",
+            ]:
+                if ratio_col in living_weight_table.columns:
+                    grid[f"__{ratio_col}"] = living_weight_table[ratio_col].to_numpy()
             living_weight_status = "applied"
             aggregation_method = "living_weighted_average"
             living_weighted_flag = True
@@ -70,6 +79,8 @@ def aggregate_district_scores(config_path: str) -> None:
             living_weight_coverage = None
             summary = {col: _safe_mean(group[col]) for col in score_columns}
 
+        area_counts = _area_ratio_counts(group)
+
         category_values = {key: float(summary[col]) if summary[col] is not None else 0.0 for key, col in CATEGORY_COLUMNS.items()}
         weakest = min(category_values, key=category_values.get)
         strongest = max(category_values, key=category_values.get)
@@ -91,6 +102,10 @@ def aggregate_district_scores(config_path: str) -> None:
                 "effective_grid_count": effective_grid_count,
                 "low_or_zero_weight_grid_count": low_or_zero_grid_count,
                 "living_weight_coverage": living_weight_coverage,
+                "park_grid_count": area_counts["park_grid_count"],
+                "green_grid_count": area_counts["green_grid_count"],
+                "river_grid_count": area_counts["river_grid_count"],
+                "forest_mountain_grid_count": area_counts["forest_mountain_grid_count"],
                 "aggregation_method": aggregation_method,
                 "living_weighted": living_weighted_flag,
                 "null_score_ratio": round(1 - calculable_count / grid_count, 6) if grid_count else None,
@@ -160,11 +175,42 @@ def _load_living_weight(config, grid):
         return None
     if "grid_id" not in lw.columns or "living_weight" not in lw.columns:
         return None
-    lw_series = pd.to_numeric(lw.set_index("grid_id")["living_weight"], errors="coerce")
-    aligned = lw_series.reindex(grid["grid_id"])
-    if aligned.notna().sum() == 0:
+    columns = [
+        col
+        for col in [
+            "living_weight",
+            "park_area_ratio",
+            "green_area_ratio",
+            "river_area_ratio",
+            "forest_mountain_area_ratio",
+        ]
+        if col in lw.columns
+    ]
+    table = lw.set_index("grid_id")[columns].reindex(grid["grid_id"]).reset_index(drop=True)
+    for col in columns:
+        table[col] = pd.to_numeric(table[col], errors="coerce")
+    if "living_weight" not in table.columns or table["living_weight"].notna().sum() == 0:
         return None
-    return aligned.reset_index(drop=True)
+    return table
+
+
+def _area_ratio_counts(group):
+    import pandas as pd
+
+    mapping = {
+        "park_grid_count": "__park_area_ratio",
+        "green_grid_count": "__green_area_ratio",
+        "river_grid_count": "__river_area_ratio",
+        "forest_mountain_grid_count": "__forest_mountain_area_ratio",
+    }
+    counts = {}
+    for output_key, col in mapping.items():
+        if col not in group.columns:
+            counts[output_key] = None
+            continue
+        values = pd.to_numeric(group[col], errors="coerce").fillna(0)
+        counts[output_key] = int((values > 0).sum())
+    return counts
 
 
 def _weighted_mean(values, weights, weight_sum):

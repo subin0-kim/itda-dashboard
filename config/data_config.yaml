@@ -258,38 +258,74 @@ weights:
 
 land_use:
   zoning:
-    path: "data/raw/land_use/seoul_zoning.geojson"
-    type: "geojson"
-    category_column: "zoning_category"
+    path: "data/raw/land_use/UQ111_용도지역(도시지역)_202602/shp파일/UPIS_C_UQ111.shp"
+    type: "shp"
+    category_column: "DGM_NM"
+    encoding: "cp949"
     required: false
-    source_name: "서울시 용도지역 공간정보"
-    source_provider: "서울 열린데이터광장"
+    source_name: "서울시 용도지역(도시지역) 공간정보"
+    source_provider: "서울 데이터 허브 또는 서울 열린데이터광장"
     source_url: null
-    source_crs: "EPSG:4326"
+    source_crs: "EPSG:5174"
+  parks_origin_mask:
+    path: "data/raw/land_use/UPIS_SHP_ZON216_서울시 생활권 계획(공원) 공간정보/UPIS_SHP_ZON216.shp"
+    type: "shp"
+    encoding: "cp949"
+    required: false
+    source_name: "서울시 생활권계획 시설(공원) 공간정보"
+    source_provider: "서울 데이터 허브 또는 서울 열린데이터광장"
+    source_url: null
+    source_crs: "EPSG:5174"
+  land_cover_optional:
+    path: "data/raw/land_use/seoul_land_cover.geojson"
+    type: "geojson"
+    category_column: "land_cover_category"
+    required: false
+    source_name: "환경공간정보서비스 토지피복지도"
+    source_provider: "환경공간정보서비스"
+    source_url: null
+    source_crs: "EPSG:5174"
+  rivers_optional:
+    path: "data/raw/land_use/seoul_rivers.geojson"
+    type: "geojson"
+    required: false
+    source_name: "서울시 하천 공간정보"
+    source_provider: null
+    source_url: null
+    source_crs: "EPSG:5174"
+  forest_mountain_optional:
+    path: "data/raw/land_use/seoul_forest_mountain.geojson"
+    type: "geojson"
+    required: false
+    source_name: "서울시 산지/임야 공간정보"
+    source_provider: null
+    source_url: null
+    source_crs: "EPSG:5174"
   parks:
-    path: "data/raw/land_use/seoul_parks.geojson"
-    type: "geojson"
+    path: "data/raw/land_use/UPIS_SHP_ZON216_서울시 생활권 계획(공원) 공간정보/UPIS_SHP_ZON216.shp"
+    type: "shp"
+    encoding: "cp949"
     required: false
-    source_name: "서울시 공원 공간정보"
-    source_provider: "서울 열린데이터광장"
+    source_name: "서울시 생활권계획 시설(공원) 공간정보"
+    source_provider: "서울 데이터 허브 또는 서울 열린데이터광장"
     source_url: null
-    source_crs: "EPSG:4326"
+    source_crs: "EPSG:5174"
   rivers:
     path: "data/raw/land_use/seoul_rivers.geojson"
     type: "geojson"
     required: false
     source_name: "서울시 하천 공간정보"
-    source_provider: "서울 열린데이터광장"
+    source_provider: null
     source_url: null
-    source_crs: "EPSG:4326"
+    source_crs: "EPSG:5174"
   forest_mountain:
     path: "data/raw/land_use/seoul_forest_mountain.geojson"
     type: "geojson"
     required: false
     source_name: "서울시 산지/임야 공간정보"
-    source_provider: "서울 열린데이터광장"
+    source_provider: null
     source_url: null
-    source_crs: "EPSG:4326"
+    source_crs: "EPSG:5174"
 
 living_weight:
   enabled_if_data_available: true
@@ -309,6 +345,17 @@ living_weight:
     - "하천"
     - "임야"
     - "산지"
+    - "산림"
+  excluded_or_zero_keywords:
+    - "녹지"
+    - "보전녹지"
+    - "생산녹지"
+    - "자연녹지"
+    - "공원"
+    - "하천"
+    - "임야"
+    - "산지"
+    - "산림"
   weights:
     residential: 1.0
     semi_residential: 1.0
@@ -319,6 +366,7 @@ living_weight:
     green: 0.0
     river: 0.0
     forest_mountain: 0.0
+    unknown: null
   min_weight_threshold: 0.05
 
 output_paths:

@@ -239,4 +239,4 @@
 
 데이터 출처 파일 목록은 실제 전처리에서 사용된 raw data와 `metadata.json`의 `source_datasets`를 기준으로 표시한다. `source_datasets`가 없으면 실제 사용 데이터 목록을 임의로 만들지 않고 안내 문구를 표시한다.
 
-생활 출발지 가중치 섹션은 `metadata.aggregation_method`, `living_weight_status`, `living_weight_limitations`, `origin_destination_role_note`를 기준으로 현재 적용 방식을 표시한다. 토지이용 데이터가 없어 fallback인 경우에도 산식과 설명은 정적으로 표시하되 현재 적용 방식은 `단순 평균`으로 명확히 표기한다.
+생활 출발지 가중치 섹션은 `metadata.aggregation_method`, `living_weight_status`, `living_weight_limitations`, `origin_destination_role_note`를 기준으로 현재 적용 방식을 표시한다. 토지이용 데이터가 없어 fallback인 경우에도 산식과 설명은 정적으로 표시하되 현재 적용 방식은 `단순 평균`으로 명확히 표기한다. 구 상세 지도 tooltip은 `grid_scores.geojson`에 `living_weight` 값이 있을 때만 생활 출발지 가중치를 표시한다.

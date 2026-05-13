@@ -1,17 +1,257 @@
 [
   {
-    "district_code": "11060",
-    "district_name": "동대문구",
+    "district_code": "11100",
+    "district_name": "도봉구",
     "benchmark_district_code": "11150",
     "benchmark_district_name": "양천구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": 12.7,
+      "education_gap": 0.572,
+      "administration_gap": -7.149,
+      "leisure_gap": -3.502,
+      "admin_gap": -7.149
+    }
+  },
+  {
+    "district_code": "11070",
+    "district_name": "중랑구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": -5.258,
+      "education_gap": 0.208,
+      "administration_gap": 4.45,
+      "leisure_gap": 7.098,
+      "admin_gap": 4.45
+    }
+  },
+  {
+    "district_code": "11250",
+    "district_name": "강동구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": -5.166,
+      "education_gap": 1.075,
+      "administration_gap": 7.152,
+      "leisure_gap": 7.138,
+      "admin_gap": 7.152
+    }
+  },
+  {
+    "district_code": "11140",
+    "district_name": "마포구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
     "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
     "weak_category": "administration",
     "comparison": {
-      "medical_gap": 4.425,
-      "education_gap": 0.374,
-      "administration_gap": -4.308,
-      "leisure_gap": 1.916,
-      "admin_gap": -4.308
+      "medical_gap": -5.56,
+      "education_gap": 3.704,
+      "administration_gap": 9.498,
+      "leisure_gap": 2.696,
+      "admin_gap": 9.498
+    }
+  },
+  {
+    "district_code": "11190",
+    "district_name": "영등포구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -5.276,
+      "education_gap": 2.207,
+      "administration_gap": 10.421,
+      "leisure_gap": 4.626,
+      "admin_gap": 10.421
+    }
+  },
+  {
+    "district_code": "11120",
+    "district_name": "은평구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -3.706,
+      "education_gap": 1.221,
+      "administration_gap": 10.979,
+      "leisure_gap": 3.281,
+      "admin_gap": 10.979
+    }
+  },
+  {
+    "district_code": "11200",
+    "district_name": "동작구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -1.621,
+      "education_gap": 2.796,
+      "administration_gap": 10.459,
+      "leisure_gap": -0.159,
+      "admin_gap": 10.459
+    }
+  },
+  {
+    "district_code": "11060",
+    "district_name": "동대문구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -3.212,
+      "education_gap": 3.288,
+      "administration_gap": 6.949,
+      "leisure_gap": 5.194,
+      "admin_gap": 6.949
+    }
+  },
+  {
+    "district_code": "11050",
+    "district_name": "광진구",
+    "benchmark_district_code": "11200",
+    "benchmark_district_name": "동작구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": -0.2,
+      "education_gap": 0.353,
+      "administration_gap": -8.057,
+      "leisure_gap": 8.383,
+      "admin_gap": -8.057
+    }
+  },
+  {
+    "district_code": "11160",
+    "district_name": "강서구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -5.325,
+      "education_gap": 0.707,
+      "administration_gap": 12.569,
+      "leisure_gap": 7.882,
+      "admin_gap": 12.569
+    }
+  },
+  {
+    "district_code": "11110",
+    "district_name": "노원구",
+    "benchmark_district_code": "11200",
+    "benchmark_district_name": "동작구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": -4.352,
+      "education_gap": -3.668,
+      "administration_gap": 0.314,
+      "leisure_gap": 14.843,
+      "admin_gap": 0.314
+    }
+  },
+  {
+    "district_code": "11240",
+    "district_name": "송파구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -4.986,
+      "education_gap": 5.873,
+      "administration_gap": 11.449,
+      "leisure_gap": 5.561,
+      "admin_gap": 11.449
+    }
+  },
+  {
+    "district_code": "11080",
+    "district_name": "성북구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -0.834,
+      "education_gap": 4.883,
+      "administration_gap": 11.203,
+      "leisure_gap": 3.867,
+      "admin_gap": 11.203
+    }
+  },
+  {
+    "district_code": "11170",
+    "district_name": "구로구",
+    "benchmark_district_code": "11200",
+    "benchmark_district_name": "동작구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
+    "comparison": {
+      "medical_gap": 1.989,
+      "education_gap": -0.149,
+      "administration_gap": -1.814,
+      "leisure_gap": 8.772,
+      "admin_gap": -1.814
+    }
+  },
+  {
+    "district_code": "11040",
+    "district_name": "성동구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": 3.307,
+      "education_gap": 7.75,
+      "administration_gap": 5.072,
+      "leisure_gap": 3.293,
+      "admin_gap": 5.072
+    }
+  },
+  {
+    "district_code": "11090",
+    "district_name": "강북구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": 5.838,
+      "education_gap": 4.595,
+      "administration_gap": 9.164,
+      "leisure_gap": 6.249,
+      "admin_gap": 9.164
+    }
+  },
+  {
+    "district_code": "11230",
+    "district_name": "강남구",
+    "benchmark_district_code": "11100",
+    "benchmark_district_name": "도봉구",
+    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "administration",
+    "comparison": {
+      "medical_gap": -0.578,
+      "education_gap": 11.29,
+      "administration_gap": 12.874,
+      "leisure_gap": 4.197,
+      "admin_gap": 12.874
     }
   },
   {
@@ -22,41 +262,41 @@
     "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
     "weak_category": "medical",
     "comparison": {
-      "medical_gap": 19.502,
-      "education_gap": 10.457,
-      "administration_gap": -13.119,
-      "leisure_gap": -7.935,
-      "admin_gap": -13.119
+      "medical_gap": 24.492,
+      "education_gap": 14.431,
+      "administration_gap": -8.217,
+      "leisure_gap": -6.939,
+      "admin_gap": -8.217
     }
   },
   {
-    "district_code": "11200",
-    "district_name": "동작구",
+    "district_code": "11180",
+    "district_name": "금천구",
     "benchmark_district_code": "11020",
     "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
     "comparison": {
-      "medical_gap": -8.576,
-      "education_gap": -5.077,
-      "administration_gap": 15.722,
-      "leisure_gap": 5.375,
-      "admin_gap": 15.722
+      "medical_gap": -3.212,
+      "education_gap": -7.959,
+      "administration_gap": 7.172,
+      "leisure_gap": 11.877,
+      "admin_gap": 7.172
     }
   },
   {
-    "district_code": "11190",
-    "district_name": "영등포구",
+    "district_code": "11210",
+    "district_name": "관악구",
     "benchmark_district_code": "11020",
     "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
     "comparison": {
-      "medical_gap": -10.813,
-      "education_gap": -3.647,
-      "administration_gap": 15.61,
-      "leisure_gap": 10.128,
-      "admin_gap": 15.61
+      "medical_gap": -6.214,
+      "education_gap": -8.443,
+      "administration_gap": 8.289,
+      "leisure_gap": 17.608,
+      "admin_gap": 8.289
     }
   },
   {
@@ -67,221 +307,11 @@
     "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
     "weak_category": "medical",
     "comparison": {
-      "medical_gap": 16.026,
-      "education_gap": 7.684,
-      "administration_gap": -5.014,
-      "leisure_gap": -0.149,
-      "admin_gap": -5.014
-    }
-  },
-  {
-    "district_code": "11240",
-    "district_name": "송파구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -8.414,
-      "education_gap": 1.182,
-      "administration_gap": 19.407,
-      "leisure_gap": 13.684,
-      "admin_gap": 19.407
-    }
-  },
-  {
-    "district_code": "11040",
-    "district_name": "성동구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -1.714,
-      "education_gap": 3.987,
-      "administration_gap": 13.491,
-      "leisure_gap": 8.756,
-      "admin_gap": 13.491
-    }
-  },
-  {
-    "district_code": "11080",
-    "district_name": "성북구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -4.93,
-      "education_gap": 1.687,
-      "administration_gap": 18.515,
-      "leisure_gap": 12.355,
-      "admin_gap": 18.515
-    }
-  },
-  {
-    "district_code": "11070",
-    "district_name": "중랑구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -5.434,
-      "education_gap": 3.422,
-      "administration_gap": 18.712,
-      "leisure_gap": 11.369,
-      "admin_gap": 18.712
-    }
-  },
-  {
-    "district_code": "11170",
-    "district_name": "구로구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -2.731,
-      "education_gap": 0.211,
-      "administration_gap": 18.731,
-      "leisure_gap": 15.74,
-      "admin_gap": 18.731
-    }
-  },
-  {
-    "district_code": "11230",
-    "district_name": "강남구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -5.136,
-      "education_gap": 4.958,
-      "administration_gap": 21.306,
-      "leisure_gap": 10.459,
-      "admin_gap": 21.306
-    }
-  },
-  {
-    "district_code": "11180",
-    "district_name": "금천구",
-    "benchmark_district_code": "11150",
-    "benchmark_district_name": "양천구",
-    "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "medical",
-    "comparison": {
-      "medical_gap": 24.241,
-      "education_gap": 9.437,
-      "administration_gap": 0.708,
-      "leisure_gap": 7.824,
-      "admin_gap": 0.708
-    }
-  },
-  {
-    "district_code": "11250",
-    "district_name": "강동구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": -3.083,
-      "education_gap": 5.717,
-      "administration_gap": 21.394,
-      "leisure_gap": 16.179,
-      "admin_gap": 21.394
-    }
-  },
-  {
-    "district_code": "11050",
-    "district_name": "광진구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 0.731,
-      "education_gap": 6.955,
-      "administration_gap": 17.333,
-      "leisure_gap": 16.768,
-      "admin_gap": 17.333
-    }
-  },
-  {
-    "district_code": "11100",
-    "district_name": "도봉구",
-    "benchmark_district_code": "11150",
-    "benchmark_district_name": "양천구",
-    "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "medical",
-    "comparison": {
-      "medical_gap": 24.545,
-      "education_gap": 20.086,
-      "administration_gap": 3.66,
-      "leisure_gap": 9.528,
-      "admin_gap": 3.66
-    }
-  },
-  {
-    "district_code": "11140",
-    "district_name": "마포구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 0.282,
-      "education_gap": 14.374,
-      "administration_gap": 24.603,
-      "leisure_gap": 11.077,
-      "admin_gap": 24.603
-    }
-  },
-  {
-    "district_code": "11030",
-    "district_name": "용산구",
-    "benchmark_district_code": "11150",
-    "benchmark_district_name": "양천구",
-    "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "medical",
-    "comparison": {
-      "medical_gap": 26.824,
-      "education_gap": 26.41,
-      "administration_gap": 1.441,
-      "leisure_gap": 7.988,
-      "admin_gap": 1.441
-    }
-  },
-  {
-    "district_code": "11120",
-    "district_name": "은평구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 3.154,
-      "education_gap": 12.102,
-      "administration_gap": 26.579,
-      "leisure_gap": 18.365,
-      "admin_gap": 26.579
-    }
-  },
-  {
-    "district_code": "11160",
-    "district_name": "강서구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 3.68,
-      "education_gap": 16.358,
-      "administration_gap": 28.987,
-      "leisure_gap": 22.969,
-      "admin_gap": 28.987
+      "medical_gap": 20.978,
+      "education_gap": 11.553,
+      "administration_gap": -0.336,
+      "leisure_gap": 1.125,
+      "admin_gap": -0.336
     }
   },
   {
@@ -292,71 +322,41 @@
     "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
     "weak_category": "medical",
     "comparison": {
-      "medical_gap": 37.898,
-      "education_gap": 33.739,
-      "administration_gap": 4.384,
-      "leisure_gap": -5.762,
-      "admin_gap": 4.384
-    }
-  },
-  {
-    "district_code": "11110",
-    "district_name": "노원구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 6.764,
-      "education_gap": 13.89,
-      "administration_gap": 28.728,
-      "leisure_gap": 28.924,
-      "admin_gap": 28.728
-    }
-  },
-  {
-    "district_code": "11090",
-    "district_name": "강북구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 14.607,
-      "education_gap": 25.819,
-      "administration_gap": 30.461,
-      "leisure_gap": 23.662,
-      "admin_gap": 30.461
-    }
-  },
-  {
-    "district_code": "11210",
-    "district_name": "관악구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
-    "comparison": {
-      "medical_gap": 15.147,
-      "education_gap": 23.504,
-      "administration_gap": 28.611,
-      "leisure_gap": 29.233,
-      "admin_gap": 28.611
+      "medical_gap": 34.72,
+      "education_gap": 20.954,
+      "administration_gap": -2.656,
+      "leisure_gap": -13.426,
+      "admin_gap": -2.656
     }
   },
   {
     "district_code": "11220",
     "district_name": "서초구",
-    "benchmark_district_code": "11020",
-    "benchmark_district_name": "중구",
-    "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
-    "weak_category": "administration",
+    "benchmark_district_code": "11010",
+    "benchmark_district_name": "종로구",
+    "reason": "leisure 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "leisure",
     "comparison": {
-      "medical_gap": 12.686,
-      "education_gap": 25.183,
-      "administration_gap": 33.868,
-      "leisure_gap": 26.877,
-      "admin_gap": 33.868
+      "medical_gap": -18.502,
+      "education_gap": -6.352,
+      "administration_gap": 12.419,
+      "leisure_gap": 26.403,
+      "admin_gap": 12.419
+    }
+  },
+  {
+    "district_code": "11030",
+    "district_name": "용산구",
+    "benchmark_district_code": "11150",
+    "benchmark_district_name": "양천구",
+    "reason": "medical 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
+    "weak_category": "medical",
+    "comparison": {
+      "medical_gap": 24.464,
+      "education_gap": 19.574,
+      "administration_gap": -1.245,
+      "leisure_gap": 6.411,
+      "admin_gap": -1.245
     }
   }
 ]

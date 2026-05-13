@@ -15,7 +15,7 @@
 - 현재 실제 전처리에서는 대형상업시설 optional 데이터가 미확보되어 공원과 도서관/문화시설 기반 여가 대체 산식을 적용했다.
 - 가정의학과는 TbHospitalInfo 원천에 별도 진료과목 컬럼이 없어 DUTYNAME(기관명)에 "가정의학"이 포함된 의원을 facility_name_fallback 방식으로 식별한다. 시설명이 명시되지 않은 종합병원·대학병원 내 가정의학과 진료는 포함되지 않을 수 있다.
 - 가정의학과 데이터가 미확보된 경우 의료 점수는 소아청소년과·종합병원 2종 기반 대체 산식을 사용하며, 실제 적용 산식은 `metadata.applied_medical_formula`와 `family_medicine_used`에 기록된다.
-- 구별 점수 집계는 가능한 경우 생활 출발지 가중 평균(`living_weighted_average`)을 적용해 공원·녹지·하천·산지·임야와 같은 비생활 출발지 격자의 영향을 줄인다. 단, 용도지역·공원·하천·산지/임야 폴리곤 공간데이터가 없으면 단순 평균(`simple_average`)으로 fallback하며 결과는 `metadata.aggregation_method`와 `living_weight_status`에 기록된다.
+- 구별 점수 집계는 가능한 경우 생활 출발지 가중 평균(`living_weighted_average`)을 적용해 공원·녹지·하천·산지·임야와 같은 비생활 출발지 격자의 영향을 줄인다. 단, 용도지역·공원·토지피복도·하천·산지/임야 폴리곤 공간데이터가 없으면 단순 평균(`simple_average`)으로 fallback하며 결과는 `metadata.aggregation_method`와 `living_weight_status`에 기록된다. 현재 산출물은 실제 용도지역 shapefile과 생활권계획 공원 shapefile을 사용해 생활 출발지 가중 평균을 적용한다.
 - 공원은 여가 카테고리의 도착지로 계속 사용되며, 공원 내부 격자는 출발지 가중치에서만 낮은 값(또는 0)으로 처리한다. 공원이 나쁜 공간이라는 의미가 아니라, "공원 한가운데에서 다른 생활시설까지의 거리"가 구 평균을 왜곡하는 효과를 줄이기 위한 보정이다.
 - 주민센터/자치회관 주소 427건 중 Kakao Local API 좌표 변환에 성공한 414건만 사용했고, 실패한 13건은 임의 좌표를 만들지 않고 제외했다.
 - `facilities.geojson`의 일부 시설은 원천 또는 좌표 변환 결과 특성상 `district_code`가 없을 수 있으며, 웹은 구 이름과 시설 좌표를 우선 활용한다.

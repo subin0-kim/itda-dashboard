@@ -190,7 +190,7 @@ python scripts/geocode_admin_facilities.py
 
 ## optional 데이터 처리 방식
 
-- `large_retail_optional`, `family_medicine`, 그리고 토지이용 폴리곤(`zoning`, `parks`, `rivers`, `forest_mountain`)이 optional이다.
+- `large_retail_optional`, `family_medicine`, 그리고 토지이용 폴리곤(`zoning`, `parks_origin_mask`, `land_cover_optional`, `rivers_optional`, `forest_mountain_optional`)이 optional이다.
 - 파일이 없으면 전처리를 중단하지 않고 `metadata.json`의 `unavailable_optional_datasets`에 기록한다.
 - 대형상업시설 데이터가 없으면 여가 점수는 `0.6 x ParkScore + 0.4 x LibraryCultureScore` 산식을 사용한다.
 - 가정의학과 데이터가 없으면 의료 점수는 `0.70 x PediatricScore + 0.30 x GeneralHospitalScore` 대체 산식을 사용한다.
@@ -205,8 +205,10 @@ python scripts/geocode_admin_facilities.py
 
 `scripts/preprocess/05_calculate_living_weight.py`는 다음을 수행한다.
 
+`scripts/preprocess/04_calculate_living_weight.py`는 직접 실행 호환용 wrapper이며, 실제 파이프라인에서는 점수 계산 후 `05_calculate_living_weight.py`를 실행한다.
+
 1. `grid_scores.geojson`을 읽어 250m 격자 폴리곤을 분석 좌표계(EPSG:5179)로 투영한다.
-2. `config.land_use.zoning/parks/rivers/forest_mountain` 항목 중 실제로 존재하는 폴리곤 데이터를 읽는다.
+2. `config.land_use.zoning/parks_origin_mask/land_cover_optional/rivers_optional/forest_mountain_optional` 항목 중 실제로 존재하는 폴리곤 데이터를 읽는다.
 3. 각 격자와 폴리곤의 교차 면적을 계산해 격자별 토지이용 면적 비율을 만든다.
 4. 주거/준주거/상업/공업/준공업 면적 비율의 가중합으로 `living_weight`를 계산한다(0~1).
 5. 공원/녹지/하천/산지/임야 면적은 LivingWeight 가중치에서 0으로 처리한다.

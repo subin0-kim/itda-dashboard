@@ -133,10 +133,11 @@ raw 파일 상세 점검 결과는 `docs/data_raw_inventory.md`에 기록한다.
 - 경사 보정: 서울시 표고점, 등고선 또는 DEM
 - 영유아 수요 가중치: 서울시 연령별 주민등록인구
 - 생활 출발지 가중치(LivingWeight) 계산용 토지이용 공간데이터:
-  - 서울시 용도지역 공간정보 (zoning)
-  - 서울시 공원 공간정보 (parks) — 여가 도착지로는 계속 사용하고, 공원 내부 격자에 한해 출발지 가중치만 낮춤
-  - 서울시 하천 공간정보 (rivers)
-  - 서울시 산지/임야 공간정보 (forest_mountain)
+  - 서울시 용도지역(도시지역) 공간정보 (`land_use.zoning`)
+  - 서울시 생활권계획 시설(공원) 공간정보 (`land_use.parks_origin_mask`) — 여가 도착지로는 계속 사용하고, 공원 내부 격자에 한해 출발지 가중치만 낮춤
+  - 환경공간정보서비스 토지피복지도 (`land_use.land_cover_optional`)
+  - 하천/수계 공간데이터 (`land_use.rivers_optional`)
+  - 임야/산지 공간데이터 (`land_use.forest_mountain_optional`)
   - 모두 `data/raw/land_use/` 아래에 배치한다. 폴리곤 GeoJSON 형식을 기본으로 한다.
 
 Optional 데이터가 없더라도 기본 점수 산출은 가능해야 한다. Optional 데이터를 사용하는 경우 `metadata.json`에 적용 여부와 산식 변경 내용을 명시한다. 토지이용 폴리곤이 모두 없으면 `aggregation_method = simple_average`, `living_weight_status = unavailable`로 기록하고 구별 점수는 단순 평균을 사용한다.

@@ -163,12 +163,22 @@ def validate(config_path: str) -> int:
         out_of_range = int(((lw < 0) | (lw > 1)).sum())
         nulls = int(lw.isna().sum())
         zero_count = int((lw == 0).sum())
-        lines.append(f"- living_weight: null={nulls}, zero={zero_count}, out_of_range={out_of_range}")
+        low_count = int(((lw > 0) & (lw < 0.05)).sum())
+        valid_count = int(lw.notna().sum())
+        low_or_zero_ratio = round(float(((lw.fillna(0) <= 0.05).sum()) / len(lw)), 6) if len(lw) else 0
+        lines.append(
+            f"- living_weight: null={nulls}, zero={zero_count}, low_under_0.05={low_count}, "
+            f"valid={valid_count}, low_or_zero_ratio={low_or_zero_ratio}, out_of_range={out_of_range}"
+        )
         if out_of_range:
             errors.append("living_weight_out_of_range")
         if aggregation_method == "living_weighted_average" and lw.notna().sum() == 0:
             errors.append("aggregation_method_living_weighted_but_no_weights")
             lines.append("- ERROR: aggregation_method이 living_weighted_average인데 living_weight 값이 모두 null입니다.")
+        for ratio_col in ["park_area_ratio", "green_area_ratio", "river_area_ratio", "forest_mountain_area_ratio"]:
+            if ratio_col in grid.columns:
+                values = pd.to_numeric(grid[ratio_col], errors="coerce").fillna(0)
+                lines.append(f"- {ratio_col} > 0 grid count: {int((values > 0).sum())}")
     else:
         if aggregation_method == "living_weighted_average":
             errors.append("aggregation_method_living_weighted_but_column_missing")

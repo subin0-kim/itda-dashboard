@@ -27,6 +27,20 @@
 | `data/raw/optional/large_retail.csv` | `large_retail_optional` | 없음 | optional 미확보로 기록하고 여가 대체 산식 사용 |
 | `data/raw/medical/family_medicine.csv` | `family_medicine` | optional. `hospital_raw.json` 보유 시 추출 가능 | 생성 시 의료 산식 `pediatric_family_general_hospital` 적용, 없으면 `pediatric_general_hospital_only` 대체 산식 적용 |
 
+## 생활 출발지 가중치 후보 데이터
+
+현재 토지이용 후보 데이터는 `data/raw/land_use/` 하위 원천 폴더에 배치되어 있다. 실제 shapefile을 `config/data_config.yaml`에 연결해 LivingWeight를 적용했다.
+
+| 후보 데이터 | 예상 경로 | 좌표계 후보 | 인코딩 후보 | 분류 컬럼 | geometry 타입 | LivingWeight 사용 여부 | 미사용 사유 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 서울시 용도지역(도시지역) 공간정보 | `data/raw/land_use/UQ111_용도지역(도시지역)_202602/shp파일/UPIS_C_UQ111.shp` | EPSG:5174 | cp949 | `DGM_NM` | Polygon/MultiPolygon | 사용 | - |
+| 서울시 생활권계획 시설(공원) 공간정보 | `data/raw/land_use/UPIS_SHP_ZON216_서울시 생활권 계획(공원) 공간정보/UPIS_SHP_ZON216.shp` | EPSG:5174 | cp949 | - | Polygon/MultiPolygon | 사용 | 공원은 기존 `data/raw/leisure/park.csv`에서 여가 도착지로도 계속 사용 |
+| 환경공간정보서비스 토지피복지도 | `data/raw/land_use/seoul_land_cover.geojson` | EPSG:5174 | windows-949 가능 | `land_cover_category` | Polygon/MultiPolygon | 미사용 | optional raw 파일 없음 |
+| 하천/수계 공간데이터 | `data/raw/land_use/seoul_rivers.geojson` | EPSG:5174 | windows-949 가능 | - | Polygon/MultiPolygon | 미사용 | optional raw 파일 없음 |
+| 임야/산지 공간데이터 | `data/raw/land_use/seoul_forest_mountain.geojson` | EPSG:5174 | windows-949 가능 | - | Polygon/MultiPolygon | 미사용 | optional raw 파일 없음 |
+
+토지피복도/하천/임야 데이터가 추가로 준비되면 `config/data_config.yaml`의 `land_use` 항목에 실제 파일명, 좌표계, 분류 컬럼을 맞춘 뒤 `python scripts/run_preprocessing.py`를 다시 실행한다. 실제 파일이 없을 때 임의 토지이용 폴리곤이나 임의 가중치는 생성하지 않는다.
+
 ## 보조/원천 보관 파일
 
 | 파일 | row 수 | 용도 | 전처리 직접 사용 여부 | 이유 |
