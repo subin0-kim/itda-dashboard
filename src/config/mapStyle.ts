@@ -51,7 +51,11 @@ export const BASE_MAP_STYLE: StyleSpecification = {
       id: BASEMAP_LAYER_ID,
       type: "raster",
       source: BASEMAP_SOURCE_ID,
-      paint: { "raster-opacity": 0.92 },
+      paint: {
+        "raster-opacity": 1,
+        "raster-contrast": 0.12,
+        "raster-saturation": -0.08,
+      },
     },
   ],
 };
@@ -77,7 +81,11 @@ export const OSM_FALLBACK_STYLE: StyleSpecification = {
       id: BASEMAP_LAYER_ID,
       type: "raster",
       source: BASEMAP_SOURCE_ID,
-      paint: { "raster-opacity": 0.85 },
+      paint: {
+        "raster-opacity": 0.98,
+        "raster-contrast": 0.08,
+        "raster-saturation": -0.05,
+      },
     },
   ],
 };
