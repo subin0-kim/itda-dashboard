@@ -10,11 +10,11 @@ export const DEFAULT_MAP_BOUNDS: LngLatBoundsLike = [
 export const BASE_MAP_ATTRIBUTION =
   '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>';
 
-const CARTO_POSITRON_TILES = [
-  "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-  "https://b.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-  "https://c.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-  "https://d.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+const CARTO_VOYAGER_TILES = [
+  "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+  "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+  "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+  "https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
 ];
 
 const OSM_TILES = [
@@ -35,7 +35,7 @@ export const BASE_MAP_STYLE: StyleSpecification = {
   sources: {
     [BASEMAP_SOURCE_ID]: {
       type: "raster",
-      tiles: CARTO_POSITRON_TILES,
+      tiles: CARTO_VOYAGER_TILES,
       tileSize: 256,
       maxzoom: 19,
       attribution: BASE_MAP_ATTRIBUTION,
@@ -45,16 +45,16 @@ export const BASE_MAP_STYLE: StyleSpecification = {
     {
       id: BASEMAP_BACKGROUND_LAYER_ID,
       type: "background",
-      paint: { "background-color": "#f6f7fb" },
+      paint: { "background-color": "#eef2f7" },
     },
     {
       id: BASEMAP_LAYER_ID,
       type: "raster",
       source: BASEMAP_SOURCE_ID,
       paint: {
-        "raster-opacity": 1,
-        "raster-contrast": 0.12,
-        "raster-saturation": -0.08,
+        "raster-opacity": 0.74,
+        "raster-contrast": -0.08,
+        "raster-saturation": -0.28,
       },
     },
   ],
@@ -75,16 +75,16 @@ export const OSM_FALLBACK_STYLE: StyleSpecification = {
     {
       id: BASEMAP_BACKGROUND_LAYER_ID,
       type: "background",
-      paint: { "background-color": "#f6f7fb" },
+      paint: { "background-color": "#eef2f7" },
     },
     {
       id: BASEMAP_LAYER_ID,
       type: "raster",
       source: BASEMAP_SOURCE_ID,
       paint: {
-        "raster-opacity": 0.98,
-        "raster-contrast": 0.08,
-        "raster-saturation": -0.05,
+        "raster-opacity": 0.68,
+        "raster-contrast": -0.12,
+        "raster-saturation": -0.35,
       },
     },
   ],
