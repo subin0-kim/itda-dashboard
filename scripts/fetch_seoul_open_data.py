@@ -146,7 +146,7 @@ def write_hospital_outputs(rows: list[dict[str, Any]], report: list[str]) -> Non
         duty_div = read_any(row, ["DUTYDIVNAM"])
         info = " ".join(str(row.get(key, "")) for key in ["DUTYINF", "DUTYETC", "DUTYNAME"])
         record = {"name": name, "longitude": lon, "latitude": lat, "source_name": "TbHospitalInfo"}
-        if "소아청소년" in name or "소아과" in name:
+        if is_pediatric_clinic_name(name, duty_div):
             pediatric.append(record)
         if "종합병원" in duty_div or "상급종합" in duty_div:
             general.append(record)
@@ -161,6 +161,22 @@ def write_hospital_outputs(rows: list[dict[str, Any]], report: list[str]) -> Non
     report.append(
         f"- family_medicine.csv: {len(family_medicine)} rows (facility_name_fallback: DUTYNAME에 '가정의학' 포함)"
     )
+
+
+def is_pediatric_clinic_name(name: str, duty_div: str) -> bool:
+    """Classify pediatric clinic names from TbHospitalInfo facility names.
+
+    The source does not expose department-level fields in this pipeline, so
+    pediatric clinics are identified by explicit pediatric terms in DUTYNAME.
+    Includes names containing "소아청소년", "소아과", and "소아과의원".
+    Oriental medicine clinics with "한의원" are excluded from this medical
+    facility type because the score definition targets pediatric clinics.
+    """
+    normalized_name = str(name or "")
+    normalized_div = str(duty_div or "")
+    if "한의원" in normalized_div or "한의원" in normalized_name:
+        return False
+    return any(keyword in normalized_name for keyword in ["소아청소년", "소아과의원", "소아과"])
 
 
 def write_simple_point_output(rows: list[dict[str, Any]], path: Path, report: list[str], label: str) -> None:

@@ -172,7 +172,7 @@
     "reason": "administration 카테고리 점수가 상대적으로 낮게 나타난 구이며, 전체 점수가 더 높고 해당 카테고리 접근성이 높은 구를 벤치마킹 후보로 추천합니다.",
     "weak_category": "administration",
     "comparison": {
-      "medical_gap": 2.396,
+      "medical_gap": 2.397,
       "education_gap": 3.704,
       "administration_gap": 9.498,
       "leisure_gap": 2.696,

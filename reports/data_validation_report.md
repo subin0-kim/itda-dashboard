@@ -31,7 +31,7 @@
 ## Facility Category Counts
 - education: 9596
 - leisure: 1378
-- medical: 836
+- medical: 835
 - administration: 440
 
 ## Null Distance Summary

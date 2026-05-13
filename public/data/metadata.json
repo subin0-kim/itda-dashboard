@@ -112,7 +112,7 @@
       "fallback_formula": "leisure_without_large_retail"
     }
   ],
-  "generated_at": "2026-05-13T12:43:48.267755+00:00",
+  "generated_at": "2026-05-13T12:57:00.226821+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -180,12 +180,12 @@
     "leisure.park": 132,
     "medical.family_medicine": 242,
     "medical.general_hospital": 61,
-    "medical.pediatric_clinic": 533
+    "medical.pediatric_clinic": 532
   },
   "excluded_records_summary": {
     "pediatric_clinic": {
-      "input_records": 536,
-      "used_records": 536,
+      "input_records": 535,
+      "used_records": 535,
       "excluded_records": 0
     },
     "general_hospital": {
