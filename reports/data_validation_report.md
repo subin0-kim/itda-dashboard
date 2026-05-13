@@ -27,6 +27,13 @@
 - score `leisure_score`: null=0, out_of_range=0
 - score `grid_stroller_score`: null=0, out_of_range=0
 - score `stroller_score`: null=0, out_of_range=0
+- score `weighted_stroller_score`: null=0, out_of_range=0
+- score `weighted_grid_stroller_score`: null=0, out_of_range=0
+- score `weighted_medical_score`: null=0, out_of_range=0
+- score `weighted_admin_score`: null=0, out_of_range=0
+- score `weighted_education_score`: null=0, out_of_range=0
+- score `weighted_leisure_score`: null=0, out_of_range=0
+- score `weighted_overall_score`: null=0, out_of_range=0
 
 ## Facility Category Counts
 - education: 9596

@@ -236,7 +236,7 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       <div className="mb-3">
         <h2 className="text-base font-semibold text-slate-950">구 상세 지도</h2>
         <p className="mt-1 text-sm text-slate-500">
-          현재 기준: {category.label}. 격자 색상은 유모차 생활보행 점수, 점은 주요 생활시설의 실제 위치를 나타냅니다.
+          현재 기준: {category.label}. 격자 색상은 생활 출발지 가중치를 반영한 점수, 점은 주요 생활시설의 실제 위치를 나타냅니다.
         </p>
       </div>
       <div className="relative overflow-hidden rounded-lg border border-slate-200">
@@ -291,7 +291,8 @@ function gridTooltipHtml(props: Record<string, unknown>, categoryLabel: string) 
   return `
     <div style="font-size:12px;line-height:1.55">
       <strong>${escapeHtml(readString(props.grid_id) || "격자 ID 없음")}</strong><br/>
-      ${categoryLabel}: ${formatPopupScore(props.selected_score)}<br/>
+      ${categoryLabel} 가중 반영: ${formatPopupScore(props.selected_score)}<br/>
+      ${categoryLabel} 원점수: ${formatPopupScore(props.selected_raw_score)}<br/>
       통합: ${formatPopupScore(props.overall_score)}<br/>
       ${formatLivingWeight(props.living_weight)}
       의료: ${formatPopupScore(props.medical_score)}<br/>

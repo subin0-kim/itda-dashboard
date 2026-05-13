@@ -48,6 +48,18 @@ export function getGridScore(feature: GeoJsonFeature | GeoJsonProperties, catego
   return getCategoryScore(feature, categoryId);
 }
 
+export function getWeightedGridScore(feature: GeoJsonFeature | GeoJsonProperties, categoryId: OverviewCategoryId): number | null {
+  const props = readProps(feature);
+  if (categoryId === "overall") {
+    return readNumber(props.weighted_overall_score ?? props.weighted_stroller_score ?? props.weighted_grid_stroller_score);
+  }
+  if (categoryId === "medical") return readNumber(props.weighted_medical_score);
+  if (categoryId === "administration") return readNumber(props.weighted_admin_score ?? props.weighted_administration_score);
+  if (categoryId === "education") return readNumber(props.weighted_education_score);
+  if (categoryId === "leisure") return readNumber(props.weighted_leisure_score);
+  return null;
+}
+
 export function getFacilityName(feature: GeoJsonFeature | GeoJsonProperties | Record<string, unknown> | null | undefined): string {
   const props = readProps(feature);
   return readFirstString(props, ["facility_name", "name", "시설명", "기관명"]);

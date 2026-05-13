@@ -35,6 +35,7 @@ def export_public_data(config_path: str) -> None:
     if grid_scores.crs is None:
         grid_scores = grid_scores.set_crs(web_crs)
     grid_scores = _attach_living_weight_columns(grid_scores, paths.get("grid_living_weight"))
+    grid_scores = _attach_living_weighted_score_columns(grid_scores)
     grid_scores.to_crs(web_crs).to_file(ensure_parent(paths["public_grid_scores"]), driver="GeoJSON")
 
     facilities = gpd.read_file(require_file(paths["prepared_facilities"], "시설 산출물"))
@@ -93,6 +94,7 @@ def export_public_data(config_path: str) -> None:
                 "benchmark_recommendations": paths["public_benchmark_recommendations"],
                 "metadata": paths["public_metadata"],
             },
+            "grid_color_score_basis": "weighted_score_when_living_weight_available",
         },
     )
     metadata["unavailable_optional_datasets"] = unavailable_optional
@@ -137,6 +139,37 @@ def _attach_living_weight_columns(grid_scores, living_path):
     select_columns = ["grid_id"] + [col for col in LIVING_WEIGHT_COLUMNS if col in lw.columns]
     merged = grid_scores.merge(lw[select_columns].drop_duplicates(subset=["grid_id"]), on="grid_id", how="left")
     return merged
+
+
+def _attach_living_weighted_score_columns(grid_scores):
+    """Precompute score x LivingWeight columns for map coloring.
+
+    The browser reads these fields directly and does not calculate distance or
+    score values. If LivingWeight is unavailable, weighted columns remain null.
+    """
+    if "living_weight" not in grid_scores.columns:
+        return grid_scores
+    import pandas as pd
+
+    weight = pd.to_numeric(grid_scores["living_weight"], errors="coerce")
+    score_columns = {
+        "stroller_score": "weighted_stroller_score",
+        "grid_stroller_score": "weighted_grid_stroller_score",
+        "medical_score": "weighted_medical_score",
+        "admin_score": "weighted_admin_score",
+        "education_score": "weighted_education_score",
+        "leisure_score": "weighted_leisure_score",
+    }
+    for source_col, target_col in score_columns.items():
+        if source_col not in grid_scores.columns:
+            continue
+        values = pd.to_numeric(grid_scores[source_col], errors="coerce")
+        grid_scores[target_col] = (values * weight).clip(0, 100).round(3)
+    if "weighted_stroller_score" in grid_scores.columns:
+        grid_scores["weighted_overall_score"] = grid_scores["weighted_stroller_score"]
+    elif "weighted_grid_stroller_score" in grid_scores.columns:
+        grid_scores["weighted_overall_score"] = grid_scores["weighted_grid_stroller_score"]
+    return grid_scores
 
 
 def main() -> None:

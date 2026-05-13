@@ -7,6 +7,7 @@ import {
   getFacilityName,
   getFacilityType,
   getGridScore,
+  getWeightedGridScore,
   normalizeCategory,
   readNumber,
   readString,
@@ -81,14 +82,17 @@ export function enrichGridScores(collection: GeoJsonFeatureCollection, categoryI
       const props = feature.properties ?? {};
       const gridId = readString(props.grid_id ?? props.GRID_ID) || `grid-${index}`;
       const scores = readGridScores(props);
-      const selected = getGridScore(props, categoryId);
+      const selectedRaw = getGridScore(props, categoryId);
+      const selectedWeighted = getWeightedGridScore(props, categoryId);
       return {
         ...feature,
         id: gridId,
         properties: {
           ...props,
           grid_id: gridId,
-          selected_score: selected,
+          selected_score: selectedWeighted ?? selectedRaw,
+          selected_raw_score: selectedRaw,
+          selected_weighted_score: selectedWeighted,
           overall_score: scores.overall_score,
           medical_score: scores.medical_score,
           admin_score: scores.admin_score,

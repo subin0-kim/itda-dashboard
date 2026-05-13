@@ -43,7 +43,7 @@ export function ScoreLegend({ categoryId = "overall", layout = "card" }: ScoreLe
     <div className="rounded-lg border border-slate-200 bg-white p-4">
       <div className="text-sm font-semibold text-slate-900">{category.label} 점수 범례</div>
       <p className="mt-2 text-xs leading-5 text-slate-500">
-        점수가 높을수록 해당 카테고리 시설까지의 공개데이터 기반 접근성이 높게 나타납니다.
+        구 지도는 구별 집계 점수, 격자 지도는 생활 출발지 가중치를 반영한 격자 점수를 색상으로 표시합니다.
       </p>
       <div className="mt-3 grid gap-2">
         {bands.map((band) => (

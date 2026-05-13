@@ -380,7 +380,7 @@ function districtTooltipHtml(props: Record<string, unknown>, label: string) {
 }
 
 function gridTooltipHtml(props: Record<string, unknown>, label: string) {
-  return `<div style="font-size:12px;line-height:1.55"><strong>${escapeHtml(readString(props.grid_id) || "격자 ID 없음")}</strong><br/>${escapeHtml(readString(props.district_name) || "")}<br/>${label}: ${formatPopupScore(props.selected_score)}</div>`;
+  return `<div style="font-size:12px;line-height:1.55"><strong>${escapeHtml(readString(props.grid_id) || "격자 ID 없음")}</strong><br/>${escapeHtml(readString(props.district_name) || "")}<br/>${label} 가중 반영: ${formatPopupScore(props.selected_score)}<br/>${label} 원점수: ${formatPopupScore(props.selected_raw_score)}</div>`;
 }
 
 function facilityPopupHtml(props: Record<string, unknown>) {

@@ -112,7 +112,7 @@
       "fallback_formula": "leisure_without_large_retail"
     }
   ],
-  "generated_at": "2026-05-13T12:57:00.226821+00:00",
+  "generated_at": "2026-05-13T13:01:42.591823+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -398,5 +398,6 @@
     "category_summary": "public/data/category_summary.json",
     "benchmark_recommendations": "public/data/benchmark_recommendations.json",
     "metadata": "public/data/metadata.json"
-  }
+  },
+  "grid_color_score_basis": "weighted_score_when_living_weight_available"
 }
