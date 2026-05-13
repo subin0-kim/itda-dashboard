@@ -36,16 +36,6 @@ export type CategorySummaryItem = {
 
 export type CategorySummary = Partial<Record<CategoryId, CategorySummaryItem[]>>;
 
-export interface BenchmarkRecommendation {
-  district_code: string;
-  district_name: string;
-  benchmark_district_code: string;
-  benchmark_district_name: string;
-  reason: string;
-  weak_category: CategoryId;
-  comparison: Partial<Record<`${CategoryId}_gap`, number | null>>;
-}
-
 export interface Metadata {
   source_datasets?: Record<string, string> | MetadataSourceDataset[];
   unavailable_optional_datasets?: string[] | MetadataUnavailableDataset[];

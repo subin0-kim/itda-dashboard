@@ -66,7 +66,6 @@
 - 시설 유형 필터 선택 시 해당 시설 마커만 표시
 - 의료 카테고리는 소아청소년과, 가정의학과(optional), 종합병원/대학병원 시설 유형으로 구성한다. 가정의학과 데이터가 미확보 상태이면 필터에서 비활성 + `데이터 없음`으로 표기하고, 카테고리 헤더에는 대체 산식이 적용되었음을 안내한다.
 - 250m 격자 hover 시 격자 점수와 카테고리 점수 표시
-- 벤치마킹 페이지에서 구 선택 시 추천 구와 비교 차트 갱신
 - 데이터 파일 누락 시 누락 파일 목록 표시
 
 ## OverviewPage 구현 기준
@@ -81,7 +80,7 @@
 
 ## DistrictDetailPage 구현 기준
 
-- DistrictDetailPage는 `/data/seoul_districts.geojson`, `/data/grid_scores.geojson`, `/data/district_scores.json`, `/data/facilities.geojson`, `/data/benchmark_recommendations.json`, `/data/metadata.json`만 사용한다.
+- DistrictDetailPage는 `/data/seoul_districts.geojson`, `/data/grid_scores.geojson`, `/data/district_scores.json`, `/data/facilities.geojson`, `/data/metadata.json`만 사용한다.
 - `districtId`는 `district_code`를 우선 사용하고, 없으면 `district_name`으로 매칭한다.
 - 선택 구 경계, 선택 구 내부 250m 격자, 선택 구 시설 위치를 MapLibre GL JS 지도에 표시한다.
 - 카테고리 선택 시 격자 heatmap 기준과 시설 표시 기준을 함께 변경한다.
@@ -101,17 +100,6 @@
 - 데이터가 없는 시설 유형은 비활성 상태로 두고 `데이터 없음`을 표시한다.
 - 데이터가 없으면 임의 카테고리 점수, 임의 격자, 임의 시설점을 만들지 않고 누락 파일명을 표시한다.
 - 기본은 구별 보기이며, 격자 데이터는 사용자가 격자 보기를 선택했을 때 지도 source에 반영한다.
-
-## BenchmarkPage 구현 기준
-
-- BenchmarkPage는 `/data/district_scores.json`, `/data/benchmark_recommendations.json`, `/data/category_summary.json`, `/data/metadata.json`만 사용한다.
-- `/benchmark?district=:districtId` query가 있으면 해당 구를 기본 선택한다.
-- 구 선택 UI는 구 이름, 전체 순위, 통합 점수를 함께 보여준다.
-- 선택 구와 추천 구의 의료/교육/행정/여가 점수를 ECharts grouped bar chart로 비교한다.
-- 추천은 `benchmark_recommendations.json`에 있는 항목만 표시하며, 브라우저에서 임의 추천을 만들지 않는다.
-- 추천 데이터가 없으면 전처리 파이프라인에서 추천 파일을 생성해야 한다는 안내를 표시한다.
-- 개선 힌트는 점수 차이를 바탕으로 `확인할 수 있습니다`, `검토할 수 있습니다`처럼 참고형 문장으로 제공한다.
-- 비교 결과는 지역 비판이 아니라 개선 여지 탐색으로 보이도록 구성한다.
 
 ## UX 원칙
 
@@ -138,8 +126,6 @@
 - `TopBottomDistrictPanel`
 - `DistrictSummaryPanel`
 - `CategoryScoreChart`
-- `BenchmarkSelector`
-- `BenchmarkComparisonChart`
 - `MethodologyFormulaBlock`
 - `DataSourceTable`
 - `DataStatusPanel`

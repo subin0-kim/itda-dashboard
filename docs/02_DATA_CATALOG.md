@@ -11,7 +11,6 @@
 | `public/data/district_scores.json` | JSON | 구별 통합 점수, 순위, 카테고리 점수 |
 | `public/data/facilities.geojson` | GeoJSON | 의료, 행정, 교육, 여가 시설 위치 표시 |
 | `public/data/category_summary.json` | JSON | 카테고리별 전체 요약, 구별 순위, 시설 유형별 요약 |
-| `public/data/benchmark_recommendations.json` | JSON | 하위 구를 위한 벤치마킹 추천 결과 |
 | `public/data/metadata.json` | JSON | 데이터 생성일, 원천 데이터 목록, 전처리 버전, 한계 문구 |
 
 파일이 없거나 로딩에 실패하면 앱은 깨지지 않아야 한다. 이 경우 가짜 데이터를 생성하지 않고 `데이터 준비 필요` 또는 `데이터를 불러올 수 없음` 상태와 누락 파일명을 표시한다.
@@ -45,7 +44,6 @@ data/processed/
 ├─ grid_scores.geojson
 ├─ district_scores.json
 ├─ category_summary.json
-├─ benchmark_recommendations.json
 └─ metadata.json
 ```
 
@@ -58,7 +56,6 @@ public/data/
 ├─ district_scores.json
 ├─ facilities.geojson
 ├─ category_summary.json
-├─ benchmark_recommendations.json
 └─ metadata.json
 ```
 

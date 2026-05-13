@@ -59,7 +59,6 @@ export const DEFAULT_PREPROCESSING_SCRIPTS = [
   "scripts/preprocess/04_calculate_scores.py",
   "scripts/preprocess/05_calculate_living_weight.py",
   "scripts/preprocess/06_aggregate_district_scores.py",
-  "scripts/preprocess/07_generate_benchmark.py",
   "scripts/preprocess/08_export_public_data.py",
   "scripts/validation/validate_processed_data.py",
 ];

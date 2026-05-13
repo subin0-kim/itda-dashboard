@@ -24,7 +24,7 @@
 - 분석 단위: 250m x 250m 격자
 - 출발점: 각 격자의 중심점
 - 평가 시설: 의료, 행정, 교육, 여가 관련 생활시설
-- 주요 결과: 격자별 점수, 구별 평균 점수, 카테고리별 점수, 벤치마킹 추천
+- 주요 결과: 격자별 점수, 구별 평균 점수, 카테고리별 점수
 
 ## 제외 대상
 
@@ -41,7 +41,6 @@
 - 250m 격자별 점수 heatmap
 - 의료/행정/교육/여가 카테고리별 상세 보기
 - 구별 순위
-- 하위 구를 위한 벤치마킹 추천
 - 방법론, 데이터 출처, 한계 설명 페이지
 
 ## 핵심 산출물
@@ -51,7 +50,6 @@
 - `public/data/district_scores.json`
 - `public/data/facilities.geojson`
 - `public/data/category_summary.json`
-- `public/data/benchmark_recommendations.json`
 - `public/data/metadata.json`
 - 전처리 스크립트
 - GitHub Pages 배포 설정

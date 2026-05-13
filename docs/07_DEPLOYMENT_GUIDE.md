@@ -6,7 +6,7 @@
 
 배포 결과물은 Vite build 산출물이며, 백엔드 서버와 데이터베이스를 사용하지 않는다.
 
-라우팅은 GitHub Pages 새로고침 안정성을 위해 `HashRouter`를 사용한다. 제출 URL은 저장소 Pages 주소이며, 내부 페이지는 `#/category/medical`, `#/benchmark`처럼 hash route로 접근한다.
+라우팅은 GitHub Pages 새로고침 안정성을 위해 `HashRouter`를 사용한다. 제출 URL은 저장소 Pages 주소이며, 내부 페이지는 `#/category/medical`, `#/district/11110`처럼 hash route로 접근한다.
 
 ## GitHub Actions
 
@@ -48,7 +48,6 @@ npm run build
 - `public/data/district_scores.json`
 - `public/data/facilities.geojson`
 - `public/data/category_summary.json`
-- `public/data/benchmark_recommendations.json`
 - `public/data/metadata.json`
 
 이 파일들은 Python 전처리 결과물이다. 웹에서 거리 계산이나 점수 계산을 수행하지 않는다.

@@ -4,6 +4,5 @@ export const ROUTES = {
   categoryDefault: "/category/medical",
   category: "/category/:categoryId",
   district: "/district/:districtId",
-  benchmark: "/benchmark",
   methodology: "/methodology",
 } as const;

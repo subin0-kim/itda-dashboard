@@ -23,7 +23,6 @@ def export_public_data(config_path: str) -> None:
     require_file(paths["prepared_facilities"], "시설 산출물")
     require_file(paths["district_scores"], "구별 점수 산출물")
     require_file(paths["category_summary"], "카테고리 요약 산출물")
-    require_file(paths["benchmark_recommendations"], "벤치마킹 추천 산출물")
     import geopandas as gpd
 
     districts = gpd.read_file(boundary_path)
@@ -45,7 +44,6 @@ def export_public_data(config_path: str) -> None:
 
     copy_json(paths["district_scores"], paths["public_district_scores"])
     copy_json(paths["category_summary"], paths["public_category_summary"])
-    copy_json(paths["benchmark_recommendations"], paths["public_benchmark_recommendations"])
 
     fallback_formula_map = {
         "large_retail_optional": "leisure_without_large_retail",
@@ -91,7 +89,6 @@ def export_public_data(config_path: str) -> None:
                 "district_scores": paths["public_district_scores"],
                 "facilities": paths["public_facilities"],
                 "category_summary": paths["public_category_summary"],
-                "benchmark_recommendations": paths["public_benchmark_recommendations"],
                 "metadata": paths["public_metadata"],
             },
             "grid_color_score_basis": "weighted_score_when_living_weight_available",

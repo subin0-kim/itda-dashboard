@@ -46,7 +46,6 @@
 - `public/data/district_scores.json`
 - `public/data/facilities.geojson`
 - `public/data/category_summary.json`
-- `public/data/benchmark_recommendations.json`
 - `public/data/metadata.json`
 
 ## 기술 스택

@@ -23,7 +23,6 @@
 - OverviewPage의 지도 색상과 랭킹은 전처리 결과 파일에 포함된 구별 점수만 사용하며, 누락된 구에는 임의 점수를 부여하지 않는다.
 - DistrictDetailPage의 구 상세 지도는 전처리 결과 파일에 포함된 격자와 시설 feature만 표시하며, 누락된 격자나 시설을 임의로 보완하지 않는다.
 - CategoryDetailPage의 구별 지도, 격자 지도, 시설 point layer는 전처리 결과 파일에 포함된 feature만 표시하며, 누락된 카테고리 점수나 시설을 임의로 보완하지 않는다.
-- BenchmarkPage의 추천 구와 개선 힌트는 전처리 결과 파일에 포함된 벤치마킹 추천과 구별 점수만 사용하며, 누락된 추천을 임의로 생성하지 않는다.
 - MethodologyPage의 실제 사용 데이터 출처 표는 `metadata.json`의 `source_datasets`만 사용하며, 후보 데이터를 실제 사용 데이터처럼 표시하지 않는다.
 
 필수 한계 문구:

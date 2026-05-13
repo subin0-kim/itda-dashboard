@@ -19,7 +19,7 @@
 - Tailwind CSS: 반응형 UI 스타일링
 - React Router: 페이지 라우팅
 - MapLibre GL JS: 자치구 지도, 격자 heatmap, 시설 마커 표시
-- ECharts: 순위, 카테고리 비교, 벤치마킹 차트 표시
+- ECharts: 순위와 카테고리 비교 차트 표시
 - lucide-react: 버튼과 UI 아이콘
 
 ## Preprocessing stack
@@ -42,7 +42,7 @@
 ## Data format
 
 - GeoJSON: 자치구 경계, 격자 점수, 시설 위치
-- JSON: 구별 점수, 카테고리 요약, 벤치마킹 추천, 메타데이터
+- JSON: 구별 점수, 카테고리 요약, 메타데이터
 - CSV: 원천 또는 중간 전처리 테이블
 
 웹에서 읽는 최종 데이터 파일:
@@ -52,7 +52,6 @@
 - `public/data/district_scores.json`
 - `public/data/facilities.geojson`
 - `public/data/category_summary.json`
-- `public/data/benchmark_recommendations.json`
 - `public/data/metadata.json`
 
 ## Deployment stack

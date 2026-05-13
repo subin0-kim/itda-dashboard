@@ -80,7 +80,6 @@ def validate(config_path: str) -> int:
         "district_scores": paths["public_district_scores"],
         "facilities": paths["public_facilities"],
         "category_summary": paths["public_category_summary"],
-        "benchmark_recommendations": paths["public_benchmark_recommendations"],
         "metadata": paths["public_metadata"],
     }
     lines = ["# Data Validation Report", ""]

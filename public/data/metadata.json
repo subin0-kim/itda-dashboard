@@ -112,7 +112,7 @@
       "fallback_formula": "leisure_without_large_retail"
     }
   ],
-  "generated_at": "2026-05-13T13:01:42.591823+00:00",
+  "generated_at": "2026-05-13T13:14:15.624699+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -132,12 +132,9 @@
     "04_calculate_scores.py",
     "05_calculate_living_weight.py",
     "06_aggregate_district_scores.py",
-    "06_generate_benchmark.py",
     "08_export_public_data.py"
   ],
-  "notes": [
-    "벤치마킹 추천은 초기 버전의 단순 비교 로직이며 실제 정책 우선순위를 확정하지 않습니다."
-  ],
+  "notes": [],
   "grid": {
     "size_meters": 250,
     "count": 10028
@@ -332,7 +329,6 @@
   ],
   "district_count": 25,
   "district_score_aggregation": "living_weighted_mean_of_grid_scores",
-  "benchmark_logic": "higher_overall_score_and_strong_weak_category_simple_v1",
   "raw_inventory_summary": {
     "pediatric_clinic": {
       "raw_file": "data/raw/medical/pediatric_clinic.csv",
@@ -396,7 +392,6 @@
     "district_scores": "public/data/district_scores.json",
     "facilities": "public/data/facilities.geojson",
     "category_summary": "public/data/category_summary.json",
-    "benchmark_recommendations": "public/data/benchmark_recommendations.json",
     "metadata": "public/data/metadata.json"
   },
   "grid_color_score_basis": "weighted_score_when_living_weight_available"

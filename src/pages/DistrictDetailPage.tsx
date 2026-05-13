@@ -6,7 +6,6 @@ import { ErrorState } from "../components/common/ErrorState";
 import { LimitationNotice } from "../components/common/LimitationNotice";
 import { LoadingState } from "../components/common/LoadingState";
 import { EmptyState } from "../components/layout/EmptyState";
-import { BenchmarkCtaCard } from "../components/district/BenchmarkCtaCard";
 import { CategoryScoreCards } from "../components/district/CategoryScoreCards";
 import { DistrictDataBasisCard } from "../components/district/DistrictDataBasisCard";
 import { DistrictFacilityFilters } from "../components/district/DistrictFacilityFilters";
@@ -17,13 +16,12 @@ import { DistrictSummaryHeader } from "../components/district/DistrictSummaryHea
 import { GridSummaryPanel } from "../components/district/GridSummaryPanel";
 import { DATA_SOURCES } from "../config/dataSources";
 import { ROUTES } from "../config/routes";
-import { useBenchmarkRecommendations } from "../hooks/useBenchmarkRecommendations";
 import { useDistrictScores } from "../hooks/useDistrictScores";
 import { useFacilities } from "../hooks/useFacilities";
 import { useGeoJsonData } from "../hooks/useGeoJsonData";
 import { useGridScores } from "../hooks/useGridScores";
 import { useMetadata } from "../hooks/useMetadata";
-import type { BenchmarkRecommendation, DistrictScore } from "../types/data";
+import type { DistrictScore } from "../types/data";
 import type { GeoJsonFeatureCollection } from "../types/geojson";
 import type { OverviewCategoryId } from "../utils/category";
 import { FACILITY_TYPE_OPTIONS } from "../utils/category";
@@ -32,7 +30,6 @@ import {
   filterDistrictBoundary,
   filterDistrictFacilities,
   filterDistrictFeatures,
-  findBenchmarkForDistrict,
   findDistrictByRoute,
   getFacilityTypeCounts,
   normalizeDistrictScores,
@@ -50,7 +47,6 @@ export function DistrictDetailPage() {
   const gridScores = useGridScores();
   const districtScores = useDistrictScores();
   const facilities = useFacilities();
-  const recommendations = useBenchmarkRecommendations();
   const metadata = useMetadata();
 
   const normalizedScores = useMemo<DistrictScore[] | null>(() => {
@@ -77,10 +73,6 @@ export function DistrictDetailPage() {
   const facilityCounts = useMemo(() => getFacilityTypeCounts(districtFacilities), [districtFacilities]);
   const categoryAverages = useMemo(() => getCategoryAverages(normalizedScores ?? []), [normalizedScores]);
   const gridSummary = useMemo(() => getGridSummary(districtGrids, categoryId), [districtGrids, categoryId]);
-  const benchmark = useMemo(
-    () => (district && isDataReady(recommendations) ? findBenchmarkForDistrict(recommendations.data as BenchmarkRecommendation[], district) : null),
-    [district, recommendations],
-  );
 
   useEffect(() => {
     if (categoryId === "overall") {
@@ -156,7 +148,6 @@ export function DistrictDetailPage() {
           />
           <GridSummaryPanel summary={gridSummary} />
           <DistrictInsightPanel district={district} averages={categoryAverages} />
-          <BenchmarkCtaCard district={district} recommendation={benchmark} />
           <Link
             to={ROUTES.methodology}
             className="block rounded-lg border border-slate-200 bg-white p-4 text-sm font-medium text-slate-700 hover:bg-slate-50"

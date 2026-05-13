@@ -378,7 +378,6 @@ output_paths:
   grid_scores: "data/processed/grid_scores.geojson"
   grid_living_weight: "data/processed/grid_living_weight.geojson"
   district_scores: "data/processed/district_scores.json"
-  benchmark_recommendations: "data/processed/benchmark_recommendations.json"
   category_summary: "data/processed/category_summary.json"
   metadata: "data/processed/metadata.json"
   public_seoul_districts: "public/data/seoul_districts.geojson"
@@ -386,7 +385,6 @@ output_paths:
   public_district_scores: "public/data/district_scores.json"
   public_facilities: "public/data/facilities.geojson"
   public_category_summary: "public/data/category_summary.json"
-  public_benchmark_recommendations: "public/data/benchmark_recommendations.json"
   public_metadata: "public/data/metadata.json"
 
 coordinate_systems:

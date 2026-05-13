@@ -1,12 +1,11 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { BarChart3, Building2, GitCompare, Layers3, MapPinned } from "lucide-react";
+import { BarChart3, Building2, Layers3, MapPinned } from "lucide-react";
 import { ROUTES } from "../../config/routes";
 
 const navItems = [
   { to: ROUTES.overview, label: "전체 현황", icon: MapPinned },
   { to: ROUTES.districtGuide, label: "구 상세", icon: Building2 },
   { to: ROUTES.categoryDefault, label: "카테고리", icon: Layers3 },
-  { to: ROUTES.benchmark, label: "벤치마킹", icon: GitCompare },
   { to: ROUTES.methodology, label: "방법론", icon: BarChart3 },
 ];
 

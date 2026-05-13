@@ -42,7 +42,6 @@ public/data/
 - `district_scores.json`
 - `facilities.geojson`
 - `category_summary.json`
-- `benchmark_recommendations.json`
 - `metadata.json`
 
 ## 전처리 단계
@@ -64,9 +63,8 @@ public/data/
 15. 격자를 자치구에 매핑
 16. 구별 점수와 순위 계산
 17. 카테고리별 요약 계산
-18. 벤치마킹 추천 생성
-19. GeoJSON, JSON 산출물 저장
-20. 산출물 스키마 및 값 범위 검증
+18. GeoJSON, JSON 산출물 저장
+19. 산출물 스키마 및 값 범위 검증
 
 ## 필요한 Python 스크립트 목록
 
@@ -80,7 +78,6 @@ scripts/preprocess/
 ├─ 04_calculate_scores.py
 ├─ 05_calculate_living_weight.py
 ├─ 06_aggregate_district_scores.py
-├─ 07_generate_benchmark.py
 └─ 08_export_public_data.py
 
 scripts/validation/
@@ -128,9 +125,8 @@ python scripts/run_preprocessing.py
 현재 실제 raw 데이터 기준 실행 결과:
 
 - `grid_base.geojson`: 10,028개 250m 격자
-- `facilities_prepared.geojson`: 12,038개 시설
+- `facilities_prepared.geojson`: 12,249개 시설
 - `district_scores.json`: 서울 25개 구 점수
-- `benchmark_recommendations.json`: 24개 추천
 - 최종 파일은 `public/data/`에 생성
 - 검증 리포트는 `reports/data_validation_report.md`에 생성
 
@@ -143,7 +139,6 @@ python scripts/preprocess/03_calculate_distances.py --config config/data_config.
 python scripts/preprocess/04_calculate_scores.py --config config/data_config.yaml
 python scripts/preprocess/05_calculate_living_weight.py --config config/data_config.yaml
 python scripts/preprocess/06_aggregate_district_scores.py --config config/data_config.yaml
-python scripts/preprocess/07_generate_benchmark.py --config config/data_config.yaml
 python scripts/preprocess/08_export_public_data.py --config config/data_config.yaml
 python scripts/validation/validate_processed_data.py --config config/data_config.yaml
 ```

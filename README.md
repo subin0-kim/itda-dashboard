@@ -4,14 +4,13 @@
 
 서울 25개 구의 아이동반 친화성을 250m 격자 기반 `유모차 생활보행 점수`로 시각화하는 GitHub Pages 기반 정적 웹 대시보드 프로젝트다.
 
-이 웹페이지는 공모전 제출 파일 중 `시각화 결과물`로 제출할 독립형 인터랙티브 웹페이지다. 발표자료는 별도 제출 파일이며, 웹 결과물은 심사자가 직접 구별 지도, 카테고리, 상세 지도, 벤치마킹, 방법론을 탐색할 수 있도록 구성한다.
+이 웹페이지는 공모전 제출 파일 중 `시각화 결과물`로 제출할 독립형 인터랙티브 웹페이지다. 발표자료는 별도 제출 파일이며, 웹 결과물은 심사자가 직접 구별 지도, 카테고리, 상세 지도, 방법론을 탐색할 수 있도록 구성한다.
 
 ## 주요 페이지
 
 - `#/`: 서울 25개 구 유모차 생활보행 점수 지도, KPI, TOP 5 / 개선 여지 큰 구
-- `#/district/:districtId`: 선택 구의 250m 격자 heatmap, 시설 위치, 카테고리 점수, 벤치마킹 링크
+- `#/district/:districtId`: 선택 구의 250m 격자 heatmap, 시설 위치, 카테고리 점수
 - `#/category/:categoryId`: 의료, 행정, 교육, 여가 카테고리별 서울 전체 비교
-- `#/benchmark`: 전처리로 생성된 벤치마킹 추천과 카테고리 점수 비교
 - `#/methodology`: 점수 산식, 기준거리, 실제 사용 데이터 출처, 전처리 파이프라인, 한계
 
 GitHub Pages 새로고침 안정성을 위해 프론트엔드는 `HashRouter`를 사용한다.
@@ -70,9 +69,8 @@ python scripts/preprocess/01_generate_grid.py --config config/data_config.yaml
 현재 실제 raw 데이터 기준 전체 전처리 결과:
 
 - 250m 격자: 10,028개
-- 시설: 12,038개
+- 시설: 12,249개
 - 구별 점수: 25개 구
-- 벤치마킹 추천: 24건
 - validation report: `reports/data_validation_report.md`
 
 ## 행정시설 주소 좌표 변환
@@ -151,7 +149,6 @@ TbHospitalInfo 원천에 별도 진료과목 컬럼이 없어 `scripts/extract_f
 - `public/data/district_scores.json`
 - `public/data/facilities.geojson`
 - `public/data/category_summary.json`
-- `public/data/benchmark_recommendations.json`
 - `public/data/metadata.json`
 
 출력 확인:
@@ -193,7 +190,6 @@ DistrictDetailPage는 아래 전처리 결과 파일만 사용한다.
 - `/data/grid_scores.geojson`
 - `/data/district_scores.json`
 - `/data/facilities.geojson`
-- `/data/benchmark_recommendations.json`
 - `/data/metadata.json`
 
 주요 기능:
@@ -204,7 +200,6 @@ DistrictDetailPage는 아래 전처리 결과 파일만 사용한다.
 - 통합/의료/행정/교육/여가 카테고리 필터
 - 카테고리별 시설 유형 체크 필터
 - 구 내부 격자 요약과 강점/개선 여지 해석
-- 벤치마킹 추천 CTA
 - 데이터 기준과 한계 안내
 
 데이터가 없으면 가짜 구 상세, 임의 격자, 임의 시설점을 만들지 않고 `데이터 준비 필요` 상태와 누락 파일명을 표시한다. 구 상세 지도는 `grid_scores.geojson`과 `facilities.geojson`에 포함된 feature만 표시한다.
@@ -242,34 +237,6 @@ CategoryDetailPage는 아래 전처리 결과 파일만 사용한다.
 - 카테고리 산식과 데이터 기준 안내
 
 데이터가 없으면 가짜 구 점수, 임의 격자, 임의 시설점을 만들지 않고 `데이터 준비 필요` 상태와 누락 파일명을 표시한다. 점수는 공개데이터 기반 생활시설 접근성 비교 지표이며, 실제 현장 이동 가능 여부를 확정하지 않는다.
-
-## BenchmarkPage
-
-Route:
-
-- `/benchmark`
-- `/benchmark?district=:districtId`
-
-BenchmarkPage는 아래 전처리 결과 파일만 사용한다.
-
-- `/data/district_scores.json`
-- `/data/benchmark_recommendations.json`
-- `/data/category_summary.json`
-- `/data/metadata.json`
-
-주요 기능:
-
-- 구 선택과 점수 기준 정렬
-- 선택 구 점수 요약
-- 전처리된 벤치마킹 추천 구 표시
-- 선택 구, 추천 구, 서울 평균 카테고리 점수 비교 차트
-- 약점 카테고리 중심 개선 힌트
-- 개선 여지가 큰 구 빠른 탐색
-- 추천 방식과 데이터 한계 안내
-
-벤치마킹 추천은 `benchmark_recommendations.json`에 생성된 실제 추천 항목만 표시한다. 추천 데이터가 없으면 임의 추천을 만들지 않고 `이 구에 대한 벤치마킹 추천 데이터가 아직 생성되지 않았습니다.` 상태를 표시한다.
-
-개선 힌트는 정책 결정을 확정하는 문장이 아니라 공개데이터 기반 생활시설 접근성 차이를 확인하기 위한 참고 문장으로 해석한다.
 
 ## MethodologyPage
 

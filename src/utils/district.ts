@@ -1,4 +1,4 @@
-import type { BenchmarkRecommendation, CategoryId, DistrictScore } from "../types/data";
+import type { CategoryId, DistrictScore } from "../types/data";
 import type { GeoJsonFeature, GeoJsonFeatureCollection, GeoJsonProperties } from "../types/geojson";
 import type { OverviewCategoryId } from "./category";
 import {
@@ -138,14 +138,6 @@ export function getFacilityTypeCounts(facilities: GeoJsonFeatureCollection): Rec
     if (type) acc[type] = (acc[type] ?? 0) + 1;
     return acc;
   }, {});
-}
-
-export function findBenchmarkForDistrict(recommendations: BenchmarkRecommendation[], district: DistrictScore) {
-  return (
-    recommendations.find((item) => item.district_code === district.district_code && district.district_code) ??
-    recommendations.find((item) => item.district_name === district.district_name && district.district_name) ??
-    null
-  );
 }
 
 export function featureMatchesDistrict(feature: GeoJsonFeature, district: DistrictScore): boolean {

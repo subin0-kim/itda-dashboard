@@ -5,7 +5,6 @@
 - OK: `public/data/district_scores.json`
 - OK: `public/data/facilities.geojson`
 - OK: `public/data/category_summary.json`
-- OK: `public/data/benchmark_recommendations.json`
 - OK: `public/data/metadata.json`
 - grid_scores geometry invalid=0, empty=0
 - seoul_districts geometry invalid=0, empty=0

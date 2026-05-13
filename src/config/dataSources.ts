@@ -33,12 +33,6 @@ export const DATA_SOURCES = {
     label: "카테고리 요약",
     type: "json",
   },
-  benchmarkRecommendations: {
-    key: "benchmarkRecommendations",
-    path: dataPath("benchmark_recommendations.json"),
-    label: "벤치마킹 추천",
-    type: "json",
-  },
   metadata: {
     key: "metadata",
     path: dataPath("metadata.json"),

@@ -17,7 +17,6 @@ STEPS = [
     "scripts/preprocess/04_calculate_scores.py",
     "scripts/preprocess/05_calculate_living_weight.py",
     "scripts/preprocess/06_aggregate_district_scores.py",
-    "scripts/preprocess/07_generate_benchmark.py",
     "scripts/preprocess/08_export_public_data.py",
     "scripts/validation/validate_processed_data.py",
 ]
@@ -54,14 +53,12 @@ def clean_generated_outputs() -> None:
         "data/processed/grid_living_weight.geojson",
         "data/processed/district_scores.json",
         "data/processed/category_summary.json",
-        "data/processed/benchmark_recommendations.json",
         "data/processed/metadata.json",
         "public/data/seoul_districts.geojson",
         "public/data/grid_scores.geojson",
         "public/data/district_scores.json",
         "public/data/facilities.geojson",
         "public/data/category_summary.json",
-        "public/data/benchmark_recommendations.json",
         "public/data/metadata.json",
     ]
     for rel_path in generated:

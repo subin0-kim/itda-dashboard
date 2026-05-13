@@ -8,10 +8,9 @@
 |---|---|---|---|---|
 | `seoul_districts.geojson` | `FeatureCollection`, 25 features | `Polygon` | `district_code`, `district_name`, `source_code`, `source_name` | 서울 25개 구 경계 |
 | `grid_scores.geojson` | `FeatureCollection`, 10,028 features | `Polygon`, 일부 `MultiPolygon` | `grid_id`, `district_code`, `district_name`, 거리 컬럼, 시설유형 점수, `medical_score`, `admin_score`, `education_score`, `leisure_score`, `grid_stroller_score`, `stroller_score` | `large_retail_optional` 관련 거리/점수는 optional 데이터 미확보로 null |
-| `facilities.geojson` | `FeatureCollection`, 12,038 features | `Point` | `facility_id`, `facility_name`, `category`, `facility_type`, `source_name`, `source_provider`, `raw_file`, `address`, `district_name`, `district_code` | 주민센터 일부는 원천/좌표변환 결과상 `district_code`가 null일 수 있음 |
+| `facilities.geojson` | `FeatureCollection`, 12,249 features | `Point` | `facility_id`, `facility_name`, `category`, `facility_type`, `source_name`, `source_provider`, `raw_file`, `address`, `district_name`, `district_code` | 주민센터 일부는 원천/좌표변환 결과상 `district_code`가 null일 수 있음 |
 | `district_scores.json` | array, 25 rows | 없음 | `district_code`, `district_name`, `overall_score`, `rank`, `medical_score`, `admin_score`, `education_score`, `leisure_score`, `weakest_category`, `strongest_category`, `grid_count`, `calculable_grid_count`, `null_score_ratio` | `weakest_category`는 `administration` 등 카테고리 ID 사용 |
 | `category_summary.json` | object | 없음 | `medical`, `administration`, `education`, `leisure` | 각 카테고리별 25개 구 요약 |
-| `benchmark_recommendations.json` | array, 24 rows | 없음 | `district_code`, `district_name`, `benchmark_district_code`, `benchmark_district_name`, `reason`, `weak_category`, `comparison` | 추천 후보가 없는 구는 임의 추천하지 않음 |
 | `metadata.json` | object | 없음 | `source_datasets`, `unavailable_optional_datasets`, `generated_at`, `coordinate_systems`, `scoring_formula_version`, `applied_leisure_formula`, `aggregation_method`, `facility_counts`, `score_null_summary` | 실제 사용 raw data와 optional 누락 정보 기록 |
 
 ## 점수 필드 범위
