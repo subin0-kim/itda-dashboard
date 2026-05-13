@@ -114,12 +114,17 @@ export function filterFacilities(
   const selected = new Set(selectedTypes);
   return {
     ...facilities,
-    features: facilities.features.filter((feature) => {
-      const props = feature.properties ?? {};
-      const category = getFacilityCategory(props);
-      const type = getFacilityType(props);
-      return category === categoryId && selected.has(type);
-    }),
+    features: facilities.features
+      .filter((feature) => {
+        const props = feature.properties ?? {};
+        const category = getFacilityCategory(props);
+        const type = getFacilityType(props);
+        return category === categoryId && selected.has(type);
+      })
+      .map((feature, index) => ({
+        ...feature,
+        id: readString(feature.properties?.facility_id) || readString(feature.properties?.facility_name) || `facility-${index}`,
+      })),
   };
 }
 

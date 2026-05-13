@@ -13,6 +13,7 @@ import { OverviewHero } from "../components/overview/OverviewHero";
 import { SeoulDistrictMap } from "../components/map/SeoulDistrictMap";
 import { DATA_SOURCES } from "../config/dataSources";
 import { useDistrictScores } from "../hooks/useDistrictScores";
+import { useFacilities } from "../hooks/useFacilities";
 import { useGeoJsonData } from "../hooks/useGeoJsonData";
 import { useMetadata } from "../hooks/useMetadata";
 import type { DistrictScore } from "../types/data";
@@ -24,6 +25,7 @@ export function OverviewPage() {
   const [categoryId, setCategoryId] = useState<OverviewCategoryId>("overall");
   const districts = useGeoJsonData(DATA_SOURCES.seoulDistricts.path);
   const districtScores = useDistrictScores();
+  const facilities = useFacilities();
   const metadata = useMetadata();
 
   const normalizedScores = useMemo<DistrictScore[] | null>(() => {
@@ -80,7 +82,17 @@ export function OverviewPage() {
           ) : null}
           {canRenderMap ? (
             <>
-              <SeoulDistrictMap districts={districts.data} scores={normalizedScores} categoryId={categoryId} />
+              <SeoulDistrictMap
+                districts={districts.data}
+                scores={normalizedScores}
+                categoryId={categoryId}
+                facilities={isDataReady(facilities) ? facilities.data : null}
+              />
+              {categoryId !== "overall" && facilities.status === "missing" ? (
+                <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">
+                  시설 위치 데이터가 없어 주요 시설 점을 표시할 수 없습니다.
+                </div>
+              ) : null}
               {noScoreDistrictCount > 0 ? (
                 <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600">
                   일부 구는 점수 데이터가 없어 회색으로 표시됩니다.
