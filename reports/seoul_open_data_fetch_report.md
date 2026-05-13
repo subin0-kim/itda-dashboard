@@ -1,0 +1,58 @@
+# Seoul Open Data Fetch Report
+
+## API service collection
+- 서울 열린데이터 직접 OpenAPI를 우선 사용하고, 실패 시 포털 프록시를 보조로 시도합니다.
+- TbHospitalInfo: 1-1000 수집 (1000 rows)
+- TbHospitalInfo: 1001-2000 수집 (1000 rows)
+- TbHospitalInfo: 2001-3000 수집 (1000 rows)
+- TbHospitalInfo: 3001-4000 수집 (1000 rows)
+- TbHospitalInfo: 4001-5000 수집 (1000 rows)
+- TbHospitalInfo: 5001-6000 수집 (1000 rows)
+- TbHospitalInfo: 6001-7000 수집 (1000 rows)
+- TbHospitalInfo: 7001-8000 수집 (1000 rows)
+- TbHospitalInfo: 8001-9000 수집 (1000 rows)
+- TbHospitalInfo: 9001-10000 수집 (1000 rows)
+- TbHospitalInfo: 10001-11000 수집 (1000 rows)
+- TbHospitalInfo: 11001-12000 수집 (1000 rows)
+- TbHospitalInfo: 12001-13000 수집 (1000 rows)
+- TbHospitalInfo: 13001-14000 수집 (1000 rows)
+- TbHospitalInfo: 14001-15000 수집 (1000 rows)
+- TbHospitalInfo: 15001-16000 수집 (1000 rows)
+- TbHospitalInfo: 16001-17000 수집 (1000 rows)
+- TbHospitalInfo: 17001-18000 수집 (1000 rows)
+- TbHospitalInfo: 18001-19000 수집 (1000 rows)
+- TbHospitalInfo: 19001-20000 수집 (1000 rows)
+- TbHospitalInfo: 20001-21000 수집 (1000 rows)
+- TbHospitalInfo: 21001-22000 수집 (1000 rows)
+- TbHospitalInfo: 22001-23000 수집 (550 rows)
+- TbHospitalInfo: 총 22550 rows 저장
+- pediatric_clinic.csv: 536 rows
+- general_hospital.csv: 93 rows
+- SearchParkInfoService: 1-1000 수집 (133 rows)
+- SearchParkInfoService: 총 133 rows 저장
+- data\raw\leisure\park.csv: 132 rows
+- culturalSpaceInfo: 1-1000 수집 (1000 rows)
+- culturalSpaceInfo: 1001-2000 수집 (52 rows)
+- culturalSpaceInfo: 총 1052 rows 저장
+- SeoulPublicLibraryInfo: 1-1000 수집 (215 rows)
+- SeoulPublicLibraryInfo: 총 215 rows 저장
+- data\raw\leisure\library_culture.csv: 1266 rows
+- ChildCareInfo: 1-1000 수집 (1000 rows)
+- ChildCareInfo: 1001-2000 수집 (1000 rows)
+- ChildCareInfo: 2001-3000 수집 (1000 rows)
+- ChildCareInfo: 3001-4000 수집 (1000 rows)
+- ChildCareInfo: 4001-5000 수집 (1000 rows)
+- ChildCareInfo: 5001-6000 수집 (1000 rows)
+- ChildCareInfo: 6001-7000 수집 (1000 rows)
+- ChildCareInfo: 7001-8000 수집 (1000 rows)
+- ChildCareInfo: 8001-9000 수집 (1000 rows)
+- ChildCareInfo: 9001-10000 수집 (478 rows)
+- ChildCareInfo: 총 9478 rows 저장
+- data\raw\education\childcare_center.csv: 8850 rows
+- city_hall.csv: 서울특별시청 1 rows
+
+## Not collected
+- kindergarten.csv: 서울 열린데이터 포털에서 좌표 포함 유치원 위치 API를 확인하지 못했습니다.
+- community_center.csv: 서울 열린데이터 포털에서 좌표 포함 주민센터 위치 API를 확인하지 못했습니다.
+- district_office.csv: 서울 열린데이터 포털에서 좌표 포함 구청 위치 API를 확인하지 못했습니다.
+- large_retail.csv: optional 데이터이며 이번 수집에서 확보하지 못했습니다.

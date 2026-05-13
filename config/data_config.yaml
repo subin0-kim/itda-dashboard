@@ -1,0 +1,352 @@
+project:
+  name: "잇다(:connect)"
+  scoring_formula_version: "stroller_access_v1"
+
+raw_data_paths:
+  root: "data/raw"
+  boundary: "data/raw/boundary"
+  medical: "data/raw/medical"
+  administration: "data/raw/administration"
+  education: "data/raw/education"
+  leisure: "data/raw/leisure"
+  optional: "data/raw/optional"
+
+geocoding:
+  provider: "Kakao Local API"
+  api_key_env:
+    - "KAKAO_REST_API_KEY"
+    - "KAKAO_API_KEY"
+  address_inputs:
+    community_center: "data/raw/administration/community_center_addresses.csv"
+    district_office: "data/raw/administration/district_office_addresses.csv"
+  outputs:
+    community_center: "data/raw/administration/community_center.csv"
+    district_office: "data/raw/administration/district_office.csv"
+  required_input_columns:
+    - "name"
+    - "address"
+
+boundary_data:
+  path: "data/raw/boundary/seoul_districts.geojson"
+  type: "geojson"
+  district_code_column: "district_code"
+  district_name_column: "district_name"
+  source_name: "서울시 자치구 경계 GeoJSON"
+  source_provider: "southkorea-maps public boundary data"
+  source_url: "https://github.com/southkorea/southkorea-maps"
+
+facility_sources:
+  pediatric_clinic:
+    category: "medical"
+    facility_type: "pediatric_clinic"
+    path: "data/raw/medical/pediatric_clinic.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 병의원 위치 정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do"
+  general_hospital:
+    category: "medical"
+    facility_type: "general_hospital"
+    path: "data/raw/medical/general_hospital.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 병의원 위치 정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do"
+  family_medicine:
+    category: "medical"
+    facility_type: "family_medicine"
+    path: "data/raw/medical/family_medicine.csv"
+    type: "csv"
+    required: false
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 병의원 위치 정보(가정의학과)"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do"
+    extraction_method: "facility_name_fallback"
+    extraction_note: "TbHospitalInfo 원천에 진료과목 컬럼이 없어 DUTYNAME에 '가정의학' 포함 여부로 필터링했습니다."
+  community_center:
+    category: "administration"
+    facility_type: "community_center"
+    path: "data/raw/administration/community_center.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: "address"
+    source_crs: "EPSG:4326"
+    source_name: "서울시 자치회관 현황"
+    source_provider: "서울 열린데이터광장 + Kakao Local API 좌표 변환"
+    source_url: "https://data.seoul.go.kr/dataList/OA-21246/F/1/datasetView.do"
+  district_office:
+    category: "administration"
+    facility_type: "district_office"
+    path: "data/raw/administration/district_office.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: "address"
+    source_crs: "EPSG:4326"
+    source_name: "서울 25개 자치구 구청 공식 주소 목록"
+    source_provider: "각 자치구 공식 홈페이지 + Kakao Local API 좌표 변환"
+    source_url: null
+  city_hall:
+    category: "administration"
+    facility_type: "city_hall"
+    path: "data/raw/administration/city_hall.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울특별시청 위치"
+    source_provider: "서울특별시"
+    source_url: "https://www.seoul.go.kr"
+  childcare_center:
+    category: "education"
+    facility_type: "childcare_center"
+    path: "data/raw/education/childcare_center.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 어린이집 정보(표준 데이터)"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr/dataList/OA-20300/A/1/datasetView.do"
+  kindergarten:
+    category: "education"
+    facility_type: "kindergarten"
+    path: "data/raw/education/kindergarten.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: "address"
+    source_crs: "EPSG:4326"
+    source_name: "서울특별시교육청_연도별 학교 위도 경도 데이터"
+    source_provider: "공공데이터포털"
+    source_url: "https://www.data.go.kr/data/15152021/fileData.do"
+  park:
+    category: "leisure"
+    facility_type: "park"
+    path: "data/raw/leisure/park.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 주요 공원현황"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr"
+  library_culture:
+    category: "leisure"
+    facility_type: "library_culture"
+    path: "data/raw/leisure/library_culture.csv"
+    type: "csv"
+    required: true
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "서울시 문화공간 정보 + 서울시 공공도서관 현황정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: "https://data.seoul.go.kr"
+  large_retail_optional:
+    category: "leisure"
+    facility_type: "large_retail_optional"
+    path: "data/raw/optional/large_retail.csv"
+    type: "csv"
+    required: false
+    name_column: "name"
+    x_column: "longitude"
+    y_column: "latitude"
+    address_column: null
+    source_crs: "EPSG:4326"
+    source_name: "대형상업시설 위치 데이터"
+    source_provider: null
+    source_url: null
+
+required_facility_types:
+  - pediatric_clinic
+  - general_hospital
+  - community_center
+  - district_office
+  - city_hall
+  - childcare_center
+  - kindergarten
+  - park
+  - library_culture
+
+optional_facility_types:
+  - family_medicine
+  - large_retail_optional
+
+distance_limits:
+  pediatric_clinic: 1000
+  family_medicine: 1000
+  general_hospital: 2500
+  community_center: 1000
+  district_office: 2000
+  city_hall: 5000
+  childcare_center: 750
+  kindergarten: 1000
+  park: 1000
+  library_culture: 1500
+  large_retail_optional: 2500
+
+category_weights:
+  medical_with_family_medicine:
+    pediatric_clinic: 0.60
+    family_medicine: 0.20
+    general_hospital: 0.20
+  medical_without_family_medicine:
+    pediatric_clinic: 0.70
+    general_hospital: 0.30
+  administration:
+    community_center: 0.6
+    district_office: 0.3
+    city_hall: 0.1
+  education:
+    childcare_center: 0.6
+    kindergarten: 0.4
+  leisure_with_large_retail:
+    park: 0.5
+    library_culture: 0.25
+    large_retail_optional: 0.25
+  leisure_without_large_retail:
+    park: 0.6
+    library_culture: 0.4
+  overall:
+    medical_score: 0.30
+    education_score: 0.30
+    admin_score: 0.20
+    leisure_score: 0.20
+
+weights:
+  grid:
+    medical: 0.30
+    education: 0.30
+    administration: 0.20
+    leisure: 0.20
+
+land_use:
+  zoning:
+    path: "data/raw/land_use/seoul_zoning.geojson"
+    type: "geojson"
+    category_column: "zoning_category"
+    required: false
+    source_name: "서울시 용도지역 공간정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: null
+    source_crs: "EPSG:4326"
+  parks:
+    path: "data/raw/land_use/seoul_parks.geojson"
+    type: "geojson"
+    required: false
+    source_name: "서울시 공원 공간정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: null
+    source_crs: "EPSG:4326"
+  rivers:
+    path: "data/raw/land_use/seoul_rivers.geojson"
+    type: "geojson"
+    required: false
+    source_name: "서울시 하천 공간정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: null
+    source_crs: "EPSG:4326"
+  forest_mountain:
+    path: "data/raw/land_use/seoul_forest_mountain.geojson"
+    type: "geojson"
+    required: false
+    source_name: "서울시 산지/임야 공간정보"
+    source_provider: "서울 열린데이터광장"
+    source_url: null
+    source_crs: "EPSG:4326"
+
+living_weight:
+  enabled_if_data_available: true
+  default_when_unavailable: "simple_average"
+  included_zoning_keywords:
+    - "주거"
+    - "준주거"
+    - "상업"
+    - "공업"
+    - "준공업"
+  low_or_zero_weight_keywords:
+    - "녹지"
+    - "보전녹지"
+    - "생산녹지"
+    - "자연녹지"
+    - "공원"
+    - "하천"
+    - "임야"
+    - "산지"
+  weights:
+    residential: 1.0
+    semi_residential: 1.0
+    commercial: 0.9
+    industrial: 0.7
+    public_facility: 0.5
+    park: 0.0
+    green: 0.0
+    river: 0.0
+    forest_mountain: 0.0
+  min_weight_threshold: 0.05
+
+output_paths:
+  processed_dir: "data/processed"
+  public_dir: "public/data"
+  grid_base: "data/processed/grid_base.geojson"
+  prepared_facilities: "data/processed/facilities_prepared.geojson"
+  grid_distances: "data/processed/grid_distances.geojson"
+  grid_scores: "data/processed/grid_scores.geojson"
+  grid_living_weight: "data/processed/grid_living_weight.geojson"
+  district_scores: "data/processed/district_scores.json"
+  benchmark_recommendations: "data/processed/benchmark_recommendations.json"
+  category_summary: "data/processed/category_summary.json"
+  metadata: "data/processed/metadata.json"
+  public_seoul_districts: "public/data/seoul_districts.geojson"
+  public_grid_scores: "public/data/grid_scores.geojson"
+  public_district_scores: "public/data/district_scores.json"
+  public_facilities: "public/data/facilities.geojson"
+  public_category_summary: "public/data/category_summary.json"
+  public_benchmark_recommendations: "public/data/benchmark_recommendations.json"
+  public_metadata: "public/data/metadata.json"
+
+coordinate_systems:
+  source_default: "EPSG:4326"
+  analysis: "EPSG:5179"
+  web: "EPSG:4326"
+  calculation: "EPSG:5179"
+  web_output: "EPSG:4326"
+
+grid:
+  size_meters: 250

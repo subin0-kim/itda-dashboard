@@ -1,0 +1,384 @@
+{
+  "project": {
+    "name": "잇다(:connect)",
+    "scoring_formula_version": "stroller_access_v1"
+  },
+  "source_datasets": [
+    {
+      "name": "서울시 자치구 경계 GeoJSON",
+      "provider": "southkorea-maps public boundary data",
+      "raw_file": "data/raw/boundary/seoul_districts.geojson",
+      "source_url": "https://github.com/southkorea/southkorea-maps",
+      "category": "boundary",
+      "facility_type": null,
+      "used": true
+    },
+    {
+      "name": "서울시 병의원 위치 정보",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/medical/pediatric_clinic.csv",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do",
+      "category": "medical",
+      "facility_type": "pediatric_clinic",
+      "used": true
+    },
+    {
+      "name": "서울시 병의원 위치 정보",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/medical/general_hospital.csv",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do",
+      "category": "medical",
+      "facility_type": "general_hospital",
+      "used": true
+    },
+    {
+      "name": "서울시 병의원 위치 정보(가정의학과)",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/medical/family_medicine.csv",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-20337/S/1/datasetView.do",
+      "category": "medical",
+      "facility_type": "family_medicine",
+      "used": true
+    },
+    {
+      "name": "서울시 자치회관 현황",
+      "provider": "서울 열린데이터광장 + Kakao Local API 좌표 변환",
+      "raw_file": "data/raw/administration/community_center.csv",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-21246/F/1/datasetView.do",
+      "category": "administration",
+      "facility_type": "community_center",
+      "used": true
+    },
+    {
+      "name": "서울 25개 자치구 구청 공식 주소 목록",
+      "provider": "각 자치구 공식 홈페이지 + Kakao Local API 좌표 변환",
+      "raw_file": "data/raw/administration/district_office.csv",
+      "source_url": null,
+      "category": "administration",
+      "facility_type": "district_office",
+      "used": true
+    },
+    {
+      "name": "서울특별시청 위치",
+      "provider": "서울특별시",
+      "raw_file": "data/raw/administration/city_hall.csv",
+      "source_url": "https://www.seoul.go.kr",
+      "category": "administration",
+      "facility_type": "city_hall",
+      "used": true
+    },
+    {
+      "name": "서울시 어린이집 정보(표준 데이터)",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/education/childcare_center.csv",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-20300/A/1/datasetView.do",
+      "category": "education",
+      "facility_type": "childcare_center",
+      "used": true
+    },
+    {
+      "name": "서울특별시교육청_연도별 학교 위도 경도 데이터",
+      "provider": "공공데이터포털",
+      "raw_file": "data/raw/education/kindergarten.csv",
+      "source_url": "https://www.data.go.kr/data/15152021/fileData.do",
+      "category": "education",
+      "facility_type": "kindergarten",
+      "used": true
+    },
+    {
+      "name": "서울시 주요 공원현황",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/leisure/park.csv",
+      "source_url": "https://data.seoul.go.kr",
+      "category": "leisure",
+      "facility_type": "park",
+      "used": true
+    },
+    {
+      "name": "서울시 문화공간 정보 + 서울시 공공도서관 현황정보",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw/leisure/library_culture.csv",
+      "source_url": "https://data.seoul.go.kr",
+      "category": "leisure",
+      "facility_type": "library_culture",
+      "used": true
+    }
+  ],
+  "unavailable_optional_datasets": [
+    {
+      "name": "대형상업시설 위치 데이터",
+      "reason": "원천 데이터 미확보",
+      "affected_score": "leisure",
+      "fallback_formula": "leisure_without_large_retail"
+    }
+  ],
+  "generated_at": "2026-05-13T03:50:42.763708+00:00",
+  "coordinate_systems": {
+    "source_default": "EPSG:4326",
+    "analysis": "EPSG:5179",
+    "web": "EPSG:4326",
+    "calculation": "EPSG:5179",
+    "web_output": "EPSG:4326"
+  },
+  "scoring_formula_version": "stroller_access_v1",
+  "limitations": [
+    "본 점수는 실제 유모차 통행 가능 여부를 확정하는 지표가 아니라, 공개데이터 기반 생활시설 접근성을 비교하기 위한 시각화 지표입니다. 실제 현장 여건은 보도 폭, 단차, 공사, 불법주정차, 시설 운영시간 등에 따라 달라질 수 있습니다."
+  ],
+  "applied_leisure_formula": "leisure_without_large_retail",
+  "preprocessing_scripts": [
+    "01_generate_grid.py",
+    "02_prepare_facilities.py",
+    "03_calculate_distances.py",
+    "04_calculate_scores.py",
+    "05_calculate_living_weight.py",
+    "06_aggregate_district_scores.py",
+    "06_generate_benchmark.py",
+    "08_export_public_data.py"
+  ],
+  "notes": [
+    "벤치마킹 추천은 초기 버전의 단순 비교 로직이며 실제 정책 우선순위를 확정하지 않습니다."
+  ],
+  "grid": {
+    "size_meters": 250,
+    "count": 10028
+  },
+  "grid_by_district": {
+    "강남구": 609,
+    "강동구": 435,
+    "강북구": 406,
+    "강서구": 746,
+    "관악구": 492,
+    "광진구": 301,
+    "구로구": 401,
+    "금천구": 185,
+    "노원구": 580,
+    "도봉구": 348,
+    "동대문구": 238,
+    "동작구": 294,
+    "마포구": 406,
+    "서대문구": 259,
+    "서초구": 826,
+    "성동구": 286,
+    "성북구": 392,
+    "송파구": 569,
+    "양천구": 226,
+    "영등포구": 345,
+    "용산구": 318,
+    "은평구": 526,
+    "종로구": 414,
+    "중구": 152,
+    "중랑구": 274
+  },
+  "grid_missing_district_count": 0,
+  "facility_counts": {
+    "administration.city_hall": 1,
+    "administration.community_center": 414,
+    "administration.district_office": 25,
+    "education.childcare_center": 8842,
+    "education.kindergarten": 754,
+    "leisure.library_culture": 1246,
+    "leisure.park": 132,
+    "medical.family_medicine": 242,
+    "medical.general_hospital": 91,
+    "medical.pediatric_clinic": 533
+  },
+  "excluded_records_summary": {
+    "pediatric_clinic": {
+      "input_records": 536,
+      "used_records": 536,
+      "excluded_records": 0
+    },
+    "general_hospital": {
+      "input_records": 93,
+      "used_records": 93,
+      "excluded_records": 0
+    },
+    "family_medicine": {
+      "input_records": 245,
+      "used_records": 245,
+      "excluded_records": 0
+    },
+    "community_center": {
+      "input_records": 414,
+      "used_records": 414,
+      "excluded_records": 0
+    },
+    "district_office": {
+      "input_records": 25,
+      "used_records": 25,
+      "excluded_records": 0
+    },
+    "city_hall": {
+      "input_records": 1,
+      "used_records": 1,
+      "excluded_records": 0
+    },
+    "childcare_center": {
+      "input_records": 8850,
+      "used_records": 8850,
+      "excluded_records": 0
+    },
+    "kindergarten": {
+      "input_records": 754,
+      "used_records": 754,
+      "excluded_records": 0
+    },
+    "park": {
+      "input_records": 132,
+      "used_records": 132,
+      "excluded_records": 0
+    },
+    "library_culture": {
+      "input_records": 1266,
+      "used_records": 1266,
+      "excluded_records": 0
+    },
+    "facility_duplicates_removed": 36
+  },
+  "facility_types_without_distance": [
+    "large_retail_optional"
+  ],
+  "distance_method": "projected_planar_nearest_distance_meters",
+  "distance_null_summary": {
+    "dist_pediatric_clinic": 0,
+    "dist_family_medicine": 0,
+    "dist_general_hospital": 0,
+    "dist_community_center": 0,
+    "dist_district_office": 0,
+    "dist_city_hall": 0,
+    "dist_childcare_center": 0,
+    "dist_kindergarten": 0,
+    "dist_park": 0,
+    "dist_library_culture": 0,
+    "dist_large_retail_optional": 10028
+  },
+  "future_enhancements": [
+    "도보 네트워크 거리",
+    "경사 보정"
+  ],
+  "applied_medical_formula": "pediatric_family_general_hospital",
+  "applied_medical_weights_key": "medical_with_family_medicine",
+  "family_medicine_used": true,
+  "score_columns": [
+    "pediatric_score",
+    "family_medicine_score",
+    "general_hospital_score",
+    "community_center_score",
+    "district_office_score",
+    "city_hall_score",
+    "childcare_center_score",
+    "kindergarten_score",
+    "park_score",
+    "library_culture_score",
+    "large_retail_score",
+    "medical_score",
+    "admin_score",
+    "education_score",
+    "leisure_score",
+    "grid_stroller_score",
+    "stroller_score"
+  ],
+  "score_null_summary": {
+    "pediatric_score": 0,
+    "family_medicine_score": 0,
+    "general_hospital_score": 0,
+    "community_center_score": 0,
+    "district_office_score": 0,
+    "city_hall_score": 0,
+    "childcare_center_score": 0,
+    "kindergarten_score": 0,
+    "park_score": 0,
+    "library_culture_score": 0,
+    "large_retail_score": 10028,
+    "medical_score": 0,
+    "admin_score": 0,
+    "education_score": 0,
+    "leisure_score": 0,
+    "grid_stroller_score": 0,
+    "stroller_score": 0
+  },
+  "origin_destination_role_note": "공원은 여가 카테고리의 도착지로 계속 사용합니다. 공원 내부 격자는 생활 출발지로 보기 어려워 구별 평균 산정 시 LivingWeight를 낮게 적용하거나 제외합니다.",
+  "aggregation_method": "simple_average",
+  "living_weight_status": "unavailable",
+  "living_weight_method": "no_land_use_data_simple_average_fallback",
+  "living_weight_source_datasets": [],
+  "living_weight_skipped_sources": [
+    "zoning",
+    "parks",
+    "rivers",
+    "forest_mountain"
+  ],
+  "living_weight_limitations": [
+    "용도지역, 공원 폴리곤, 하천, 산지/임야 등 토지이용 공간데이터가 data/raw/land_use/ 아래에 없어 LivingWeight를 계산하지 않았습니다.",
+    "구별 점수는 simple_average로 계산되며 공원·녹지·하천·산지가 많은 자치구의 점수가 부당하게 낮아질 가능성이 있습니다."
+  ],
+  "district_count": 25,
+  "district_score_aggregation": "simple_mean_of_grid_scores",
+  "benchmark_logic": "higher_overall_score_and_strong_weak_category_simple_v1",
+  "raw_inventory_summary": {
+    "pediatric_clinic": {
+      "raw_file": "data/raw/medical/pediatric_clinic.csv",
+      "required": true,
+      "exists": true
+    },
+    "general_hospital": {
+      "raw_file": "data/raw/medical/general_hospital.csv",
+      "required": true,
+      "exists": true
+    },
+    "family_medicine": {
+      "raw_file": "data/raw/medical/family_medicine.csv",
+      "required": false,
+      "exists": true
+    },
+    "community_center": {
+      "raw_file": "data/raw/administration/community_center.csv",
+      "required": true,
+      "exists": true
+    },
+    "district_office": {
+      "raw_file": "data/raw/administration/district_office.csv",
+      "required": true,
+      "exists": true
+    },
+    "city_hall": {
+      "raw_file": "data/raw/administration/city_hall.csv",
+      "required": true,
+      "exists": true
+    },
+    "childcare_center": {
+      "raw_file": "data/raw/education/childcare_center.csv",
+      "required": true,
+      "exists": true
+    },
+    "kindergarten": {
+      "raw_file": "data/raw/education/kindergarten.csv",
+      "required": true,
+      "exists": true
+    },
+    "park": {
+      "raw_file": "data/raw/leisure/park.csv",
+      "required": true,
+      "exists": true
+    },
+    "library_culture": {
+      "raw_file": "data/raw/leisure/library_culture.csv",
+      "required": true,
+      "exists": true
+    },
+    "large_retail_optional": {
+      "raw_file": "data/raw/optional/large_retail.csv",
+      "required": false,
+      "exists": false
+    }
+  },
+  "public_outputs": {
+    "seoul_districts": "public/data/seoul_districts.geojson",
+    "grid_scores": "public/data/grid_scores.geojson",
+    "district_scores": "public/data/district_scores.json",
+    "facilities": "public/data/facilities.geojson",
+    "category_summary": "public/data/category_summary.json",
+    "benchmark_recommendations": "public/data/benchmark_recommendations.json",
+    "metadata": "public/data/metadata.json"
+  }
+}
