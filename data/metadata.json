@@ -112,7 +112,7 @@
       "fallback_formula": "park_other_leisure_additive"
     }
   ],
-  "generated_at": "2026-05-14T01:07:29.153756+00:00",
+  "generated_at": "2026-05-14T03:57:25.265806+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -1632,8 +1632,8 @@
   "grid_score_weights": {
     "medical": 0.3,
     "education": 0.3,
-    "administration": 0.2,
-    "leisure": 0.2
+    "administration": 0.1,
+    "leisure": 0.3
   },
   "facility_score_formula": "DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 − D / 800))",
   "facility_score_description": "800m 이내는 시설 유형별 최대 점수 W를 부여하고, 800m 초과 후 거리에 비례해 감점하여 1600m 이상에서 0점.",
