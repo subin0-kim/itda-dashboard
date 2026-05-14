@@ -11,72 +11,80 @@ export const SCORE_BUCKETS = [
 
 export const NO_DATA_COLOR = "#cbd5e1";
 
+// 색 램프는 ColorBrewer 9-class sequential 팔레트를 10단계로 확장한 형태.
+// 다중 hue 변화를 사용해 점수 간 차이가 시각적으로 분명해지도록 하고,
+// 상위 점수도 채도 높은 vivid 색으로 표현하여 거의 검정색이 되지 않게 한다.
 export const SCORE_RAMP_COLORS: Record<OverviewCategoryId, string[]> = {
+  // YlGnBu-inspired (light yellow → teal → indigo)
   overall: [
-    "#eef2ff",
-    "#c7d2fe",
-    "#a5b4fc",
-    "#818cf8",
-    "#6366f1",
-    "#4f46e5",
-    "#4338ca",
-    "#3730a3",
-    "#1e1b4b",
-    "#0b0a26",
+    "#fff7bc",
+    "#feeaa1",
+    "#fed976",
+    "#ffd166",
+    "#f7b801",
+    "#f18701",
+    "#f35b04",
+    "#d62828",
+    "#9d0208",
+    "#6a040f",
   ],
+  // YlOrRd-style warm health palette
   medical: [
-    "#fff1f2",
-    "#fecdd3",
-    "#fda4af",
-    "#fb7185",
-    "#f43f5e",
-    "#e11d48",
-    "#be123c",
-    "#9f1239",
-    "#4c0519",
-    "#26020b",
+    "#fff5eb",
+    "#fee6ce",
+    "#fdd0a2",
+    "#fdae6b",
+    "#fd8d3c",
+    "#f16913",
+    "#d94801",
+    "#a63603",
+    "#7f2704",
+    "#5a1c03",
   ],
+  // Blues (light cyan → mid blue → deep navy, but not black)
   administration: [
-    "#eff6ff",
-    "#bfdbfe",
-    "#93c5fd",
-    "#60a5fa",
-    "#3b82f6",
+    "#f0f9ff",
+    "#cfe8ff",
+    "#a6d4ff",
+    "#7ab8ff",
+    "#4f9bff",
     "#2563eb",
     "#1d4ed8",
     "#1e40af",
-    "#0c1e6e",
-    "#050f3a",
+    "#1e3a8a",
+    "#172554",
   ],
+  // YlOrBr-style warm amber → brown
   education: [
-    "#fffbeb",
-    "#fde68a",
-    "#fcd34d",
-    "#fbbf24",
-    "#f59e0b",
-    "#d97706",
-    "#b45309",
-    "#92400e",
-    "#451a03",
-    "#220c01",
+    "#fffbe6",
+    "#fff1a8",
+    "#fde047",
+    "#facc15",
+    "#eab308",
+    "#ca8a04",
+    "#a16207",
+    "#854d0e",
+    "#713f12",
+    "#582f0a",
   ],
+  // YlGn-style yellow-green → deep teal
   leisure: [
-    "#ecfdf5",
-    "#a7f3d0",
-    "#6ee7b7",
-    "#34d399",
-    "#10b981",
-    "#059669",
-    "#047857",
-    "#065f46",
-    "#022c22",
-    "#011912",
+    "#f7fcb9",
+    "#d9f0a3",
+    "#addd8e",
+    "#78c679",
+    "#41ab5d",
+    "#238443",
+    "#1d6b3a",
+    "#155d3a",
+    "#0f4b34",
+    "#0a3b29",
   ],
 };
 
-// 점수 분포가 60~90 구간에 몰려 있어, 그 구간에 더 많은 컬러 스텝이 할당되도록
-// 색 램프 stop을 비선형으로 배치한다.
-const RAMP_STOP_SCORES = [0, 35, 50, 58, 65, 72, 78, 84, 90, 100];
+// 격자/구 점수 분포가 60~90 구간에 몰려 있어, 그 구간에 더 많은 컬러 스텝을
+// 할당한다. 0~50 구간은 데이터가 적으므로 색 변화를 좁히고, 60~90 구간을 더 펼친다.
+const RAMP_STOP_SCORES = [0, 30, 45, 55, 62, 68, 74, 80, 87, 100];
 
 function hexToRgb(hex: string): [number, number, number] {
   const value = hex.replace("#", "");

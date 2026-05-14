@@ -36,7 +36,7 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
   const hoveredFacilityId = useRef<string | number | null>(null);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [ready, setReady] = useState(false);
-  const [showNetwork, setShowNetwork] = useState(false);
+  const [showNetwork, setShowNetwork] = useState(true);
   const [networkData, setNetworkData] = useState<{ links: GeoJsonFeatureCollection | null; nodes: GeoJsonFeatureCollection | null; missing: boolean }>({
     links: null,
     nodes: null,
@@ -282,7 +282,7 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       <div className="relative overflow-hidden rounded-lg border border-slate-200">
         <div ref={containerRef} className="h-[620px] w-full" />
         {basemapError ? <BasemapErrorBanner /> : null}
-        <div className="absolute left-4 top-4 max-w-[220px] rounded-md border border-slate-200 bg-white/95 p-2 shadow-sm">
+        <div className="absolute right-4 bottom-10 max-w-[220px] rounded-md border border-slate-200 bg-white/95 p-2 shadow-sm">
           <button
             type="button"
             onClick={() => setShowNetwork((value) => !value)}
