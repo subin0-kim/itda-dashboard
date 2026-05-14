@@ -130,3 +130,6 @@
 - `DataSourceTable`
 - `DataStatusPanel`
 - `MissingDataNotice`
+## 보행 네트워크 overlay
+
+DistrictDetailPage는 구별 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson`가 있을 때만 보행 네트워크 레이어를 표시한다. 기본값은 OFF이며 사용자가 "보행 네트워크 보기" 토글을 켤 때 해당 구의 파일만 로드한다. 웹은 최단거리나 점수를 계산하지 않고 전처리 결과를 시각화만 한다.

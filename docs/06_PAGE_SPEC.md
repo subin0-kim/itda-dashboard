@@ -168,7 +168,7 @@
 - 점수 산식
 - 250m 격자 설명
 - 카테고리별 시설 정의
-- 기준거리 표
+- 만점 기준거리와 점수 0 도달 거리 표
 - 구별 점수 집계 방식
 - 데이터 출처 표
 - 전처리 파이프라인 설명
@@ -191,3 +191,8 @@
 데이터 출처 파일 목록은 실제 전처리에서 사용된 raw data와 `metadata.json`의 `source_datasets`를 기준으로 표시한다. `source_datasets`가 없으면 실제 사용 데이터 목록을 임의로 만들지 않고 안내 문구를 표시한다.
 
 생활 출발지 가중치 섹션은 `metadata.aggregation_method`, `living_weight_status`, `living_weight_limitations`, `origin_destination_role_note`를 기준으로 현재 적용 방식을 표시한다. 토지이용 데이터가 없어 fallback인 경우에도 산식과 설명은 정적으로 표시하되 현재 적용 방식은 `단순 평균`으로 명확히 표기한다. 구 상세 지도 tooltip은 `grid_scores.geojson`에 `living_weight` 값이 있을 때만 생활 출발지 가중치를 표시한다.
+## 보행 네트워크 표시
+
+DistrictDetailPage는 보행 네트워크 overlay 파일이 있는 경우 "보행 네트워크 보기" 토글을 제공한다. 노드/링크는 계산에 사용된 원천 기반 네트워크를 시각화하기 위한 레이어이며, 웹에서는 최단거리 계산을 수행하지 않는다.
+
+MethodologyPage는 `metadata.distance_method`, `pedestrian_network_status`, `network_distance_coverage`, `euclidean_fallback_coverage`, `scoring_method`, `full_score_distance_m`, `zero_score_distance_m`를 표시한다. 실제 도보 네트워크 데이터가 없으면 네트워크 기반 계산을 적용했다고 표시하지 않고 직선거리 fallback 상태를 명확히 안내한다.

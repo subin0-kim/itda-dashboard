@@ -40,6 +40,13 @@
 - medical: 835
 - administration: 440
 
+## Scoring Method Summary
+- scoring_method: full_score_with_decay_after_800m
+- full_score_distance_m: 800.0
+- zero_score_distance_m: 1600.0
+- distance_method: mixed
+- pedestrian_network_status: partial
+
 ## Null Distance Summary
 - dist_pediatric_clinic: 0
 - dist_family_medicine: 0
@@ -52,6 +59,29 @@
 - dist_park: 0
 - dist_library_culture: 0
 - dist_large_retail_optional: 10028
+- dist_pediatric_clinic_network: 6056
+- dist_family_medicine_network: 6570
+- dist_general_hospital_network: 7195
+- dist_community_center_network: 6099
+- dist_district_office_network: 7595
+- dist_city_hall_network: 9319
+- dist_childcare_center_network: 4463
+- dist_kindergarten_network: 5908
+- dist_park_network: 7014
+- dist_library_culture_network: 5842
+
+## Distance Method Summary
+- dist_pediatric_clinic_method: {'euclidean_fallback': 6056, 'pedestrian_network': 3972}
+- dist_family_medicine_method: {'euclidean_fallback': 6570, 'pedestrian_network': 3458}
+- dist_general_hospital_method: {'euclidean_fallback': 7195, 'pedestrian_network': 2833}
+- dist_community_center_method: {'euclidean_fallback': 6099, 'pedestrian_network': 3929}
+- dist_district_office_method: {'euclidean_fallback': 7595, 'pedestrian_network': 2433}
+- dist_city_hall_method: {'euclidean_fallback': 9319, 'pedestrian_network': 709}
+- dist_childcare_center_method: {'pedestrian_network': 5565, 'euclidean_fallback': 4463}
+- dist_kindergarten_method: {'euclidean_fallback': 5908, 'pedestrian_network': 4120}
+- dist_park_method: {'euclidean_fallback': 7014, 'pedestrian_network': 3014}
+- dist_library_culture_method: {'euclidean_fallback': 5842, 'pedestrian_network': 4186}
+- dist_large_retail_optional_method: {'unavailable': 10028}
 
 ## Living Weight Summary
 - aggregation_method: living_weighted_average

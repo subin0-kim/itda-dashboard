@@ -44,10 +44,11 @@ def export_public_data(config_path: str) -> None:
 
     copy_json(paths["district_scores"], paths["public_district_scores"])
     copy_json(paths["category_summary"], paths["public_category_summary"])
+    export_network_overlay(config)
 
     fallback_formula_map = {
-        "large_retail_optional": "leisure_without_large_retail",
-        "family_medicine": "pediatric_general_hospital_only",
+        "large_retail_optional": "park_other_leisure_additive",
+        "family_medicine": "pediatric_general_hospital_additive",
     }
     unavailable_optional = []
     for facility_type, source in config["facility_sources"].items():
@@ -92,12 +93,73 @@ def export_public_data(config_path: str) -> None:
                 "metadata": paths["public_metadata"],
             },
             "grid_color_score_basis": "weighted_score_when_living_weight_available",
+            "pedestrian_network": config.get("pedestrian_network"),
+            "origin_destination_role_note": (
+                "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다."
+            ),
         },
     )
     metadata["unavailable_optional_datasets"] = unavailable_optional
     write_json(paths["public_metadata"], metadata)
     write_json(paths["metadata"], metadata)
     print(f"[OK] public/data 최종 산출물 생성: {paths['public_dir']}")
+
+
+def export_network_overlay(config) -> None:
+    """Export district network overlay files only when real processed network data exists."""
+    network_cfg = config.get("pedestrian_network") or {}
+    overlay_dir = ensure_parent(Path((network_cfg.get("output") or {}).get("public_network_overlay_dir", "public/data/network")) / ".gitkeep").parent
+    intermediate_dir = Path((network_cfg.get("output") or {}).get("intermediate_dir", "data/processed/pedestrian_network"))
+    if not intermediate_dir.is_absolute():
+        intermediate_dir = Path(__file__).resolve().parents[2] / intermediate_dir
+
+    for path in overlay_dir.glob("*.geojson"):
+        path.unlink()
+    if not intermediate_dir.exists():
+        return
+
+    import geopandas as gpd
+
+    web_crs = config["coordinate_systems"]["web"]
+    for district_dir in intermediate_dir.iterdir():
+        if not district_dir.is_dir():
+            continue
+        for role in ["nodes", "links"]:
+            source_files = [district_dir / f"{role}.geojson", district_dir / f"crosswalk_{role}.geojson"]
+            frames = []
+            for source_file in source_files:
+                if not source_file.exists():
+                    continue
+                frame = gpd.read_file(source_file)
+                if frame.crs is None:
+                    frame = frame.set_crs(config["coordinate_systems"]["analysis"])
+                frames.append(frame)
+            if not frames:
+                continue
+            if len(frames) == 1:
+                gdf = frames[0]
+            else:
+                import pandas as pd
+
+                gdf = gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), geometry="geometry", crs=frames[0].crs)
+            if role == "links":
+                keep_columns = [
+                    "link_id",
+                    "link_type_label",
+                    "source_service",
+                    "network_include_reason",
+                    "geometry",
+                ]
+            else:
+                keep_columns = [
+                    "node_id",
+                    "node_type_label",
+                    "source_service",
+                    "geometry",
+                ]
+            gdf = gdf[[col for col in keep_columns if col in gdf.columns]]
+            output_file = overlay_dir / f"{district_dir.name}_{role}.geojson"
+            gdf.to_crs(web_crs).to_file(output_file, driver="GeoJSON")
 
 
 LIVING_WEIGHT_COLUMNS = [

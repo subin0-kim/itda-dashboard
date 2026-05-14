@@ -23,11 +23,15 @@ def calculate_distances(config_path: str) -> None:
     grid_coords = np.column_stack([centers.x, centers.y])
     unavailable_types = []
 
-    for facility_type in config["distance_limits"].keys():
+    facility_types = get_distance_facility_types(config)
+
+    for facility_type in facility_types:
         subset = facilities[facilities["facility_type"] == facility_type]
         col = f"dist_{facility_type}"
+        method_col = f"{col}_method"
         if subset.empty:
             grid[col] = np.nan
+            grid[method_col] = "unavailable"
             grid[f"nearest_{facility_type}_name"] = None
             grid[f"nearest_{facility_type}_id"] = None
             unavailable_types.append(facility_type)
@@ -37,27 +41,45 @@ def calculate_distances(config_path: str) -> None:
         distances, indexes = tree.query(grid_coords, k=1)
         nearest = subset.iloc[indexes].reset_index(drop=True)
         grid[col] = distances.round(3)
+        grid[method_col] = "euclidean_fallback"
         grid[f"nearest_{facility_type}_name"] = nearest["facility_name"].values
         grid[f"nearest_{facility_type}_id"] = nearest["facility_id"].values
 
     output_path = ensure_parent(config["output_paths"]["grid_distances"])
     grid.to_crs(web_crs).to_file(output_path, driver="GeoJSON")
+    euclidean_output_path = ensure_parent(config["output_paths"].get("euclidean_grid_distances", output_path))
+    if euclidean_output_path != output_path:
+        grid.to_crs(web_crs).to_file(euclidean_output_path, driver="GeoJSON")
 
     update_metadata(
         config,
         {
             "facility_types_without_distance": unavailable_types,
             "preprocessing_scripts": ["03_calculate_distances.py"],
-            "distance_method": "projected_planar_nearest_distance_meters",
+            "distance_method": "euclidean",
+            "pedestrian_network_status": "not_yet_applied",
             "distance_null_summary": {
                 f"dist_{facility_type}": int(grid[f"dist_{facility_type}"].isna().sum())
-                for facility_type in config["distance_limits"].keys()
+                for facility_type in facility_types
                 if f"dist_{facility_type}" in grid.columns
             },
-            "future_enhancements": ["도보 네트워크 거리", "경사 보정"],
+            "distance_method_summary": {
+                "euclidean_fallback": int(len(grid)),
+                "pedestrian_network": 0,
+                "unavailable": 0,
+            },
         },
     )
     print(f"[OK] grid_distances 생성: {output_path}")
+
+
+def get_distance_facility_types(config: dict) -> list[str]:
+    scoring_types = (config.get("scoring") or {}).get("type_max_scores") or {}
+    if scoring_types:
+        return list(scoring_types.keys())
+    if "distance_limits" in config:
+        return list(config["distance_limits"].keys())
+    return list(config.get("facility_sources", {}).keys())
 
 
 def main() -> None:

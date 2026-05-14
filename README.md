@@ -136,7 +136,37 @@ data/raw/
 - 가정의학과 (optional)
 - 종합병원/대학병원
 
-가정의학과는 `data/raw/medical/family_medicine.csv`가 있으면 의료 산식 `MedicalScore = 0.60 × PediatricScore + 0.20 × FamilyMedicineScore + 0.20 × GeneralHospitalScore`를 적용하고, 파일이 없으면 기존 대체 산식 `MedicalScore = 0.70 × PediatricScore + 0.30 × GeneralHospitalScore`를 사용한다. 실제 적용 산식은 `public/data/metadata.json`의 `applied_medical_formula`와 `family_medicine_used`에서 확인한다.
+가정의학과는 optional 시설 유형이다. 의료 점수는 시설 유형별 최대 점수를 더하는 가산식으로 계산하며, 가정의학과 데이터가 없으면 해당 항목은 0으로 기여한다. 실제 적용 산식과 사용 시설 유형은 `public/data/metadata.json`의 `applied_medical_formula`, `family_medicine_used`, `medical_facility_types_used`에서 확인한다.
+
+## 도보 네트워크와 새 점수 산식
+
+도보 네트워크 원천 데이터는 서울 열린데이터광장 OA-21208 `TbTraficWlkNet` OpenAPI로 자치구별 수집한다. 횡단보도 보조 연결은 OA-21209 `tbTraficCrsng` OpenAPI의 실제 횡단보도 geometry를 사용한다. 캐시는 `data/raw_api/pedestrian_network/`에 저장된다. 전처리 파이프라인은 자치구 단위로 노드/링크를 표준화하고, 격자 중심점과 시설을 가장 가까운 도보 노드에 스냅한 뒤 최단거리 계산을 시도한다. 전체 서울 네트워크를 한 번에 브라우저로 불러오거나 웹에서 최단거리를 계산하지 않는다.
+
+수집 명령:
+
+```bash
+set SEOUL_OPENAPI_KEY=발급키
+python scripts/fetch/fetch_pedestrian_network_by_district.py --include-crosswalk
+```
+
+`data/도보네트워크_링크노드유형코드.xlsx`는 링크/노드 유형코드 해석에 사용한다. 링크 유형 라벨에 `보행자`가 포함된 링크와 원천 데이터에서 횡단보도, 공원, 건물 내부, 교량 연결로 식별되는 링크를 계산용 네트워크에 사용한다. 횡단보도 데이터는 임의 연결선이 아니라 OA-21209 응답에 포함된 실제 `LNKG_WKT` 선형 geometry만 병합한다.
+
+도보 네트워크 데이터가 없거나 특정 구 계산이 실패하면 직선거리 fallback을 사용하고, `metadata.json`의 `distance_method`, `pedestrian_network_status`, `network_distance_coverage`, `euclidean_fallback_coverage`에 기록한다. 가짜 노드, 링크, 점수는 생성하지 않는다.
+
+시설 유형별 점수는 다음 산식으로 계산한다.
+
+```text
+DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 - D / 800))
+```
+
+- 800m 이내: 시설 유형별 최대 점수 `W`
+- 1000m: `W × 0.75`
+- 1200m: `W × 0.50`
+- 1600m 이상: 0점
+
+기본 최대 점수는 소아청소년과 80, 가정의학과 40, 종합병원 20, 주민센터 80, 구청 20, 어린이집 80, 유치원 20, 공원 70, 도서관/문화시설 30이다.
+
+도보 네트워크 overlay 파일이 생성되면 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson` 형태로 저장된다. 구 상세 페이지에서 "보행 네트워크 보기" 토글로 표시할 수 있으며, 웹에서는 시각화만 수행한다.
 
 TbHospitalInfo 원천에 별도 진료과목 컬럼이 없어 `scripts/extract_family_medicine.py`는 DUTYNAME(기관명)에 "가정의학"이 포함된 행을 `facility_name_fallback` 방식으로 추출한다.
 

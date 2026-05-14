@@ -1,6 +1,6 @@
 project:
   name: "잇다(:connect)"
-  scoring_formula_version: "stroller_access_v1"
+  scoring_formula_version: "stroller_access_v2_network_ready_800m"
 
 raw_data_paths:
   root: "data/raw"
@@ -10,6 +10,7 @@ raw_data_paths:
   education: "data/raw/education"
   leisure: "data/raw/leisure"
   optional: "data/raw/optional"
+  pedestrian_network: "data/raw/pedestrian_network"
 
 geocoding:
   provider: "Kakao Local API"
@@ -45,7 +46,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 병의원 위치 정보"
     source_provider: "서울 열린데이터광장"
@@ -59,7 +60,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 병의원 위치 정보"
     source_provider: "서울 열린데이터광장"
@@ -73,7 +74,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 병의원 위치 정보(가정의학과)"
     source_provider: "서울 열린데이터광장"
@@ -131,7 +132,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 어린이집 정보(표준 데이터)"
     source_provider: "서울 열린데이터광장"
@@ -159,7 +160,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 주요 공원현황"
     source_provider: "서울 열린데이터광장"
@@ -173,7 +174,7 @@ facility_sources:
     name_column: "name"
     x_column: "longitude"
     y_column: "latitude"
-    address_column: null
+    address_column: "address"
     source_crs: "EPSG:4326"
     source_name: "서울시 문화공간 정보 + 서울시 공공도서관 현황정보"
     source_provider: "서울 열린데이터광장"
@@ -209,45 +210,151 @@ optional_facility_types:
   - large_retail_optional
 
 distance_limits:
-  pediatric_clinic: 1000
-  family_medicine: 1000
-  general_hospital: 2500
-  community_center: 1000
-  district_office: 2000
-  city_hall: 5000
-  childcare_center: 750
-  kindergarten: 1000
-  park: 1000
-  library_culture: 1500
-  large_retail_optional: 2500
+  pediatric_clinic: 800
+  family_medicine: 800
+  general_hospital: 800
+  community_center: 800
+  district_office: 800
+  city_hall: 800
+  childcare_center: 800
+  kindergarten: 800
+  park: 800
+  library_culture: 800
+  large_retail_optional: 800
+
+scoring:
+  scoring_method: "full_score_with_decay_after_800m"
+  distance_score_method: "full_score_with_decay_after_800m"
+  full_score_distance_m: 800
+  zero_score_distance_m: 1600
+  facility_score_formula: "DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 − D / 800))"
+  facility_score_description: "800m 이내는 시설 유형별 최대 점수 W를 부여하고, 800m 초과 후 거리에 비례해 감점하여 1600m 이상에서 0점."
+  category_aggregation: "additive_capped_type_max_scores_v1"
+  category_aggregation_description: "category_score = min(100, Σ DistanceAdjustedScore(type_max_score[t], distance[t])). 누락된 시설 유형은 0으로 기여."
+  category_score_cap: 100
+  type_max_scores:
+    pediatric_clinic: 80
+    family_medicine: 40
+    general_hospital: 20
+    community_center: 80
+    district_office: 20
+    city_hall: 0
+    childcare_center: 80
+    kindergarten: 20
+    park: 70
+    library_culture: 30
+    large_retail_optional: 0
+  category_formulas:
+    medical:
+      cap: 100
+      types:
+        pediatric_clinic: 80
+        family_medicine: 40
+        general_hospital: 20
+    administration:
+      cap: 100
+      types:
+        community_center: 80
+        district_office: 20
+    education:
+      cap: 100
+      types:
+        childcare_center: 80
+        kindergarten: 20
+    leisure:
+      cap: 100
+      types:
+        park: 70
+        library_culture: 30
+  grid_weights:
+    medical: 0.30
+    education: 0.30
+    administration: 0.20
+    leisure: 0.20
 
 category_weights:
-  medical_with_family_medicine:
-    pediatric_clinic: 0.60
-    family_medicine: 0.20
-    general_hospital: 0.20
-  medical_without_family_medicine:
-    pediatric_clinic: 0.70
-    general_hospital: 0.30
+  medical:
+    pediatric_clinic: 80
+    family_medicine: 40
+    general_hospital: 20
   administration:
-    community_center: 0.6
-    district_office: 0.3
-    city_hall: 0.1
+    community_center: 80
+    district_office: 20
+    city_hall: 0
   education:
-    childcare_center: 0.6
-    kindergarten: 0.4
-  leisure_with_large_retail:
-    park: 0.5
-    library_culture: 0.25
-    large_retail_optional: 0.25
-  leisure_without_large_retail:
-    park: 0.6
-    library_culture: 0.4
+    childcare_center: 80
+    kindergarten: 20
+  leisure:
+    park: 70
+    library_culture: 30
+    large_retail_optional: 0
   overall:
     medical_score: 0.30
     education_score: 0.30
     admin_score: 0.20
     leisure_score: 0.20
+
+pedestrian_network:
+  enabled: true
+  process_by_district: true
+  service_name: "TbTraficWlkNet"
+  source_url: "https://data.seoul.go.kr/dataList/OA-21208/A/1/datasetView.do"
+  supplemental_services:
+    crosswalk:
+      service_name: "tbTraficCrsng"
+      source_url: "https://data.seoul.go.kr/dataList/OA-21209/A/1/datasetView.do"
+      raw_file: "data/raw_api/pedestrian_network/supplemental/crosswalk.json"
+      include_in_graph: true
+  type_codebook:
+    path: "data/도보네트워크_링크노드유형코드.xlsx"
+    link_sheet: "링크유형코드"
+    node_sheet: "노드유형코드"
+  source:
+    type: "local_or_openapi"
+    raw_dir: "data/raw/pedestrian_network"
+    api_cache_dir: "data/raw_api/pedestrian_network"
+  crs:
+    source: "EPSG:4326"
+    calculation: "EPSG:5179"
+    web_output: "EPSG:4326"
+  snap:
+    grid_snap_max_distance_m: 200
+    facility_snap_max_distance_m: 200
+  buffer:
+    facility_search_buffer_m: 3000
+    network_buffer_m: 3000
+  distance:
+    use_length_column_if_available: true
+    length_column_candidates:
+      - "length"
+      - "length_m"
+      - "LNKG_LEN"
+      - "link_len"
+      - "링크길이"
+      - "연장"
+      - "거리"
+  columns:
+    node_type: "NODE_TYPE"
+    node_wkt: "NODE_WKT"
+    node_id: "NODE_ID"
+    node_type_code: "NODE_TYPE_CD"
+    link_wkt: "LNKG_WKT"
+    link_id: "LNKG_ID"
+    link_type_code: "LNKG_TYPE_CD"
+    from_node: "BGNG_LNKG_ID"
+    to_node: "END_LNKG_ID"
+    length_m: "LNKG_LEN"
+    district_code: "SGG_CD"
+    district_name: "SGG_NM"
+    collected_at: "WORK_DTTM"
+  output:
+    save_district_intermediate: true
+    intermediate_dir: "data/processed/pedestrian_network"
+    distance_dir: "data/processed/network_by_district"
+    public_network_overlay_dir: "public/data/network"
+  fallback:
+    allow_euclidean_fallback: true
+    record_fallback_in_metadata: true
 
 weights:
   grid:
@@ -375,6 +482,9 @@ output_paths:
   grid_base: "data/processed/grid_base.geojson"
   prepared_facilities: "data/processed/facilities_prepared.geojson"
   grid_distances: "data/processed/grid_distances.geojson"
+  euclidean_grid_distances: "data/processed/grid_distances_euclidean.geojson"
+  network_inventory: "data/processed/pedestrian_network/network_inventory.json"
+  network_distance_summary: "data/processed/network_by_district/network_distance_summary.json"
   grid_scores: "data/processed/grid_scores.geojson"
   grid_living_weight: "data/processed/grid_living_weight.geojson"
   district_scores: "data/processed/district_scores.json"

@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import os
+import re
+import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -43,6 +46,20 @@ OUTPUTS = {
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="서울 열린데이터광장 API에서 의료/공원/도서관/문화공간/어린이집 데이터를 받아 CSV로 정리합니다."
+    )
+    parser.add_argument(
+        "--from-cache",
+        action="store_true",
+        help="API 호출 없이 data/raw/*_raw.json 캐시에서 CSV를 다시 만듭니다. API 키 없이 동작.",
+    )
+    args = parser.parse_args()
+
+    if args.from_cache:
+        run_from_cache()
+        return
+
     if not API_KEY:
         raise SystemExit("SEOUL_OPEN_API_KEY 환경변수를 설정하세요. 샘플/더미 데이터는 생성하지 않습니다.")
 
@@ -85,6 +102,41 @@ def main() -> None:
     report.append("- large_retail.csv: optional 데이터이며 이번 수집에서 확보하지 못했습니다.")
     write_report(report)
     print(f"보고서 생성: {REPORT_PATH}")
+
+
+def run_from_cache() -> None:
+    """Regenerate CSVs from cached *_raw.json without hitting the API."""
+    report: list[str] = ["# Seoul Open Data CSV Regeneration (from cache)", ""]
+    cache_map = {
+        "hospital": (RAW_ROOT / "hospital_raw.json", write_hospital_outputs),
+        "park": (RAW_ROOT / "park_raw.json", lambda rows, rpt: write_simple_point_output(rows, OUTPUTS["park"], rpt, "park")),
+        "childcare": (RAW_ROOT / "childcare_raw.json", lambda rows, rpt: write_simple_point_output(rows, OUTPUTS["childcare_center"], rpt, "childcare_center")),
+    }
+    for label, (path, handler) in cache_map.items():
+        if not path.exists():
+            print(f"[skip] {path.relative_to(PROJECT_ROOT)} 없음", file=sys.stderr)
+            continue
+        try:
+            with path.open("r", encoding="utf-8") as file:
+                rows = json.load(file)
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"[error] {path.relative_to(PROJECT_ROOT)} 로딩 실패: {exc}", file=sys.stderr)
+            continue
+        handler(rows, report)
+        print(f"[OK] {label}: {len(rows)} rows from cache")
+
+    culture_path = RAW_ROOT / "culture_raw.json"
+    library_path = RAW_ROOT / "library_raw.json"
+    library_culture_rows: list[dict[str, Any]] = []
+    for path in (culture_path, library_path):
+        if not path.exists():
+            print(f"[skip] {path.relative_to(PROJECT_ROOT)} 없음", file=sys.stderr)
+            continue
+        with path.open("r", encoding="utf-8") as file:
+            library_culture_rows.extend(json.load(file))
+    if library_culture_rows:
+        write_simple_point_output(library_culture_rows, OUTPUTS["library_culture"], report, "library_culture")
+        print(f"[OK] library_culture: {len(library_culture_rows)} rows from cache")
 
 
 def fetch_all(service: str, report: list[str], page_size: int = 1000, max_pages: int = 100) -> list[dict[str, Any]]:
@@ -145,7 +197,15 @@ def write_hospital_outputs(rows: list[dict[str, Any]], report: list[str]) -> Non
         name = read_any(row, ["DUTYNAME", "name"])
         duty_div = read_any(row, ["DUTYDIVNAM"])
         info = " ".join(str(row.get(key, "")) for key in ["DUTYINF", "DUTYETC", "DUTYNAME"])
-        record = {"name": name, "longitude": lon, "latitude": lat, "source_name": "TbHospitalInfo"}
+        address = read_any(row, ["DUTYADDR"])
+        record = {
+            "name": name,
+            "longitude": lon,
+            "latitude": lat,
+            "source_name": "TbHospitalInfo",
+            "address": address,
+            "district_name": extract_seoul_district_name(address),
+        }
         if is_pediatric_clinic_name(name, duty_div):
             pediatric.append(record)
         if "종합병원" in duty_div or "상급종합" in duty_div:
@@ -185,12 +245,16 @@ def write_simple_point_output(rows: list[dict[str, Any]], path: Path, report: li
         lon, lat = pick_lon_lat(row)
         if lon is None or lat is None:
             continue
+        address = read_any(row, ["PARK_ADDR", "CRADDR", "ADDR", "BPLCADRES", "ADRES", "RDNMADR", "address"])
+        district_name = read_any(row, ["RGN", "SIGUNGU", "SGG_NM", "CGG_NM", "GUNAME"]) or extract_seoul_district_name(address)
         output.append(
             {
                 "name": read_any(row, ["name", "NAME", "CRNAME", "PARK_NM", "FAC_NAME", "FCLT_NM", "COT_CONTS_NAME", "P_PARK", "LBRRY_NAME", "DUTYNAME", "BPLCNM"]),
                 "longitude": lon,
                 "latitude": lat,
                 "source_name": label,
+                "address": address,
+                "district_name": district_name,
             }
         )
     write_csv(path, output)
@@ -239,11 +303,16 @@ def read_float(row: dict[str, Any], keys: list[str]) -> float | None:
 
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    fields = ["name", "longitude", "latitude", "source_name"]
+    fields = ["name", "longitude", "latitude", "source_name", "address", "district_name"]
     with path.open("w", encoding="utf-8-sig", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=fields)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def extract_seoul_district_name(address: str | None) -> str:
+    match = re.search(r"서울(?:특별시)?\s+([가-힣]+구)", str(address or ""))
+    return match.group(1) if match else ""
 
 
 def write_report(lines: list[str]) -> None:

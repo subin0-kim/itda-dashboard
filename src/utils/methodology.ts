@@ -5,8 +5,9 @@ export const LIMITATION_TEXT =
 
 export const PROCESS_STEPS = [
   "서울시 경계 데이터를 기준으로 250m 격자를 생성합니다.",
-  "각 격자 중심점에서 의료, 행정, 교육, 여가 시설까지의 가장 가까운 거리를 계산합니다.",
-  "시설 유형별 기준거리와 비교해 0~100점 접근성 점수로 변환합니다.",
+  "도보 네트워크 데이터가 있으면 격자 중심점과 시설을 가장 가까운 도보 네트워크 노드에 스냅하고, 노드-링크 최단거리로 접근 거리를 계산합니다.",
+  "도보 네트워크 데이터가 없거나 일부 구에서 계산이 어려우면 metadata에 기록하고 직선거리 fallback을 사용합니다.",
+  "각 시설 유형은 800m 이내에 있으면 최대 점수를 부여하고, 800m 초과 후 거리 비례 감점으로 1600m 이상에서 0점 처리합니다.",
   "의료, 행정, 교육, 여가 카테고리 점수를 계산합니다. 의료는 가정의학과 데이터 유무에 따라 산식을 자동 전환합니다.",
   "카테고리 점수를 가중합하여 격자별 유모차 생활보행 점수를 계산합니다.",
   "각 격자의 생활 출발지 가중치(LivingWeight)를 계산합니다. 주거·준주거·상업·공업·준공업 면적 비율을 기반으로 0~1 값을 부여하며, 공원·녹지·하천·산지·임야 면적은 출발지 가중치에서 제외하거나 낮은 값으로 처리합니다. 용도지역·공원·하천·산지 폴리곤이 없으면 LivingWeight 계산을 건너뜁니다.",
@@ -14,40 +15,46 @@ export const PROCESS_STEPS = [
 ];
 
 export const DISTANCE_LIMITS = [
-  ["소아청소년과", "1000m"],
-  ["가정의학과", "1000m"],
-  ["종합병원/대학병원", "2500m"],
-  ["주민센터", "1000m"],
-  ["구청", "2000m"],
-  ["시청", "5000m"],
-  ["어린이집", "750m"],
-  ["유치원", "1000m"],
-  ["공원", "1000m"],
-  ["도서관/문화시설", "1500m"],
-  ["대형상업시설", "2500m"],
+  ["만점 기준거리", "800m"],
+  ["점수 0 도달 거리", "1600m"],
+  ["격자 네트워크 스냅 기준", "200m"],
+  ["시설 네트워크 스냅 기준", "200m"],
 ];
+
+export const FACILITY_SCORE_FORMULA =
+  "DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 − D / 800))";
+
+export const FACILITY_SCORE_DESCRIPTION =
+  "D는 전처리에서 계산된 접근 거리입니다. 도보 네트워크 최단거리가 있으면 이를 우선 사용하고, 없으면 직선거리 fallback을 metadata에 기록합니다. 800m 이내는 시설 유형별 최대 점수 W, 1000m는 W × 0.75, 1200m는 W × 0.5, 1600m 이상은 0점입니다.";
 
 export const CATEGORY_FORMULAS: Array<{ id: CategoryId; label: string; formulas: string[] }> = [
   {
     id: "medical",
     label: "의료",
     formulas: [
-      "가정의학과 데이터가 있는 경우: MedicalScore = 0.60 x PediatricScore + 0.20 x FamilyMedicineScore + 0.20 x GeneralHospitalScore",
-      "가정의학과 데이터가 없는 경우: MedicalScore = 0.70 x PediatricScore + 0.30 x GeneralHospitalScore",
+      "MedicalScore = min(100, PediatricScore + FamilyMedicineScore + GeneralHospitalScore)",
+      "최대 점수: 소아청소년과 80, 가정의학과 40, 종합병원/대학병원 20",
     ],
   },
   {
     id: "administration",
     label: "행정",
-    formulas: ["AdminScore = 0.6 x CommunityCenterScore + 0.3 x DistrictOfficeScore + 0.1 x CityHallScore"],
+    formulas: [
+      "AdminScore = min(100, CommunityCenterScore + DistrictOfficeScore)",
+      "최대 점수: 주민센터 80, 구청 20. 시청은 기본 산식에서 제외합니다.",
+    ],
   },
-  { id: "education", label: "교육", formulas: ["EducationScore = 0.6 x ChildcareCenterScore + 0.4 x KindergartenScore"] },
+  {
+    id: "education",
+    label: "교육",
+    formulas: ["EducationScore = min(100, ChildcareCenterScore + KindergartenScore)", "최대 점수: 어린이집 80, 유치원 20"],
+  },
   {
     id: "leisure",
     label: "여가",
     formulas: [
-      "대형상업시설 데이터가 있는 경우: LeisureScore = 0.5 x ParkScore + 0.25 x LibraryCultureScore + 0.25 x LargeRetailScore",
-      "대형상업시설 데이터가 없는 경우: LeisureScore = 0.6 x ParkScore + 0.4 x LibraryCultureScore",
+      "LeisureScore = min(100, ParkScore + LibraryCultureScore)",
+      "최대 점수: 공원 70, 도서관/문화시설 30. 대형상업시설은 optional이며 기본값은 0입니다.",
     ],
   },
 ];

@@ -3,12 +3,17 @@
 서울 열린데이터광장 TbHospitalInfo API 원천에는 별도 진료과목 컬럼이 없어
 DUTYNAME(기관명)에 '가정의학' 포함 여부로 가정의학과 의원을 필터링합니다.
 좌표가 없는 행과 WGS84 범위를 벗어난 행은 제외합니다.
+
+원천 좌표가 실제 주소와 어긋나는 사례가 있으므로 주소(DUTYADDR)와 주소에서 추출한
+district_name도 함께 저장해 전처리에서 좌표 기반 fallback이 아니라 주소 기반 매칭이
+가능하도록 합니다.
 """
 
 from __future__ import annotations
 
 import csv
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -16,6 +21,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 HOSPITAL_RAW = PROJECT_ROOT / "data" / "raw" / "hospital_raw.json"
 OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "medical" / "family_medicine.csv"
 NAME_KEYWORD = "가정의학"
+
+
+def extract_seoul_district_name(address: str | None) -> str:
+    match = re.search(r"서울(?:특별시)?\s+([가-힣]+구)", str(address or ""))
+    return match.group(1) if match else ""
 
 
 def main() -> int:
@@ -55,12 +65,15 @@ def main() -> int:
         if not (120 <= lon <= 135 and 30 <= lat <= 40):
             excluded_out_of_range += 1
             continue
+        address = str(row.get("DUTYADDR") or "")
         output_rows.append(
             {
                 "name": name,
                 "longitude": lon,
                 "latitude": lat,
                 "source_name": "TbHospitalInfo",
+                "address": address,
+                "district_name": extract_seoul_district_name(address),
             }
         )
 
@@ -73,7 +86,10 @@ def main() -> int:
 
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT_PATH.open("w", encoding="utf-8-sig", newline="") as file:
-        writer = csv.DictWriter(file, fieldnames=["name", "longitude", "latitude", "source_name"])
+        writer = csv.DictWriter(
+            file,
+            fieldnames=["name", "longitude", "latitude", "source_name", "address", "district_name"],
+        )
         writer.writeheader()
         writer.writerows(output_rows)
 

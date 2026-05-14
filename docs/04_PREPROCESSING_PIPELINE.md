@@ -106,7 +106,7 @@ scripts/
 
 대형상업시설은 `large_retail_optional`로 정의하며 optional 데이터로 처리한다.
 
-가정의학과는 `family_medicine`으로 정의하며 optional 데이터로 처리한다. TbHospitalInfo 원천에 진료과목 컬럼이 없어 `scripts/extract_family_medicine.py`가 `hospital_raw.json`의 DUTYNAME 필드에서 "가정의학"이 포함된 의원을 facility_name_fallback 방식으로 필터링해 `data/raw/medical/family_medicine.csv`를 생성한다. 좌표 누락 또는 WGS84 범위 밖 행은 제외하고 excluded count를 기록한다. 의료 점수 가중치는 `category_weights.medical_with_family_medicine`(가정의학과 데이터 사용)과 `category_weights.medical_without_family_medicine`(데이터 없음 대체) 두 가지를 정의한다.
+가정의학과는 `family_medicine`으로 정의하며 optional 데이터로 처리한다. TbHospitalInfo 원천에 진료과목 컬럼이 없어 `scripts/extract_family_medicine.py`가 `hospital_raw.json`의 DUTYNAME 필드에서 "가정의학"이 포함된 의원을 facility_name_fallback 방식으로 필터링해 `data/raw/medical/family_medicine.csv`를 생성한다. 좌표 누락 또는 WGS84 범위 밖 행은 제외하고 excluded count를 기록한다. 의료 점수는 `category_weights.medical` 가산식으로 계산하며, optional 시설 유형이 없으면 해당 항목은 0으로 기여한다.
 
 ## 실행 방법
 
@@ -187,12 +187,25 @@ python scripts/geocode_admin_facilities.py
 
 - `large_retail_optional`, `family_medicine`, 그리고 토지이용 폴리곤(`zoning`, `parks_origin_mask`, `land_cover_optional`, `rivers_optional`, `forest_mountain_optional`)이 optional이다.
 - 파일이 없으면 전처리를 중단하지 않고 `metadata.json`의 `unavailable_optional_datasets`에 기록한다.
-- 대형상업시설 데이터가 없으면 여가 점수는 `0.6 x ParkScore + 0.4 x LibraryCultureScore` 산식을 사용한다.
-- 가정의학과 데이터가 없으면 의료 점수는 `0.70 x PediatricScore + 0.30 x GeneralHospitalScore` 대체 산식을 사용한다.
+- 대형상업시설 데이터가 없으면 여가 가산식에서 해당 항목은 0으로 기여한다. 현재 여가 산식은 `min(100, 0.70 x ParkScore + 0.30 x LibraryCultureScore [+ 0.30 x LargeRetailScore])`다.
+- 가정의학과 데이터가 없으면 의료 가산식에서 해당 항목은 0으로 기여한다. 현재 의료 산식은 `min(100, 0.80 x PediatricScore + 0.60 x FamilyMedicineScore + 0.20 x GeneralHospitalScore)`다.
 - 토지이용 폴리곤이 모두 없으면 LivingWeight를 계산하지 않고 구별 점수는 `simple_average` fallback을 사용한다.
 - 어떤 여가 산식이 적용되었는지는 `metadata.json`의 `applied_leisure_formula`에 기록한다.
 - 어떤 의료 산식이 적용되었는지는 `metadata.json`의 `applied_medical_formula`와 `family_medicine_used`에 기록한다.
 - 어떤 구별 집계 방식이 적용되었는지는 `metadata.json`의 `aggregation_method`와 `living_weight_status`에 기록한다.
+
+## 도보 네트워크 기반 거리 계산 단계
+
+도보 네트워크 고도화 단계는 다음 스크립트로 구성한다.
+
+- `scripts/preprocess/03b_prepare_pedestrian_network.py`: `data/raw/pedestrian_network` 또는 `data/raw_api/pedestrian_network`의 노드/링크 파일을 자치구 단위로 표준화한다. OA-21209 `tbTraficCrsng` 횡단보도 캐시가 있으면 실제 `LNKG_WKT` 선형 geometry를 보조 링크로 표준화해 같은 자치구 네트워크에 병합한다.
+- `scripts/preprocess/03c_calculate_network_distances_by_district.py`: 구별 grid, facility, network를 사용해 스냅과 최단거리 계산을 수행한다.
+- `scripts/preprocess/03d_merge_network_distances.py`: 네트워크 거리와 직선거리 fallback을 병합해 표준 `dist_*` 컬럼을 만든다.
+- `scripts/validation/validate_pedestrian_network.py`: 노드/링크, coverage, overlay 파일 상태를 검증한다.
+
+데이터가 크기 때문에 전체 서울 네트워크를 한 번에 처리하지 않고 자치구 단위로 처리한다. 격자와 시설의 노드 스냅 기준 기본값은 각각 200m이며, 시설 후보는 구 경계 기준 3000m buffer 안에서 선택한다. 네트워크 그래프도 해당 구 경계 3000m buffer와 교차하는 인접 구 네트워크 링크/노드를 함께 포함한다. 횡단보도는 임의 연결선으로 만들지 않고 OpenAPI 응답에 포함된 실제 geometry만 연결한다. 도보 네트워크 데이터가 없으면 파이프라인은 중단하지 않고 직선거리 fallback을 유지한다.
+
+점수 계산은 `DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 - D / 800))` 산식을 사용한다. 800m 이내는 만점, 1600m 이상은 0점이다.
 
 실제 적용된 의료 산식과 가정의학과 데이터 사용 여부는 전처리 실행 후 `metadata.json`의 `applied_medical_formula`, `family_medicine_used`에서 확인한다. 적용된 여가 산식은 `applied_leisure_formula`에서 확인한다. 적용된 구별 집계 방식은 `aggregation_method`에서 확인한다.
 

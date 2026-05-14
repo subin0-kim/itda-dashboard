@@ -67,7 +67,7 @@ public/data/
 
 대형상업시설은 `large_retail_optional`로 정의한다. 파일이 없으면 `metadata.json`에 unavailable로 기록하고, 여가 점수는 대체 산식을 적용한다.
 
-가정의학과는 `family_medicine`으로 정의하며 `required: false`인 optional 시설 유형이다. 원천 추출이 가능해 `data/raw/medical/family_medicine.csv`가 생성되면 의료 점수 산식은 `pediatric_family_general_hospital`을 사용하고, 파일이 없으면 기존 `pediatric_general_hospital_only` 대체 산식을 사용한다. 실제 적용 결과는 `metadata.json`의 `applied_medical_formula`와 `family_medicine_used`에 기록한다.
+가정의학과는 `family_medicine`으로 정의하며 `required: false`인 optional 시설 유형이다. 의료 점수는 시설 유형별 최대 점수(소아청소년과 80, 가정의학과 40, 종합병원 20)를 더하는 가산식으로 계산하며, optional 데이터가 없으면 해당 항목은 0으로 기여한다. 실제 적용 결과는 `metadata.json`의 `applied_medical_formula`, `family_medicine_used`, `medical_facility_types_used`에 기록한다.
 
 ## 원천 데이터 후보
 
@@ -138,6 +138,34 @@ raw 파일 상세 점검 결과는 `docs/data_raw_inventory.md`에 기록한다.
   - 모두 `data/raw/land_use/` 아래에 배치한다. 폴리곤 GeoJSON 형식을 기본으로 한다.
 
 Optional 데이터가 없더라도 기본 점수 산출은 가능해야 한다. Optional 데이터를 사용하는 경우 `metadata.json`에 적용 여부와 산식 변경 내용을 명시한다. 토지이용 폴리곤이 모두 없으면 `aggregation_method = simple_average`, `living_weight_status = unavailable`로 기록하고 구별 점수는 단순 평균을 사용한다.
+
+## 도보 네트워크 데이터
+
+도보 네트워크 공간정보는 optional 고도화 데이터다.
+
+- 로컬 raw 위치: `data/raw/pedestrian_network/`
+- OpenAPI cache 위치: `data/raw_api/pedestrian_network/`
+- 전처리 중간 산출물: `data/processed/pedestrian_network/`, `data/processed/network_by_district/`
+- public overlay: `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson`
+
+현재 도보 네트워크는 서울 열린데이터광장 `서울시 자치구별 도보 네트워크 공간정보` OpenAPI를 사용한다.
+
+- 데이터셋: OA-21208
+- 서비스명: `TbTraficWlkNet`
+- 요청 필터: `SGG_NM`, `WORK_DTTM`
+- 주요 컬럼: `NODE_WKT`, `NODE_ID`, `NODE_TYPE_CD`, `LNKG_WKT`, `LNKG_ID`, `LNKG_TYPE_CD`, `BGNG_LNKG_ID`, `END_LNKG_ID`, `LNKG_LEN`, `SGG_CD`, `SGG_NM`
+- 유형코드 참조 파일: `data/도보네트워크_링크노드유형코드.xlsx`
+
+전처리에서는 `LNKG_WKT`와 시작/종료 노드 ID를 기준으로 링크를 만들고, 링크 endpoint에서 노드 좌표를 파생한다. 이는 API geometry에서 얻은 값이며 임의 노드 생성이 아니다. 링크 유형코드 엑셀을 참조해 `보행자`가 포함된 링크만 계산용 네트워크에 사용한다. 데이터가 없거나 특정 구 계산이 실패하면 `pedestrian_network_status`와 `distance_method`에 기록하고 직선거리 fallback을 사용한다.
+
+참조 가능한 연관 OpenAPI:
+
+- OA-21209: `tbTraficCrsng`
+- OA-21211: `tbTraficEntrcLft`
+- OA-21212: `tbTraficElvtr`
+- OA-21213: `tbTraficUndpass`
+
+위 연관 데이터는 향후 도보 경로 해석 보조 데이터로 검토할 수 있으나, 현재 유모차 생활보행 점수의 최단거리 그래프는 OA-21208의 노드/링크를 기준으로 계산한다.
 
 ## 데이터 원칙
 

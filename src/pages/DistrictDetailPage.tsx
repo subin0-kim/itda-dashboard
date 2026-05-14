@@ -138,6 +138,7 @@ export function DistrictDetailPage() {
           facilities={facilityCollection}
           categoryId={categoryId}
           selectedFacilityTypes={selectedFacilityTypes}
+          districtCode={district.district_code}
         />
         <aside className="space-y-4">
           <DistrictFacilityFilters

@@ -8,6 +8,7 @@ import { LimitationsSection } from "../components/methodology/LimitationsSection
 import { LivingWeightSection } from "../components/methodology/LivingWeightSection";
 import { MethodologyIntro } from "../components/methodology/MethodologyIntro";
 import { OptionalDataStatusTable } from "../components/methodology/OptionalDataStatusTable";
+import { PedestrianNetworkSection } from "../components/methodology/PedestrianNetworkSection";
 import { PreprocessingPipelineSection } from "../components/methodology/PreprocessingPipelineSection";
 import { ProcessSteps } from "../components/methodology/ProcessSteps";
 import { SeoulDataHubUsageGuide } from "../components/methodology/SeoulDataHubUsageGuide";
@@ -57,6 +58,7 @@ export function MethodologyPage() {
         </div>
       </div>
 
+      <PedestrianNetworkSection metadata={metadataValue} />
       <LivingWeightSection metadata={metadataValue} />
 
       <ActualDataSourceTable metadata={metadataValue} />

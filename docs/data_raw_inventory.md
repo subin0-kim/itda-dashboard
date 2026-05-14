@@ -25,11 +25,27 @@
 | 파일 | 매핑 | 상태 | 처리 |
 | --- | --- | --- | --- |
 | `data/raw/optional/large_retail.csv` | `large_retail_optional` | 없음 | optional 미확보로 기록하고 여가 대체 산식 사용 |
-| `data/raw/medical/family_medicine.csv` | `family_medicine` | optional. `hospital_raw.json` 보유 시 추출 가능 | 생성 시 의료 산식 `pediatric_family_general_hospital` 적용, 없으면 `pediatric_general_hospital_only` 대체 산식 적용 |
+| `data/raw/medical/family_medicine.csv` | `family_medicine` | optional. `hospital_raw.json` 보유 시 추출 가능 | 의료 가산식에 포함. 없으면 해당 항목은 0으로 기여하고 `medical_facility_types_used`에 기록되지 않음 |
 
 ## 생활 출발지 가중치 후보 데이터
 
 현재 토지이용 후보 데이터는 `data/raw/land_use/` 하위 원천 폴더에 배치되어 있다. 실제 shapefile을 `config/data_config.yaml`에 연결해 LivingWeight를 적용했다.
+
+## 도보 네트워크 후보 데이터
+
+현재 `data/raw_api/pedestrian_network/`에는 서울 열린데이터광장 OA-21208 `TbTraficWlkNet` OpenAPI로 수집한 자치구별 JSON 캐시가 있다. 횡단보도 보조 연결은 OA-21209 `tbTraficCrsng` 응답을 `data/raw_api/pedestrian_network/supplemental/crosswalk.json`에 캐시해 사용한다. `data/도보네트워크_링크노드유형코드.xlsx`는 링크/노드 유형코드 해석에 사용한다.
+
+도보 네트워크 데이터가 추가되면 다음 정보를 기록해야 한다.
+
+- 파일명: `data/raw_api/pedestrian_network/{district_code}_{district_name}.json`
+- 노드/링크 구분: `NODE_TYPE`, `NODE_WKT`, `LNKG_WKT`
+- 자치구 코드/명: `SGG_CD`, `SGG_NM`
+- 좌표계: WGS84
+- 길이 컬럼: `LNKG_LEN`
+- from_node / to_node 컬럼: `BGNG_LNKG_ID`, `END_LNKG_ID`
+- LineString endpoint 기반 노드 파생: 사용
+- 유형코드 파일: `data/도보네트워크_링크노드유형코드.xlsx`
+- 횡단보도 보조 링크: `data/raw_api/pedestrian_network/supplemental/crosswalk.json`, `LNKG_WKT`가 있는 실제 횡단보도 선형 geometry만 사용
 
 | 후보 데이터 | 예상 경로 | 좌표계 후보 | 인코딩 후보 | 분류 컬럼 | geometry 타입 | LivingWeight 사용 여부 | 미사용 사유 |
 | --- | --- | --- | --- | --- | --- | --- | --- |

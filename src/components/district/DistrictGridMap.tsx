@@ -25,9 +25,10 @@ interface DistrictGridMapProps {
   facilities: GeoJsonFeatureCollection;
   categoryId: OverviewCategoryId;
   selectedFacilityTypes: string[];
+  districtCode?: string | null;
 }
 
-export function DistrictGridMap({ boundary, grids, facilities, categoryId, selectedFacilityTypes }: DistrictGridMapProps) {
+export function DistrictGridMap({ boundary, grids, facilities, categoryId, selectedFacilityTypes, districtCode }: DistrictGridMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const popupRef = useRef<maplibregl.Popup | null>(null);
@@ -35,6 +36,12 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
   const hoveredFacilityId = useRef<string | number | null>(null);
   const [map, setMap] = useState<maplibregl.Map | null>(null);
   const [ready, setReady] = useState(false);
+  const [showNetwork, setShowNetwork] = useState(false);
+  const [networkData, setNetworkData] = useState<{ links: GeoJsonFeatureCollection | null; nodes: GeoJsonFeatureCollection | null; missing: boolean }>({
+    links: null,
+    nodes: null,
+    missing: false,
+  });
   const basemapError = useBasemapStatus(map);
   const category = getOverviewCategory(categoryId);
 
@@ -131,6 +138,7 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
           paint: { "line-color": "#0f172a", "line-width": 2.4, "line-opacity": 0.85 },
         });
       }
+      ensureNetworkLayers(instance, networkData.links, networkData.nodes);
 
       instance.setPaintProperty(DISTRICT_GRID_FILL_LAYER_ID, "fill-color", getMapLibreScoreExpression(categoryId));
       setVisibility(instance, DISTRICT_GRID_FILL_LAYER_ID, hasGrid);
@@ -139,6 +147,7 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
         instance.setLayoutProperty(DISTRICT_FACILITY_LAYER_ID, "visibility", "visible");
         instance.moveLayer(DISTRICT_FACILITY_LAYER_ID);
       }
+      setNetworkLayerVisibility(instance, showNetwork && Boolean(networkData.links));
 
       const bounds = getBoundsForMap(boundary);
       if (bounds) instance.fitBounds(bounds, { padding: 36, duration: 0, maxZoom: 13 });
@@ -147,7 +156,32 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
 
     if (instance.isStyleLoaded()) applyData();
     else instance.once("load", applyData);
-  }, [boundary, gridData, facilityData, categoryId, canRenderMap, hasGrid]);
+  }, [boundary, gridData, facilityData, categoryId, canRenderMap, hasGrid, networkData.links, networkData.nodes, showNetwork]);
+
+  useEffect(() => {
+    if (!showNetwork || !districtCode) return;
+    let cancelled = false;
+    async function loadNetwork() {
+      const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+      const linksUrl = `${base}data/network/${districtCode}_links.geojson`;
+      const nodesUrl = `${base}data/network/${districtCode}_nodes.geojson`;
+      try {
+        const [linksResponse, nodesResponse] = await Promise.all([fetch(linksUrl), fetch(nodesUrl)]);
+        if (!linksResponse.ok || !nodesResponse.ok) {
+          if (!cancelled) setNetworkData({ links: null, nodes: null, missing: true });
+          return;
+        }
+        const [links, nodes] = await Promise.all([linksResponse.json(), nodesResponse.json()]);
+        if (!cancelled) setNetworkData({ links, nodes, missing: false });
+      } catch {
+        if (!cancelled) setNetworkData({ links: null, nodes: null, missing: true });
+      }
+    }
+    loadNetwork();
+    return () => {
+      cancelled = true;
+    };
+  }, [showNetwork, districtCode]);
 
   useEffect(() => {
     const instance = mapRef.current;
@@ -242,6 +276,13 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       <div className="relative overflow-hidden rounded-lg border border-slate-200">
         <div ref={containerRef} className="h-[620px] w-full" />
         {basemapError ? <BasemapErrorBanner /> : null}
+        <button
+          type="button"
+          onClick={() => setShowNetwork((value) => !value)}
+          className="absolute left-4 top-4 rounded-md border border-slate-200 bg-white/95 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+        >
+          {showNetwork ? "보행 네트워크 숨기기" : "보행 네트워크 보기"}
+        </button>
         <div className="absolute right-4 top-4 w-44">
           <FacilityLegend categories={categoryId === "overall" ? undefined : [categoryId as CategoryId]} />
         </div>
@@ -254,6 +295,9 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       ) : null}
       {categoryId !== "overall" && facilityData.features.length === 0 ? (
         <p className="mt-3 text-sm text-slate-500">선택한 구의 시설 위치 데이터가 없습니다.</p>
+      ) : null}
+      {showNetwork && networkData.missing ? (
+        <p className="mt-3 text-sm text-slate-500">보행 네트워크 데이터가 없습니다. 현재 산출물은 직선거리 fallback을 사용할 수 있습니다.</p>
       ) : null}
     </section>
   );
@@ -269,6 +313,53 @@ function upsertGeoJsonSource(map: maplibregl.Map, id: string, data: GeoJsonFeatu
 
 function setVisibility(map: maplibregl.Map, layerId: string, visible: boolean) {
   if (map.getLayer(layerId)) map.setLayoutProperty(layerId, "visibility", visible ? "visible" : "none");
+}
+
+const NETWORK_LINK_SOURCE_ID = "district-network-links";
+const NETWORK_NODE_SOURCE_ID = "district-network-nodes";
+const NETWORK_LINK_LAYER_ID = "district-network-link-layer";
+const NETWORK_NODE_LAYER_ID = "district-network-node-layer";
+
+function ensureNetworkLayers(
+  map: maplibregl.Map,
+  links: GeoJsonFeatureCollection | null,
+  nodes: GeoJsonFeatureCollection | null,
+) {
+  if (!links) return;
+  upsertGeoJsonSource(map, NETWORK_LINK_SOURCE_ID, links);
+  if (!map.getLayer(NETWORK_LINK_LAYER_ID)) {
+    map.addLayer(
+      {
+        id: NETWORK_LINK_LAYER_ID,
+        type: "line",
+        source: NETWORK_LINK_SOURCE_ID,
+        layout: { visibility: "none" },
+        paint: { "line-color": "#475569", "line-width": 1, "line-opacity": 0.32 },
+      },
+      DISTRICT_FACILITY_LAYER_ID,
+    );
+  }
+  if (nodes) {
+    upsertGeoJsonSource(map, NETWORK_NODE_SOURCE_ID, nodes);
+    if (!map.getLayer(NETWORK_NODE_LAYER_ID)) {
+      map.addLayer(
+        {
+          id: NETWORK_NODE_LAYER_ID,
+          type: "circle",
+          source: NETWORK_NODE_SOURCE_ID,
+          minzoom: 14,
+          layout: { visibility: "none" },
+          paint: { "circle-radius": 2, "circle-color": "#334155", "circle-opacity": 0.45 },
+        },
+        DISTRICT_FACILITY_LAYER_ID,
+      );
+    }
+  }
+}
+
+function setNetworkLayerVisibility(map: maplibregl.Map, visible: boolean) {
+  setVisibility(map, NETWORK_LINK_LAYER_ID, visible);
+  setVisibility(map, NETWORK_NODE_LAYER_ID, visible);
 }
 
 function getFacilityColorExpression(): maplibregl.ExpressionSpecification {

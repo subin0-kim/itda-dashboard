@@ -21,22 +21,22 @@ export function normalizeUnavailableOptionalDatasets(metadata: Metadata | null):
 
 export function getAppliedLeisureFormulaLabel(value: string | null | undefined) {
   if (!value) return "정보 없음";
-  if (value === "park_library_only" || value.includes("without_large_retail")) {
-    return "현재 적용 산식: 공원 + 도서관/문화시설 기반 여가 점수";
+  if (value === "park_other_leisure_with_large_retail_additive" || value.includes("large_retail")) {
+    return "현재 적용 산식: min(100, 공원 70 + 도서관/문화시설 30 + optional 대형상업시설)";
   }
-  if (value.includes("large_retail")) {
-    return "현재 적용 산식: 공원 + 도서관/문화시설 + 대형상업시설 기반 여가 점수";
+  if (value === "park_other_leisure_additive" || value.includes("without_large_retail")) {
+    return "현재 적용 산식: min(100, 공원 70 + 도서관/문화시설 30) (대형상업시설 데이터 미확보)";
   }
   return value;
 }
 
 export function getAppliedMedicalFormulaLabel(value: string | null | undefined) {
   if (!value) return "정보 없음";
-  if (value === "pediatric_family_general_hospital") {
-    return "현재 적용 산식: 소아청소년과 0.60 + 가정의학과 0.20 + 종합병원 0.20";
+  if (value === "pediatric_family_general_hospital_additive" || value === "pediatric_family_general_hospital") {
+    return "현재 적용 산식: min(100, 소아청소년과 80 + 가정의학과 40 + 종합병원 20)";
   }
-  if (value === "pediatric_general_hospital_only") {
-    return "현재 적용 산식: 소아청소년과 0.70 + 종합병원 0.30 (가정의학과 데이터 미확보)";
+  if (value === "pediatric_general_hospital_additive" || value === "pediatric_general_hospital_only") {
+    return "현재 적용 산식: min(100, 소아청소년과 80 + 종합병원 20) (가정의학과 데이터 미확보)";
   }
   return value;
 }
@@ -44,7 +44,10 @@ export function getAppliedMedicalFormulaLabel(value: string | null | undefined) 
 export function isFamilyMedicineUsed(metadata: Metadata | null) {
   if (!metadata) return false;
   if (typeof metadata.family_medicine_used === "boolean") return metadata.family_medicine_used;
-  return metadata.applied_medical_formula === "pediatric_family_general_hospital";
+  return (
+    metadata.applied_medical_formula === "pediatric_family_general_hospital" ||
+    metadata.applied_medical_formula === "pediatric_family_general_hospital_additive"
+  );
 }
 
 export function getAggregationMethodLabel(value: string | null | undefined) {

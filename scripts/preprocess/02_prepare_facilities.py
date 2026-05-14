@@ -45,10 +45,14 @@ def prepare_facilities(config_path: str) -> None:
         )
         prepared["source_url"] = prepared["source_url"] if "source_url" in prepared.columns else source.get("source_url", "")
         prepared["raw_file"] = source["path"]
-        prepared["address"] = prepared[address_col].astype(str) if address_col and address_col in prepared.columns else ""
-        if "district_name" not in prepared.columns:
+        prepared["address"] = prepared[address_col].fillna("").astype(str) if address_col and address_col in prepared.columns else ""
+        if "district_name" in prepared.columns:
+            prepared["district_name"] = prepared["district_name"].fillna("").astype(str)
+        else:
             prepared["district_name"] = ""
-        if "district_code" not in prepared.columns:
+        if "district_code" in prepared.columns:
+            prepared["district_code"] = prepared["district_code"].fillna("").astype(str)
+        else:
             prepared["district_code"] = ""
         if "reference_year" not in prepared.columns:
             prepared["reference_year"] = ""

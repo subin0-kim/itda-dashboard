@@ -14,11 +14,15 @@ STEPS = [
     "scripts/preprocess/01_generate_grid.py",
     "scripts/preprocess/02_prepare_facilities.py",
     "scripts/preprocess/03_calculate_distances.py",
+    "scripts/preprocess/03b_prepare_pedestrian_network.py",
+    "scripts/preprocess/03c_calculate_network_distances_by_district.py",
+    "scripts/preprocess/03d_merge_network_distances.py",
     "scripts/preprocess/04_calculate_scores.py",
     "scripts/preprocess/05_calculate_living_weight.py",
     "scripts/preprocess/06_aggregate_district_scores.py",
     "scripts/preprocess/08_export_public_data.py",
     "scripts/validation/validate_processed_data.py",
+    "scripts/validation/validate_pedestrian_network.py",
 ]
 
 STEPS_WITHOUT_CONFIG = {"scripts/extract_family_medicine.py"}
@@ -48,12 +52,15 @@ def clean_generated_outputs() -> None:
     generated = [
         "data/processed/grid_base.geojson",
         "data/processed/facilities_prepared.geojson",
+        "data/processed/grid_distances_euclidean.geojson",
         "data/processed/grid_distances.geojson",
         "data/processed/grid_scores.geojson",
         "data/processed/grid_living_weight.geojson",
         "data/processed/district_scores.json",
         "data/processed/category_summary.json",
         "data/processed/metadata.json",
+        "data/processed/pedestrian_network/network_inventory.json",
+        "data/processed/network_by_district/network_distance_summary.json",
         "public/data/seoul_districts.geojson",
         "public/data/grid_scores.geojson",
         "public/data/district_scores.json",

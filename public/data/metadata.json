@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "잇다(:connect)",
-    "scoring_formula_version": "stroller_access_v1"
+    "scoring_formula_version": "stroller_access_v2_network_ready_800m"
   },
   "source_datasets": [
     {
@@ -109,10 +109,10 @@
       "name": "대형상업시설 위치 데이터",
       "reason": "원천 데이터 미확보",
       "affected_score": "leisure",
-      "fallback_formula": "leisure_without_large_retail"
+      "fallback_formula": "park_other_leisure_additive"
     }
   ],
-  "generated_at": "2026-05-13T13:14:15.624699+00:00",
+  "generated_at": "2026-05-14T01:07:29.153756+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -120,15 +120,18 @@
     "calculation": "EPSG:5179",
     "web_output": "EPSG:4326"
   },
-  "scoring_formula_version": "stroller_access_v1",
+  "scoring_formula_version": "stroller_access_v2_network_ready_800m",
   "limitations": [
     "본 점수는 실제 유모차 통행 가능 여부를 확정하는 지표가 아니라, 공개데이터 기반 생활시설 접근성을 비교하기 위한 시각화 지표입니다. 실제 현장 여건은 보도 폭, 단차, 공사, 불법주정차, 시설 운영시간 등에 따라 달라질 수 있습니다."
   ],
-  "applied_leisure_formula": "leisure_without_large_retail",
+  "applied_leisure_formula": "park_other_leisure_additive",
   "preprocessing_scripts": [
     "01_generate_grid.py",
     "02_prepare_facilities.py",
     "03_calculate_distances.py",
+    "03b_prepare_pedestrian_network.py",
+    "03c_calculate_network_distances_by_district.py",
+    "03d_merge_network_distances.py",
     "04_calculate_scores.py",
     "05_calculate_living_weight.py",
     "06_aggregate_district_scores.py",
@@ -235,7 +238,8 @@
   "facility_types_without_distance": [
     "large_retail_optional"
   ],
-  "distance_method": "projected_planar_nearest_distance_meters",
+  "distance_method": "mixed",
+  "pedestrian_network_status": "partial",
   "distance_null_summary": {
     "dist_pediatric_clinic": 0,
     "dist_family_medicine": 0,
@@ -249,13 +253,1404 @@
     "dist_library_culture": 0,
     "dist_large_retail_optional": 10028
   },
-  "future_enhancements": [
-    "도보 네트워크 거리",
-    "경사 보정"
+  "distance_method_summary": {
+    "euclidean_fallback": 66061,
+    "pedestrian_network": 34219,
+    "unavailable": 10028
+  },
+  "pedestrian_network_inventory": {
+    "enabled": true,
+    "status": "prepared",
+    "raw_dir": "D:\\project\\itda\\data\\raw\\pedestrian_network",
+    "api_cache_dir": "data\\raw_api\\pedestrian_network",
+    "districts": {
+      "11010": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11010\\nodes.geojson",
+          "feature_count": 8387,
+          "source_file": "data\\raw_api\\pedestrian_network\\11010_종로구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11010\\links.geojson",
+          "feature_count": 10659,
+          "source_file": "data\\raw_api\\pedestrian_network\\11010_종로구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11010\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11010\\crosswalk_links.geojson",
+          "node_count": 683,
+          "link_count": 419,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11020": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11020\\nodes.geojson",
+          "feature_count": 5924,
+          "source_file": "data\\raw_api\\pedestrian_network\\11020_중구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11020\\links.geojson",
+          "feature_count": 10269,
+          "source_file": "data\\raw_api\\pedestrian_network\\11020_중구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11020\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11020\\crosswalk_links.geojson",
+          "node_count": 685,
+          "link_count": 424,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11030": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11030\\nodes.geojson",
+          "feature_count": 7596,
+          "source_file": "data\\raw_api\\pedestrian_network\\11030_용산구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11030\\links.geojson",
+          "feature_count": 10496,
+          "source_file": "data\\raw_api\\pedestrian_network\\11030_용산구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11030\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11030\\crosswalk_links.geojson",
+          "node_count": 579,
+          "link_count": 325,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11040": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11040\\nodes.geojson",
+          "feature_count": 7514,
+          "source_file": "data\\raw_api\\pedestrian_network\\11040_성동구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11040\\links.geojson",
+          "feature_count": 7831,
+          "source_file": "data\\raw_api\\pedestrian_network\\11040_성동구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11040\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11040\\crosswalk_links.geojson",
+          "node_count": 521,
+          "link_count": 313,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11050": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11050\\nodes.geojson",
+          "feature_count": 6843,
+          "source_file": "data\\raw_api\\pedestrian_network\\11050_광진구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11050\\links.geojson",
+          "feature_count": 9514,
+          "source_file": "data\\raw_api\\pedestrian_network\\11050_광진구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11050\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11050\\crosswalk_links.geojson",
+          "node_count": 631,
+          "link_count": 403,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11060": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11060\\nodes.geojson",
+          "feature_count": 9285,
+          "source_file": "data\\raw_api\\pedestrian_network\\11060_동대문구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11060\\links.geojson",
+          "feature_count": 14477,
+          "source_file": "data\\raw_api\\pedestrian_network\\11060_동대문구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11060\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11060\\crosswalk_links.geojson",
+          "node_count": 815,
+          "link_count": 484,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11070": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11070\\nodes.geojson",
+          "feature_count": 9092,
+          "source_file": "data\\raw_api\\pedestrian_network\\11070_중랑구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11070\\links.geojson",
+          "feature_count": 11211,
+          "source_file": "data\\raw_api\\pedestrian_network\\11070_중랑구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11070\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11070\\crosswalk_links.geojson",
+          "node_count": 802,
+          "link_count": 507,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11080": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11080\\nodes.geojson",
+          "feature_count": 11777,
+          "source_file": "data\\raw_api\\pedestrian_network\\11080_성북구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11080\\links.geojson",
+          "feature_count": 14679,
+          "source_file": "data\\raw_api\\pedestrian_network\\11080_성북구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11080\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11080\\crosswalk_links.geojson",
+          "node_count": 726,
+          "link_count": 429,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11090": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11090\\nodes.geojson",
+          "feature_count": 7973,
+          "source_file": "data\\raw_api\\pedestrian_network\\11090_강북구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11090\\links.geojson",
+          "feature_count": 9127,
+          "source_file": "data\\raw_api\\pedestrian_network\\11090_강북구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11090\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11090\\crosswalk_links.geojson",
+          "node_count": 499,
+          "link_count": 279,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11100": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11100\\nodes.geojson",
+          "feature_count": 6420,
+          "source_file": "data\\raw_api\\pedestrian_network\\11100_도봉구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11100\\links.geojson",
+          "feature_count": 7239,
+          "source_file": "data\\raw_api\\pedestrian_network\\11100_도봉구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11100\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11100\\crosswalk_links.geojson",
+          "node_count": 507,
+          "link_count": 270,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11110": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11110\\nodes.geojson",
+          "feature_count": 10452,
+          "source_file": "data\\raw_api\\pedestrian_network\\11110_노원구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11110\\links.geojson",
+          "feature_count": 12348,
+          "source_file": "data\\raw_api\\pedestrian_network\\11110_노원구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11110\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11110\\crosswalk_links.geojson",
+          "node_count": 766,
+          "link_count": 398,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11120": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11120\\nodes.geojson",
+          "feature_count": 8649,
+          "source_file": "data\\raw_api\\pedestrian_network\\11120_은평구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11120\\links.geojson",
+          "feature_count": 9888,
+          "source_file": "data\\raw_api\\pedestrian_network\\11120_은평구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11120\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11120\\crosswalk_links.geojson",
+          "node_count": 747,
+          "link_count": 409,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11130": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11130\\nodes.geojson",
+          "feature_count": 7326,
+          "source_file": "data\\raw_api\\pedestrian_network\\11130_서대문구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11130\\links.geojson",
+          "feature_count": 9695,
+          "source_file": "data\\raw_api\\pedestrian_network\\11130_서대문구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11130\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11130\\crosswalk_links.geojson",
+          "node_count": 459,
+          "link_count": 272,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11140": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11140\\nodes.geojson",
+          "feature_count": 8559,
+          "source_file": "data\\raw_api\\pedestrian_network\\11140_마포구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11140\\links.geojson",
+          "feature_count": 12108,
+          "source_file": "data\\raw_api\\pedestrian_network\\11140_마포구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11140\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11140\\crosswalk_links.geojson",
+          "node_count": 1047,
+          "link_count": 611,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11150": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11150\\nodes.geojson",
+          "feature_count": 8117,
+          "source_file": "data\\raw_api\\pedestrian_network\\11150_양천구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11150\\links.geojson",
+          "feature_count": 10786,
+          "source_file": "data\\raw_api\\pedestrian_network\\11150_양천구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11150\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11150\\crosswalk_links.geojson",
+          "node_count": 1076,
+          "link_count": 611,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11160": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11160\\nodes.geojson",
+          "feature_count": 7943,
+          "source_file": "data\\raw_api\\pedestrian_network\\11160_강서구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11160\\links.geojson",
+          "feature_count": 11138,
+          "source_file": "data\\raw_api\\pedestrian_network\\11160_강서구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11160\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11160\\crosswalk_links.geojson",
+          "node_count": 996,
+          "link_count": 651,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11170": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11170\\nodes.geojson",
+          "feature_count": 8639,
+          "source_file": "data\\raw_api\\pedestrian_network\\11170_구로구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11170\\links.geojson",
+          "feature_count": 10673,
+          "source_file": "data\\raw_api\\pedestrian_network\\11170_구로구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11170\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11170\\crosswalk_links.geojson",
+          "node_count": 861,
+          "link_count": 569,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11180": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11180\\nodes.geojson",
+          "feature_count": 5382,
+          "source_file": "data\\raw_api\\pedestrian_network\\11180_금천구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11180\\links.geojson",
+          "feature_count": 6991,
+          "source_file": "data\\raw_api\\pedestrian_network\\11180_금천구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11180\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11180\\crosswalk_links.geojson",
+          "node_count": 545,
+          "link_count": 302,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11190": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11190\\nodes.geojson",
+          "feature_count": 9562,
+          "source_file": "data\\raw_api\\pedestrian_network\\11190_영등포구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11190\\links.geojson",
+          "feature_count": 11064,
+          "source_file": "data\\raw_api\\pedestrian_network\\11190_영등포구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11190\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11190\\crosswalk_links.geojson",
+          "node_count": 1078,
+          "link_count": 656,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11200": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11200\\nodes.geojson",
+          "feature_count": 7908,
+          "source_file": "data\\raw_api\\pedestrian_network\\11200_동작구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11200\\links.geojson",
+          "feature_count": 11840,
+          "source_file": "data\\raw_api\\pedestrian_network\\11200_동작구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11200\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11200\\crosswalk_links.geojson",
+          "node_count": 468,
+          "link_count": 286,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11210": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11210\\nodes.geojson",
+          "feature_count": 8219,
+          "source_file": "data\\raw_api\\pedestrian_network\\11210_관악구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11210\\links.geojson",
+          "feature_count": 13124,
+          "source_file": "data\\raw_api\\pedestrian_network\\11210_관악구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11210\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11210\\crosswalk_links.geojson",
+          "node_count": 540,
+          "link_count": 301,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11220": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11220\\nodes.geojson",
+          "feature_count": 8012,
+          "source_file": "data\\raw_api\\pedestrian_network\\11220_서초구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11220\\links.geojson",
+          "feature_count": 10206,
+          "source_file": "data\\raw_api\\pedestrian_network\\11220_서초구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11220\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11220\\crosswalk_links.geojson",
+          "node_count": 989,
+          "link_count": 593,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11230": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11230\\nodes.geojson",
+          "feature_count": 12142,
+          "source_file": "data\\raw_api\\pedestrian_network\\11230_강남구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11230\\links.geojson",
+          "feature_count": 16501,
+          "source_file": "data\\raw_api\\pedestrian_network\\11230_강남구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11230\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11230\\crosswalk_links.geojson",
+          "node_count": 1289,
+          "link_count": 756,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11240": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11240\\nodes.geojson",
+          "feature_count": 8983,
+          "source_file": "data\\raw_api\\pedestrian_network\\11240_송파구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11240\\links.geojson",
+          "feature_count": 9990,
+          "source_file": "data\\raw_api\\pedestrian_network\\11240_송파구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11240\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11240\\crosswalk_links.geojson",
+          "node_count": 1222,
+          "link_count": 725,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      },
+      "11250": {
+        "nodes": {
+          "path": "data\\processed\\pedestrian_network\\11250\\nodes.geojson",
+          "feature_count": 8081,
+          "source_file": "data\\raw_api\\pedestrian_network\\11250_강동구.json",
+          "derivation": "link_endpoint_and_optional_node_wkt"
+        },
+        "links": {
+          "path": "data\\processed\\pedestrian_network\\11250\\links.geojson",
+          "feature_count": 10860,
+          "source_file": "data\\raw_api\\pedestrian_network\\11250_강동구.json"
+        },
+        "supplemental_crosswalk": {
+          "nodes_path": "data\\processed\\pedestrian_network\\11250\\crosswalk_nodes.geojson",
+          "links_path": "data\\processed\\pedestrian_network\\11250\\crosswalk_links.geojson",
+          "node_count": 1092,
+          "link_count": 569,
+          "source_file": "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json",
+          "service": "tbTraficCrsng"
+        }
+      }
+    },
+    "files": [
+      "data\\raw_api\\pedestrian_network\\11010_종로구.json",
+      "data\\raw_api\\pedestrian_network\\11020_중구.json",
+      "data\\raw_api\\pedestrian_network\\11030_용산구.json",
+      "data\\raw_api\\pedestrian_network\\11040_성동구.json",
+      "data\\raw_api\\pedestrian_network\\11050_광진구.json",
+      "data\\raw_api\\pedestrian_network\\11060_동대문구.json",
+      "data\\raw_api\\pedestrian_network\\11070_중랑구.json",
+      "data\\raw_api\\pedestrian_network\\11080_성북구.json",
+      "data\\raw_api\\pedestrian_network\\11090_강북구.json",
+      "data\\raw_api\\pedestrian_network\\11100_도봉구.json",
+      "data\\raw_api\\pedestrian_network\\11110_노원구.json",
+      "data\\raw_api\\pedestrian_network\\11120_은평구.json",
+      "data\\raw_api\\pedestrian_network\\11130_서대문구.json",
+      "data\\raw_api\\pedestrian_network\\11140_마포구.json",
+      "data\\raw_api\\pedestrian_network\\11150_양천구.json",
+      "data\\raw_api\\pedestrian_network\\11160_강서구.json",
+      "data\\raw_api\\pedestrian_network\\11170_구로구.json",
+      "data\\raw_api\\pedestrian_network\\11180_금천구.json",
+      "data\\raw_api\\pedestrian_network\\11190_영등포구.json",
+      "data\\raw_api\\pedestrian_network\\11200_동작구.json",
+      "data\\raw_api\\pedestrian_network\\11210_관악구.json",
+      "data\\raw_api\\pedestrian_network\\11220_서초구.json",
+      "data\\raw_api\\pedestrian_network\\11230_강남구.json",
+      "data\\raw_api\\pedestrian_network\\11240_송파구.json",
+      "data\\raw_api\\pedestrian_network\\11250_강동구.json",
+      "data\\raw_api\\pedestrian_network\\supplemental\\crosswalk.json"
+    ],
+    "message": null
+  },
+  "pedestrian_network_source_datasets": [
+    {
+      "name": "서울시 자치구별 도보 네트워크 공간정보",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data\\raw_api\\pedestrian_network",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-21208/A/1/datasetView.do",
+      "service_name": "TbTraficWlkNet",
+      "used": true
+    },
+    {
+      "name": "도보네트워크 링크노드유형코드",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data\\도보네트워크_링크노드유형코드.xlsx",
+      "source_url": null,
+      "used": true
+    },
+    {
+      "name": "서울시 횡단보도 위치정보",
+      "provider": "서울 열린데이터광장",
+      "raw_file": "data/raw_api/pedestrian_network/supplemental/crosswalk.json",
+      "source_url": "https://data.seoul.go.kr/dataList/OA-21209/A/1/datasetView.do",
+      "service_name": "tbTraficCrsng",
+      "used": true,
+      "usage_note": "도보 네트워크 보조 연결 링크로 사용"
+    }
   ],
-  "applied_medical_formula": "pediatric_family_general_hospital",
-  "applied_medical_weights_key": "medical_with_family_medicine",
+  "status": "partial",
+  "network_distance_coverage": 0.341235,
+  "grid_count": 10028,
+  "network_grid_count": 8104,
+  "district_network_status": {
+    "11010": {
+      "status": "applied",
+      "grid_count": 414,
+      "network_snap_grid_count": 335,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11040",
+        "11060",
+        "11080",
+        "11090",
+        "11120",
+        "11130",
+        "11140"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 135,
+        "family_medicine": 110,
+        "general_hospital": 108,
+        "community_center": 149,
+        "district_office": 108,
+        "city_hall": 108,
+        "childcare_center": 170,
+        "kindergarten": 146,
+        "park": 112,
+        "library_culture": 210,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11010_network_distances.geojson"
+    },
+    "11020": {
+      "status": "applied",
+      "grid_count": 152,
+      "network_snap_grid_count": 150,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11040",
+        "11060",
+        "11080",
+        "11130",
+        "11140",
+        "11220",
+        "11230"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 121,
+        "family_medicine": 119,
+        "general_hospital": 119,
+        "community_center": 119,
+        "district_office": 119,
+        "city_hall": 119,
+        "childcare_center": 132,
+        "kindergarten": 122,
+        "park": 119,
+        "library_culture": 131,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11020_network_distances.geojson"
+    },
+    "11030": {
+      "status": "applied",
+      "grid_count": 318,
+      "network_snap_grid_count": 258,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11040",
+        "11050",
+        "11130",
+        "11140",
+        "11190",
+        "11200",
+        "11210",
+        "11220",
+        "11230"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 132,
+        "family_medicine": 109,
+        "general_hospital": 70,
+        "community_center": 135,
+        "district_office": 70,
+        "city_hall": 70,
+        "childcare_center": 185,
+        "kindergarten": 116,
+        "park": 71,
+        "library_culture": 152,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11030_network_distances.geojson"
+    },
+    "11040": {
+      "status": "applied",
+      "grid_count": 286,
+      "network_snap_grid_count": 251,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11040",
+        "11050",
+        "11060",
+        "11070",
+        "11080",
+        "11220",
+        "11230",
+        "11240"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 98,
+        "family_medicine": 78,
+        "general_hospital": 40,
+        "community_center": 71,
+        "district_office": 54,
+        "city_hall": 0,
+        "childcare_center": 147,
+        "kindergarten": 96,
+        "park": 53,
+        "library_culture": 94,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11040_network_distances.geojson"
+    },
+    "11050": {
+      "status": "applied",
+      "grid_count": 301,
+      "network_snap_grid_count": 225,
+      "included_network_districts": [
+        "11040",
+        "11050",
+        "11060",
+        "11070",
+        "11230",
+        "11240",
+        "11250"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 121,
+        "family_medicine": 115,
+        "general_hospital": 79,
+        "community_center": 117,
+        "district_office": 1,
+        "city_hall": 0,
+        "childcare_center": 166,
+        "kindergarten": 127,
+        "park": 38,
+        "library_culture": 134,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11050_network_distances.geojson"
+    },
+    "11060": {
+      "status": "applied",
+      "grid_count": 238,
+      "network_snap_grid_count": 238,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11040",
+        "11050",
+        "11060",
+        "11070",
+        "11080",
+        "11090",
+        "11110"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 194,
+        "family_medicine": 191,
+        "general_hospital": 191,
+        "community_center": 192,
+        "district_office": 191,
+        "city_hall": 0,
+        "childcare_center": 206,
+        "kindergarten": 195,
+        "park": 191,
+        "library_culture": 194,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11060_network_distances.geojson"
+    },
+    "11070": {
+      "status": "applied",
+      "grid_count": 274,
+      "network_snap_grid_count": 215,
+      "included_network_districts": [
+        "11040",
+        "11050",
+        "11060",
+        "11070",
+        "11080",
+        "11090",
+        "11100",
+        "11110",
+        "11250"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 149,
+        "family_medicine": 130,
+        "general_hospital": 140,
+        "community_center": 159,
+        "district_office": 10,
+        "city_hall": 0,
+        "childcare_center": 177,
+        "kindergarten": 155,
+        "park": 142,
+        "library_culture": 138,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11070_network_distances.geojson"
+    },
+    "11080": {
+      "status": "applied",
+      "grid_count": 392,
+      "network_snap_grid_count": 352,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11040",
+        "11060",
+        "11070",
+        "11080",
+        "11090",
+        "11100",
+        "11110",
+        "11120"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 158,
+        "family_medicine": 144,
+        "general_hospital": 100,
+        "community_center": 137,
+        "district_office": 99,
+        "city_hall": 99,
+        "childcare_center": 216,
+        "kindergarten": 154,
+        "park": 104,
+        "library_culture": 172,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11080_network_distances.geojson"
+    },
+    "11090": {
+      "status": "applied",
+      "grid_count": 406,
+      "network_snap_grid_count": 255,
+      "included_network_districts": [
+        "11010",
+        "11060",
+        "11070",
+        "11080",
+        "11090",
+        "11100",
+        "11110",
+        "11120"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 125,
+        "family_medicine": 44,
+        "general_hospital": 69,
+        "community_center": 115,
+        "district_office": 69,
+        "city_hall": 0,
+        "childcare_center": 171,
+        "kindergarten": 124,
+        "park": 75,
+        "library_culture": 125,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11090_network_distances.geojson"
+    },
+    "11100": {
+      "status": "applied",
+      "grid_count": 348,
+      "network_snap_grid_count": 258,
+      "included_network_districts": [
+        "11070",
+        "11080",
+        "11090",
+        "11100",
+        "11110"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 137,
+        "family_medicine": 104,
+        "general_hospital": 24,
+        "community_center": 129,
+        "district_office": 25,
+        "city_hall": 0,
+        "childcare_center": 174,
+        "kindergarten": 154,
+        "park": 110,
+        "library_culture": 139,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11100_network_distances.geojson"
+    },
+    "11110": {
+      "status": "applied",
+      "grid_count": 580,
+      "network_snap_grid_count": 411,
+      "included_network_districts": [
+        "11060",
+        "11070",
+        "11080",
+        "11090",
+        "11100",
+        "11110"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 132,
+        "family_medicine": 87,
+        "general_hospital": 51,
+        "community_center": 127,
+        "district_office": 3,
+        "city_hall": 0,
+        "childcare_center": 242,
+        "kindergarten": 172,
+        "park": 22,
+        "library_culture": 157,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11110_network_distances.geojson"
+    },
+    "11120": {
+      "status": "applied",
+      "grid_count": 526,
+      "network_snap_grid_count": 380,
+      "included_network_districts": [
+        "11010",
+        "11080",
+        "11090",
+        "11120",
+        "11130",
+        "11140"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 122,
+        "family_medicine": 91,
+        "general_hospital": 57,
+        "community_center": 126,
+        "district_office": 40,
+        "city_hall": 0,
+        "childcare_center": 237,
+        "kindergarten": 135,
+        "park": 61,
+        "library_culture": 150,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11120_network_distances.geojson"
+    },
+    "11130": {
+      "status": "applied",
+      "grid_count": 259,
+      "network_snap_grid_count": 249,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11080",
+        "11120",
+        "11130",
+        "11140",
+        "11190"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 114,
+        "family_medicine": 93,
+        "general_hospital": 80,
+        "community_center": 108,
+        "district_office": 80,
+        "city_hall": 80,
+        "childcare_center": 180,
+        "kindergarten": 116,
+        "park": 90,
+        "library_culture": 129,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11130_network_distances.geojson"
+    },
+    "11140": {
+      "status": "applied",
+      "grid_count": 406,
+      "network_snap_grid_count": 337,
+      "included_network_districts": [
+        "11010",
+        "11020",
+        "11030",
+        "11120",
+        "11130",
+        "11140",
+        "11150",
+        "11160",
+        "11190",
+        "11200"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 240,
+        "family_medicine": 236,
+        "general_hospital": 233,
+        "community_center": 235,
+        "district_office": 233,
+        "city_hall": 233,
+        "childcare_center": 267,
+        "kindergarten": 242,
+        "park": 235,
+        "library_culture": 244,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11140_network_distances.geojson"
+    },
+    "11150": {
+      "status": "applied",
+      "grid_count": 226,
+      "network_snap_grid_count": 222,
+      "included_network_districts": [
+        "11140",
+        "11150",
+        "11160",
+        "11170",
+        "11180",
+        "11190"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 107,
+        "family_medicine": 89,
+        "general_hospital": 72,
+        "community_center": 108,
+        "district_office": 71,
+        "city_hall": 0,
+        "childcare_center": 157,
+        "kindergarten": 100,
+        "park": 75,
+        "library_culture": 102,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11150_network_distances.geojson"
+    },
+    "11160": {
+      "status": "applied",
+      "grid_count": 746,
+      "network_snap_grid_count": 510,
+      "included_network_districts": [
+        "11120",
+        "11130",
+        "11140",
+        "11150",
+        "11160",
+        "11170",
+        "11190"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 429,
+        "family_medicine": 431,
+        "general_hospital": 431,
+        "community_center": 431,
+        "district_office": 429,
+        "city_hall": 0,
+        "childcare_center": 463,
+        "kindergarten": 449,
+        "park": 442,
+        "library_culture": 440,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11160_network_distances.geojson"
+    },
+    "11170": {
+      "status": "applied",
+      "grid_count": 401,
+      "network_snap_grid_count": 346,
+      "included_network_districts": [
+        "11150",
+        "11160",
+        "11170",
+        "11180",
+        "11190",
+        "11200",
+        "11210"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 161,
+        "family_medicine": 158,
+        "general_hospital": 114,
+        "community_center": 164,
+        "district_office": 137,
+        "city_hall": 0,
+        "childcare_center": 249,
+        "kindergarten": 158,
+        "park": 94,
+        "library_culture": 169,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11170_network_distances.geojson"
+    },
+    "11180": {
+      "status": "applied",
+      "grid_count": 185,
+      "network_snap_grid_count": 166,
+      "included_network_districts": [
+        "11150",
+        "11170",
+        "11180",
+        "11190",
+        "11200",
+        "11210"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 84,
+        "family_medicine": 83,
+        "general_hospital": 83,
+        "community_center": 101,
+        "district_office": 83,
+        "city_hall": 0,
+        "childcare_center": 129,
+        "kindergarten": 92,
+        "park": 85,
+        "library_culture": 90,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11180_network_distances.geojson"
+    },
+    "11190": {
+      "status": "applied",
+      "grid_count": 345,
+      "network_snap_grid_count": 320,
+      "included_network_districts": [
+        "11030",
+        "11130",
+        "11140",
+        "11150",
+        "11160",
+        "11170",
+        "11180",
+        "11190",
+        "11200",
+        "11210",
+        "11220"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 196,
+        "family_medicine": 190,
+        "general_hospital": 153,
+        "community_center": 198,
+        "district_office": 150,
+        "city_hall": 0,
+        "childcare_center": 248,
+        "kindergarten": 216,
+        "park": 139,
+        "library_culture": 197,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11190_network_distances.geojson"
+    },
+    "11200": {
+      "status": "applied",
+      "grid_count": 294,
+      "network_snap_grid_count": 282,
+      "included_network_districts": [
+        "11030",
+        "11140",
+        "11170",
+        "11180",
+        "11190",
+        "11200",
+        "11210",
+        "11220"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 142,
+        "family_medicine": 112,
+        "general_hospital": 84,
+        "community_center": 148,
+        "district_office": 67,
+        "city_hall": 0,
+        "childcare_center": 201,
+        "kindergarten": 161,
+        "park": 117,
+        "library_culture": 157,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11200_network_distances.geojson"
+    },
+    "11210": {
+      "status": "applied",
+      "grid_count": 492,
+      "network_snap_grid_count": 314,
+      "included_network_districts": [
+        "11030",
+        "11170",
+        "11180",
+        "11190",
+        "11200",
+        "11210",
+        "11220"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 204,
+        "family_medicine": 201,
+        "general_hospital": 200,
+        "community_center": 204,
+        "district_office": 200,
+        "city_hall": 0,
+        "childcare_center": 232,
+        "kindergarten": 205,
+        "park": 207,
+        "library_culture": 205,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11210_network_distances.geojson"
+    },
+    "11220": {
+      "status": "applied",
+      "grid_count": 826,
+      "network_snap_grid_count": 577,
+      "included_network_districts": [
+        "11020",
+        "11030",
+        "11040",
+        "11190",
+        "11200",
+        "11210",
+        "11220",
+        "11230",
+        "11240"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 211,
+        "family_medicine": 163,
+        "general_hospital": 137,
+        "community_center": 186,
+        "district_office": 132,
+        "city_hall": 0,
+        "childcare_center": 331,
+        "kindergarten": 196,
+        "park": 130,
+        "library_culture": 162,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11220_network_distances.geojson"
+    },
+    "11230": {
+      "status": "applied",
+      "grid_count": 609,
+      "network_snap_grid_count": 556,
+      "included_network_districts": [
+        "11020",
+        "11030",
+        "11040",
+        "11050",
+        "11220",
+        "11230",
+        "11240"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 194,
+        "family_medicine": 163,
+        "general_hospital": 84,
+        "community_center": 208,
+        "district_office": 58,
+        "city_hall": 0,
+        "childcare_center": 348,
+        "kindergarten": 221,
+        "park": 135,
+        "library_culture": 234,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11230_network_distances.geojson"
+    },
+    "11240": {
+      "status": "applied",
+      "grid_count": 569,
+      "network_snap_grid_count": 526,
+      "included_network_districts": [
+        "11040",
+        "11050",
+        "11220",
+        "11230",
+        "11240",
+        "11250"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 119,
+        "family_medicine": 84,
+        "general_hospital": 7,
+        "community_center": 116,
+        "district_office": 0,
+        "city_hall": 0,
+        "childcare_center": 292,
+        "kindergarten": 102,
+        "park": 48,
+        "library_culture": 124,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11240_network_distances.geojson"
+    },
+    "11250": {
+      "status": "applied",
+      "grid_count": 435,
+      "network_snap_grid_count": 371,
+      "included_network_districts": [
+        "11050",
+        "11070",
+        "11240",
+        "11250"
+      ],
+      "facility_type_network_distance_counts": {
+        "pediatric_clinic": 147,
+        "family_medicine": 133,
+        "general_hospital": 107,
+        "community_center": 146,
+        "district_office": 4,
+        "city_hall": 0,
+        "childcare_center": 245,
+        "kindergarten": 166,
+        "park": 119,
+        "library_culture": 137,
+        "large_retail_optional": 0
+      },
+      "output": "data\\processed\\network_by_district\\11250_network_distances.geojson"
+    }
+  },
+  "euclidean_fallback_coverage": 0.658765,
+  "grid_snap_max_distance_m": 200,
+  "facility_snap_max_distance_m": 200,
+  "scoring_method": "full_score_with_decay_after_800m",
+  "distance_score_method": "full_score_with_decay_after_800m",
+  "full_score_distance_m": 800.0,
+  "zero_score_distance_m": 1600.0,
+  "type_max_scores": {
+    "pediatric_clinic": 80,
+    "family_medicine": 40,
+    "general_hospital": 20,
+    "community_center": 80,
+    "district_office": 20,
+    "city_hall": 0,
+    "childcare_center": 80,
+    "kindergarten": 20,
+    "park": 70,
+    "library_culture": 30,
+    "large_retail_optional": 0
+  },
+  "category_score_cap": 100.0,
+  "category_formulas": {
+    "medical": {
+      "cap": 100,
+      "types": {
+        "pediatric_clinic": 80,
+        "family_medicine": 40,
+        "general_hospital": 20
+      }
+    },
+    "administration": {
+      "cap": 100,
+      "types": {
+        "community_center": 80,
+        "district_office": 20
+      }
+    },
+    "education": {
+      "cap": 100,
+      "types": {
+        "childcare_center": 80,
+        "kindergarten": 20
+      }
+    },
+    "leisure": {
+      "cap": 100,
+      "types": {
+        "park": 70,
+        "library_culture": 30
+      }
+    }
+  },
+  "grid_score_weights": {
+    "medical": 0.3,
+    "education": 0.3,
+    "administration": 0.2,
+    "leisure": 0.2
+  },
+  "facility_score_formula": "DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 − D / 800))",
+  "facility_score_description": "800m 이내는 시설 유형별 최대 점수 W를 부여하고, 800m 초과 후 거리에 비례해 감점하여 1600m 이상에서 0점.",
+  "category_aggregation": "additive_capped_type_max_scores_v1",
+  "category_aggregation_description": "category_score = min(100, Σ DistanceAdjustedScore(type_max_score[t], distance[t])). 누락된 시설 유형은 0으로 기여.",
+  "applied_medical_formula": "pediatric_family_general_hospital_additive",
   "family_medicine_used": true,
+  "large_retail_used": false,
+  "medical_facility_types_used": [
+    "pediatric_clinic",
+    "family_medicine",
+    "general_hospital"
+  ],
+  "leisure_facility_types_used": [
+    "park",
+    "library_culture"
+  ],
   "score_columns": [
     "pediatric_score",
     "family_medicine_score",
@@ -293,6 +1688,11 @@
     "leisure_score": 0,
     "grid_stroller_score": 0,
     "stroller_score": 0
+  },
+  "score_distance_method_summary": {
+    "euclidean_fallback": 66061,
+    "pedestrian_network": 34219,
+    "unavailable": 10028
   },
   "origin_destination_role_note": "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다.",
   "aggregation_method": "living_weighted_average",
@@ -394,5 +1794,79 @@
     "category_summary": "public/data/category_summary.json",
     "metadata": "public/data/metadata.json"
   },
-  "grid_color_score_basis": "weighted_score_when_living_weight_available"
+  "grid_color_score_basis": "weighted_score_when_living_weight_available",
+  "pedestrian_network": {
+    "enabled": true,
+    "process_by_district": true,
+    "service_name": "TbTraficWlkNet",
+    "source_url": "https://data.seoul.go.kr/dataList/OA-21208/A/1/datasetView.do",
+    "supplemental_services": {
+      "crosswalk": {
+        "service_name": "tbTraficCrsng",
+        "source_url": "https://data.seoul.go.kr/dataList/OA-21209/A/1/datasetView.do",
+        "raw_file": "data/raw_api/pedestrian_network/supplemental/crosswalk.json",
+        "include_in_graph": true
+      }
+    },
+    "type_codebook": {
+      "path": "data/도보네트워크_링크노드유형코드.xlsx",
+      "link_sheet": "링크유형코드",
+      "node_sheet": "노드유형코드"
+    },
+    "source": {
+      "type": "local_or_openapi",
+      "raw_dir": "data/raw/pedestrian_network",
+      "api_cache_dir": "data/raw_api/pedestrian_network"
+    },
+    "crs": {
+      "source": "EPSG:4326",
+      "calculation": "EPSG:5179",
+      "web_output": "EPSG:4326"
+    },
+    "snap": {
+      "grid_snap_max_distance_m": 200,
+      "facility_snap_max_distance_m": 200
+    },
+    "buffer": {
+      "facility_search_buffer_m": 3000,
+      "network_buffer_m": 3000
+    },
+    "distance": {
+      "use_length_column_if_available": true,
+      "length_column_candidates": [
+        "length",
+        "length_m",
+        "LNKG_LEN",
+        "link_len",
+        "링크길이",
+        "연장",
+        "거리"
+      ]
+    },
+    "columns": {
+      "node_type": "NODE_TYPE",
+      "node_wkt": "NODE_WKT",
+      "node_id": "NODE_ID",
+      "node_type_code": "NODE_TYPE_CD",
+      "link_wkt": "LNKG_WKT",
+      "link_id": "LNKG_ID",
+      "link_type_code": "LNKG_TYPE_CD",
+      "from_node": "BGNG_LNKG_ID",
+      "to_node": "END_LNKG_ID",
+      "length_m": "LNKG_LEN",
+      "district_code": "SGG_CD",
+      "district_name": "SGG_NM",
+      "collected_at": "WORK_DTTM"
+    },
+    "output": {
+      "save_district_intermediate": true,
+      "intermediate_dir": "data/processed/pedestrian_network",
+      "distance_dir": "data/processed/network_by_district",
+      "public_network_overlay_dir": "public/data/network"
+    },
+    "fallback": {
+      "allow_euclidean_fallback": true,
+      "record_fallback_in_metadata": true
+    }
+  }
 }

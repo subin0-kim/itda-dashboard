@@ -1,0 +1,89 @@
+# Pedestrian Network Validation Report
+
+- inventory_exists: True
+- summary_exists: True
+- inventory_status: prepared
+- network_distance_status: partial
+- network_distance_coverage: 0.808137
+- euclidean_fallback_coverage: 1
+
+## Public Overlay
+- overlay_dir: public\data\network
+- overlay_geojson_count: 50
+- 11010_links.geojson: 4143618 bytes
+- 11010_nodes.geojson: 1662446 bytes
+- 11020_links.geojson: 3876014 bytes
+- 11020_nodes.geojson: 1186186 bytes
+- 11030_links.geojson: 3810696 bytes
+- 11030_nodes.geojson: 1506689 bytes
+- 11040_links.geojson: 2921463 bytes
+- 11040_nodes.geojson: 1493106 bytes
+- 11050_links.geojson: 3395189 bytes
+- 11050_nodes.geojson: 1370738 bytes
+- 11060_links.geojson: 5260133 bytes
+- 11060_nodes.geojson: 1828322 bytes
+- 11070_links.geojson: 3983947 bytes
+- 11070_nodes.geojson: 1821158 bytes
+- 11080_links.geojson: 5555429 bytes
+- 11080_nodes.geojson: 2315020 bytes
+- 11090_links.geojson: 3286294 bytes
+- 11090_nodes.geojson: 1552396 bytes
+- 11100_links.geojson: 2617851 bytes
+- 11100_nodes.geojson: 1280007 bytes
+- 11110_links.geojson: 4605397 bytes
+- 11110_nodes.geojson: 2062849 bytes
+- 11120_links.geojson: 3656830 bytes
+- 11120_nodes.geojson: 1735966 bytes
+- 11130_links.geojson: 3508482 bytes
+- 11130_nodes.geojson: 1429232 bytes
+- 11140_links.geojson: 4393957 bytes
+- 11140_nodes.geojson: 1750329 bytes
+- 11150_links.geojson: 3953285 bytes
+- 11150_nodes.geojson: 1692682 bytes
+- 11160_links.geojson: 4025124 bytes
+- 11160_nodes.geojson: 1622005 bytes
+- 11170_links.geojson: 3909698 bytes
+- 11170_nodes.geojson: 1750148 bytes
+- 11180_links.geojson: 2534020 bytes
+- 11180_nodes.geojson: 1080442 bytes
+- 11190_links.geojson: 4041444 bytes
+- 11190_nodes.geojson: 1954313 bytes
+- 11200_links.geojson: 4345295 bytes
+- 11200_nodes.geojson: 1530751 bytes
+- 11210_links.geojson: 4675391 bytes
+- 11210_nodes.geojson: 1587956 bytes
+- 11220_links.geojson: 3763380 bytes
+- 11220_nodes.geojson: 1654188 bytes
+- 11230_links.geojson: 5684625 bytes
+- 11230_nodes.geojson: 2419887 bytes
+- 11240_links.geojson: 3752987 bytes
+- 11240_nodes.geojson: 1921466 bytes
+- 11250_links.geojson: 3971395 bytes
+- 11250_nodes.geojson: 1685032 bytes
+
+## District Network Files
+- 11010: nodes=8387, links=10659, errors=0
+- 11020: nodes=5924, links=10269, errors=0
+- 11030: nodes=7596, links=10496, errors=0
+- 11040: nodes=7514, links=7831, errors=0
+- 11050: nodes=6843, links=9514, errors=0
+- 11060: nodes=9285, links=14477, errors=0
+- 11070: nodes=9092, links=11211, errors=0
+- 11080: nodes=11777, links=14679, errors=0
+- 11090: nodes=7973, links=9127, errors=0
+- 11100: nodes=6420, links=7239, errors=0
+- 11110: nodes=10452, links=12348, errors=0
+- 11120: nodes=8649, links=9888, errors=0
+- 11130: nodes=7326, links=9695, errors=0
+- 11140: nodes=8559, links=12108, errors=0
+- 11150: nodes=8117, links=10786, errors=0
+- 11160: nodes=7943, links=11138, errors=0
+- 11170: nodes=8639, links=10673, errors=0
+- 11180: nodes=5382, links=6991, errors=0
+- 11190: nodes=9562, links=11064, errors=0
+- 11200: nodes=7908, links=11840, errors=0
+- 11210: nodes=8219, links=13124, errors=0
+- 11220: nodes=8012, links=10206, errors=0
+- 11230: nodes=12142, links=16501, errors=0
+- 11240: nodes=8983, links=9990, errors=0
+- 11250: nodes=8081, links=10860, errors=0

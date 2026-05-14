@@ -145,11 +145,41 @@ def validate(config_path: str) -> int:
             errors.append(f"missing_metadata:{key}")
             lines.append(f"- ERROR: metadata에 `{key}` 필드가 없습니다.")
 
-    distance_cols = [col for col in grid.columns if col.startswith("dist_")]
+    lines.append("")
+    lines.append("## Scoring Method Summary")
+    scoring_method = metadata.get("scoring_method")
+    full_score_distance = metadata.get("full_score_distance_m")
+    zero_score_distance = metadata.get("zero_score_distance_m")
+    distance_method = metadata.get("distance_method")
+    pedestrian_status = metadata.get("pedestrian_network_status")
+    lines.append(f"- scoring_method: {scoring_method}")
+    lines.append(f"- full_score_distance_m: {full_score_distance}")
+    lines.append(f"- zero_score_distance_m: {zero_score_distance}")
+    lines.append(f"- distance_method: {distance_method}")
+    lines.append(f"- pedestrian_network_status: {pedestrian_status}")
+    if scoring_method != "full_score_with_decay_after_800m":
+        errors.append("scoring_method_not_updated")
+    if int(full_score_distance or 0) != 800:
+        errors.append("full_score_distance_not_800")
+    if int(zero_score_distance or 0) != 1600:
+        errors.append("zero_score_distance_not_1600")
+    if "type_max_scores" not in metadata:
+        errors.append("missing_metadata:type_max_scores")
+    if "category_formulas" not in metadata:
+        errors.append("missing_metadata:category_formulas")
+
+    distance_cols = [col for col in grid.columns if col.startswith("dist_") and not col.endswith("_method")]
     lines.append("")
     lines.append("## Null Distance Summary")
     for col in distance_cols:
         lines.append(f"- {col}: {int(grid[col].isna().sum())}")
+
+    method_cols = [col for col in grid.columns if col.startswith("dist_") and col.endswith("_method")]
+    lines.append("")
+    lines.append("## Distance Method Summary")
+    for col in method_cols:
+        counts = grid[col].fillna("unavailable").value_counts().to_dict()
+        lines.append(f"- {col}: {counts}")
 
     lines.append("")
     lines.append("## Living Weight Summary")
