@@ -47,8 +47,43 @@ export function getScoreColor(score: number | null | undefined, categoryId: Over
   return bucket === null ? NO_DATA_COLOR : SCORE_COLORS[categoryId][bucket];
 }
 
+const RAMP_STOP_SCORES = [0, 10, 20, 30, 40, 50, 60, 70, 80, 100];
+
+function hexToRgb(hex: string): [number, number, number] {
+  const value = hex.replace("#", "");
+  const num = parseInt(value, 16);
+  return [(num >> 16) & 0xff, (num >> 8) & 0xff, num & 0xff];
+}
+
+function rgbToHex([r, g, b]: [number, number, number]): string {
+  const toHex = (n: number) => Math.round(n).toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function colorAtScore(score: number, colors: string[]): string {
+  if (score <= RAMP_STOP_SCORES[0]) return colors[0];
+  if (score >= RAMP_STOP_SCORES[RAMP_STOP_SCORES.length - 1]) return colors[colors.length - 1];
+  for (let i = 1; i < RAMP_STOP_SCORES.length; i += 1) {
+    if (score <= RAMP_STOP_SCORES[i]) {
+      const lo = RAMP_STOP_SCORES[i - 1];
+      const hi = RAMP_STOP_SCORES[i];
+      const t = (score - lo) / (hi - lo);
+      const a = hexToRgb(colors[i - 1]);
+      const b = hexToRgb(colors[i]);
+      return rgbToHex([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]);
+    }
+  }
+  return colors[colors.length - 1];
+}
+
+export const SCORE_STEP_SIZE = 5;
+
 export function getMapLibreScoreExpression(categoryId: OverviewCategoryId): ExpressionSpecification {
   const colors = SCORE_RAMP_COLORS[categoryId];
+  const stepStops: (string | number)[] = [];
+  for (let score = SCORE_STEP_SIZE; score <= 100; score += SCORE_STEP_SIZE) {
+    stepStops.push(score, colorAtScore(score, colors));
+  }
   return [
     "case",
     ["!", ["has", "selected_score"]],
@@ -56,29 +91,10 @@ export function getMapLibreScoreExpression(categoryId: OverviewCategoryId): Expr
     ["==", ["get", "selected_score"], null],
     NO_DATA_COLOR,
     [
-      "interpolate",
-      ["linear"],
+      "step",
       ["to-number", ["get", "selected_score"]],
-      0,
-      colors[0],
-      10,
-      colors[1],
-      20,
-      colors[2],
-      30,
-      colors[3],
-      40,
-      colors[4],
-      50,
-      colors[5],
-      60,
-      colors[6],
-      70,
-      colors[7],
-      80,
-      colors[8],
-      100,
-      colors[9],
+      colorAtScore(0, colors),
+      ...stepStops,
     ],
-  ];
+  ] as ExpressionSpecification;
 }
