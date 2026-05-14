@@ -71,16 +71,16 @@
 - dist_library_culture_network: 5842
 
 ## Distance Method Summary
-- dist_pediatric_clinic_method: {'euclidean_fallback': 6056, 'euclidean_fallback_excessive_detour': 2704, 'pedestrian_network': 1268}
-- dist_family_medicine_method: {'euclidean_fallback': 6570, 'euclidean_fallback_excessive_detour': 2666, 'pedestrian_network': 792}
-- dist_general_hospital_method: {'euclidean_fallback': 7195, 'euclidean_fallback_excessive_detour': 2329, 'pedestrian_network': 504}
-- dist_community_center_method: {'euclidean_fallback': 6099, 'euclidean_fallback_excessive_detour': 2713, 'pedestrian_network': 1216}
-- dist_district_office_method: {'euclidean_fallback': 7595, 'euclidean_fallback_excessive_detour': 1959, 'pedestrian_network': 474}
-- dist_city_hall_method: {'euclidean_fallback': 9319, 'euclidean_fallback_excessive_detour': 564, 'pedestrian_network': 145}
-- dist_childcare_center_method: {'euclidean_fallback': 4463, 'pedestrian_network': 3328, 'euclidean_fallback_excessive_detour': 2237}
-- dist_kindergarten_method: {'euclidean_fallback': 5908, 'euclidean_fallback_excessive_detour': 2864, 'pedestrian_network': 1256}
-- dist_park_method: {'euclidean_fallback': 7014, 'euclidean_fallback_excessive_detour': 2518, 'pedestrian_network': 496}
-- dist_library_culture_method: {'euclidean_fallback': 5842, 'euclidean_fallback_excessive_detour': 2656, 'pedestrian_network': 1530}
+- dist_pediatric_clinic_method: {'euclidean_fallback': 6056, 'pedestrian_network': 3972}
+- dist_family_medicine_method: {'euclidean_fallback': 6570, 'pedestrian_network': 3458}
+- dist_general_hospital_method: {'euclidean_fallback': 7195, 'pedestrian_network': 2833}
+- dist_community_center_method: {'euclidean_fallback': 6099, 'pedestrian_network': 3929}
+- dist_district_office_method: {'euclidean_fallback': 7595, 'pedestrian_network': 2433}
+- dist_city_hall_method: {'euclidean_fallback': 9319, 'pedestrian_network': 709}
+- dist_childcare_center_method: {'pedestrian_network': 5565, 'euclidean_fallback': 4463}
+- dist_kindergarten_method: {'euclidean_fallback': 5908, 'pedestrian_network': 4120}
+- dist_park_method: {'euclidean_fallback': 7014, 'pedestrian_network': 3014}
+- dist_library_culture_method: {'euclidean_fallback': 5842, 'pedestrian_network': 4186}
 - dist_large_retail_optional_method: {'unavailable': 10028}
 
 ## Living Weight Summary
