@@ -20,8 +20,10 @@ def merge_network_distances(config_path: str) -> None:
     network_dir = resolve_path((config.get("pedestrian_network") or {}).get("output", {}).get("distance_dir", "data/processed/network_by_district"))
     network_files = list(network_dir.glob("*_network_distances.geojson")) if network_dir.exists() else []
 
+    detour_counts: dict[str, int] = {}
     if summary.get("status") in {"applied", "partial"} and network_files:
         grid = apply_network_distances(grid, network_files, facility_types)
+        detour_counts = dict(grid.attrs.get("excessive_network_detour_fallback_counts", {}))
         fallback_series = grid["euclidean_fallback_used"] if "euclidean_fallback_used" in grid.columns else None
         distance_method = "mixed" if fallback_series is not None and bool(fallback_series.any()) else "pedestrian_network"
     else:
@@ -40,7 +42,9 @@ def merge_network_distances(config_path: str) -> None:
     grid.to_file(output_path, driver="GeoJSON")
     method_counts = summarize_methods(grid, facility_types)
     network_count = method_counts.get("pedestrian_network", 0)
-    fallback_count = method_counts.get("euclidean_fallback", 0)
+    fallback_count = method_counts.get("euclidean_fallback", 0) + method_counts.get(
+        "euclidean_fallback_excessive_detour", 0
+    )
     available_total = network_count + fallback_count or 1
     update_metadata(
         config,
@@ -53,12 +57,20 @@ def merge_network_distances(config_path: str) -> None:
             "distance_method_summary": method_counts,
             "grid_snap_max_distance_m": (config.get("pedestrian_network") or {}).get("snap", {}).get("grid_snap_max_distance_m"),
             "facility_snap_max_distance_m": (config.get("pedestrian_network") or {}).get("snap", {}).get("facility_snap_max_distance_m"),
+            "excessive_network_detour_threshold": "network <= euclidean * 1.5 + 100m",
+            "excessive_network_detour_fallback_counts": detour_counts,
+            "excessive_network_detour_fallback_total": int(sum(detour_counts.values())),
         },
     )
     print(f"[OK] network/euclidean distance 병합: {output_path} / method={distance_method}")
 
 
 def apply_network_distances(grid, network_files: list[Path], facility_types: list[str]):
+    """네트워크 거리와 직선거리를 병합한다.
+
+    네트워크 거리가 직선거리 × 1.5 + 100m를 초과하면 그래프 분단/노드 snap 오류로 인한
+    비현실적 우회로 판단하고 직선거리 fallback을 사용한다.
+    """
     import geopandas as gpd
     import pandas as pd
 
@@ -78,19 +90,28 @@ def apply_network_distances(grid, network_files: list[Path], facility_types: lis
     merged = grid.merge(network[keep_cols], on="grid_id", how="left")
     merged["network_distance_available"] = merged.get("network_distance_available", False).fillna(False).astype(bool)
     merged["euclidean_fallback_used"] = False
+    detour_counts: dict[str, int] = {}
     for facility_type in facility_types:
         final_col = f"dist_{facility_type}"
         network_col = f"dist_{facility_type}_network"
         method_col = f"{final_col}_method"
-        if network_col in merged.columns:
-            use_network = merged[network_col].notna()
-            merged[final_col] = pd.to_numeric(merged[final_col], errors="coerce")
-            merged[network_col] = pd.to_numeric(merged[network_col], errors="coerce")
-            merged.loc[use_network, final_col] = merged.loc[use_network, network_col]
-            merged[method_col] = "euclidean_fallback"
-            merged.loc[use_network, method_col] = "pedestrian_network"
-            merged.loc[merged[final_col].isna(), method_col] = "unavailable"
-            merged.loc[~use_network & merged[final_col].notna(), "euclidean_fallback_used"] = True
+        if network_col not in merged.columns:
+            continue
+        euclidean_val = pd.to_numeric(merged[final_col], errors="coerce")
+        network_val = pd.to_numeric(merged[network_col], errors="coerce")
+        # 직선거리 × 1.5 + 100m를 임계값으로 사용. 직선거리가 없으면 네트워크 거리를 그대로 사용.
+        threshold = euclidean_val * 1.5 + 100.0
+        plausible_network = network_val.notna() & (euclidean_val.isna() | (network_val <= threshold))
+        excessive_detour = network_val.notna() & euclidean_val.notna() & (network_val > threshold)
+        detour_counts[facility_type] = int(excessive_detour.sum())
+        merged[final_col] = euclidean_val
+        merged.loc[plausible_network, final_col] = network_val[plausible_network]
+        merged[method_col] = "euclidean_fallback"
+        merged.loc[plausible_network, method_col] = "pedestrian_network"
+        merged.loc[excessive_detour, method_col] = "euclidean_fallback_excessive_detour"
+        merged.loc[merged[final_col].isna(), method_col] = "unavailable"
+        merged.loc[~plausible_network & merged[final_col].notna(), "euclidean_fallback_used"] = True
+    merged.attrs["excessive_network_detour_fallback_counts"] = detour_counts
     return merged
 
 

@@ -82,10 +82,9 @@ export const SCORE_RAMP_COLORS: Record<OverviewCategoryId, string[]> = {
   ],
 };
 
-// 격자/구 점수 분포가 60~90 구간에 몰려 있어, 그 구간에 더 많은 컬러 스텝을
-// 할당한다. 0~50 구간은 데이터가 적으므로 색 변화를 좁히고, 60~90 구간을 6개 stop에 펼쳐
-// 5점 단위로 인접 셀이 시각적으로 분명히 구분되게 한다.
-const RAMP_STOP_SCORES = [0, 30, 45, 55, 62, 69, 76, 83, 92, 100];
+// 도보 네트워크 우회 fallback 보정 후 격자/구 점수 분포는 75~95 구간에 몰려 있다.
+// 해당 구간에 컬러 stop을 더 촘촘히 배치해 5점 단위 색 차이가 시각적으로 분명히 보이게 한다.
+const RAMP_STOP_SCORES = [0, 30, 50, 65, 75, 82, 87, 91, 94, 100];
 
 function hexToRgb(hex: string): [number, number, number] {
   const value = hex.replace("#", "");
