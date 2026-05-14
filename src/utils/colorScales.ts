@@ -11,80 +11,81 @@ export const SCORE_BUCKETS = [
 
 export const NO_DATA_COLOR = "#cbd5e1";
 
-// 색 램프는 ColorBrewer 9-class sequential 팔레트를 10단계로 확장한 형태.
-// 다중 hue 변화를 사용해 점수 간 차이가 시각적으로 분명해지도록 하고,
-// 상위 점수도 채도 높은 vivid 색으로 표현하여 거의 검정색이 되지 않게 한다.
+// 카테고리별 브랜드 hue에서 lightness/saturation을 단계적으로 낮춰 만든 10단계 sequential 램프.
+// 상위 점수는 카테고리 hue가 분명히 살아있는 vivid한 톤으로 끝나며 검정 근처로 가지 않는다.
+// 인접 stop 간 lightness 차이를 6~10%로 유지해 채도/명도 차이가 명확히 보이도록 한다.
 export const SCORE_RAMP_COLORS: Record<OverviewCategoryId, string[]> = {
-  // YlGnBu-inspired (light yellow → teal → indigo)
+  // 보라 (Tailwind purple 50→900)
   overall: [
-    "#fff7bc",
-    "#feeaa1",
-    "#fed976",
-    "#ffd166",
-    "#f7b801",
-    "#f18701",
-    "#f35b04",
-    "#d62828",
-    "#9d0208",
-    "#6a040f",
+    "#faf5ff",
+    "#f3e8ff",
+    "#e9d5ff",
+    "#d8b4fe",
+    "#c084fc",
+    "#a855f7",
+    "#9333ea",
+    "#7e22ce",
+    "#6b21a8",
+    "#581c87",
   ],
-  // YlOrRd-style warm health palette
+  // 빨강 (Tailwind red 50→900)
   medical: [
-    "#fff5eb",
-    "#fee6ce",
-    "#fdd0a2",
-    "#fdae6b",
-    "#fd8d3c",
-    "#f16913",
-    "#d94801",
-    "#a63603",
-    "#7f2704",
-    "#5a1c03",
+    "#fef2f2",
+    "#fee2e2",
+    "#fecaca",
+    "#fca5a5",
+    "#f87171",
+    "#ef4444",
+    "#dc2626",
+    "#b91c1c",
+    "#991b1b",
+    "#7f1d1d",
   ],
-  // Blues (light cyan → mid blue → deep navy, but not black)
+  // 파랑 (Tailwind blue 50→900)
   administration: [
-    "#f0f9ff",
-    "#cfe8ff",
-    "#a6d4ff",
-    "#7ab8ff",
-    "#4f9bff",
+    "#eff6ff",
+    "#dbeafe",
+    "#bfdbfe",
+    "#93c5fd",
+    "#60a5fa",
+    "#3b82f6",
     "#2563eb",
     "#1d4ed8",
     "#1e40af",
     "#1e3a8a",
-    "#172554",
   ],
-  // YlOrBr-style warm amber → brown
+  // 노랑 → 황금색 (Tailwind 기반 + 갈색으로 가지 않게 골드로 마감)
   education: [
-    "#fffbe6",
-    "#fff1a8",
+    "#fefce8",
+    "#fef9c3",
+    "#fef08a",
     "#fde047",
     "#facc15",
     "#eab308",
     "#ca8a04",
-    "#a16207",
-    "#854d0e",
-    "#713f12",
-    "#582f0a",
+    "#a78201",
+    "#8f6f00",
+    "#785a00",
   ],
-  // YlGn-style yellow-green → deep teal
+  // 초록 (Tailwind green 50→900)
   leisure: [
-    "#f7fcb9",
-    "#d9f0a3",
-    "#addd8e",
-    "#78c679",
-    "#41ab5d",
-    "#238443",
-    "#1d6b3a",
-    "#155d3a",
-    "#0f4b34",
-    "#0a3b29",
+    "#f0fdf4",
+    "#dcfce7",
+    "#bbf7d0",
+    "#86efac",
+    "#4ade80",
+    "#22c55e",
+    "#16a34a",
+    "#15803d",
+    "#166534",
+    "#14532d",
   ],
 };
 
 // 격자/구 점수 분포가 60~90 구간에 몰려 있어, 그 구간에 더 많은 컬러 스텝을
-// 할당한다. 0~50 구간은 데이터가 적으므로 색 변화를 좁히고, 60~90 구간을 더 펼친다.
-const RAMP_STOP_SCORES = [0, 30, 45, 55, 62, 68, 74, 80, 87, 100];
+// 할당한다. 0~50 구간은 데이터가 적으므로 색 변화를 좁히고, 60~90 구간을 6개 stop에 펼쳐
+// 5점 단위로 인접 셀이 시각적으로 분명히 구분되게 한다.
+const RAMP_STOP_SCORES = [0, 30, 45, 55, 62, 69, 76, 83, 92, 100];
 
 function hexToRgb(hex: string): [number, number, number] {
   const value = hex.replace("#", "");
