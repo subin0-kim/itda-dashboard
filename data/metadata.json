@@ -112,7 +112,7 @@
       "fallback_formula": "park_other_leisure_additive"
     }
   ],
-  "generated_at": "2026-05-14T03:34:41.808407+00:00",
+  "generated_at": "2026-05-14T01:07:29.153756+00:00",
   "coordinate_systems": {
     "source_default": "EPSG:4326",
     "analysis": "EPSG:5179",
@@ -255,9 +255,8 @@
   },
   "distance_method_summary": {
     "euclidean_fallback": 66061,
-    "pedestrian_network": 11009,
-    "unavailable": 10028,
-    "euclidean_fallback_excessive_detour": 23210
+    "pedestrian_network": 34219,
+    "unavailable": 10028
   },
   "pedestrian_network_inventory": {
     "enabled": true,
@@ -848,7 +847,7 @@
     }
   ],
   "status": "partial",
-  "network_distance_coverage": 0.109783,
+  "network_distance_coverage": 0.341235,
   "grid_count": 10028,
   "network_grid_count": 8104,
   "district_network_status": {
@@ -1578,23 +1577,9 @@
       "output": "data\\processed\\network_by_district\\11250_network_distances.geojson"
     }
   },
-  "euclidean_fallback_coverage": 0.890217,
+  "euclidean_fallback_coverage": 0.658765,
   "grid_snap_max_distance_m": 200,
   "facility_snap_max_distance_m": 200,
-  "excessive_network_detour_threshold": "network <= euclidean * 1.5 + 100m",
-  "excessive_network_detour_fallback_counts": {
-    "pediatric_clinic": 2704,
-    "family_medicine": 2666,
-    "general_hospital": 2329,
-    "community_center": 2713,
-    "district_office": 1959,
-    "city_hall": 564,
-    "childcare_center": 2237,
-    "kindergarten": 2864,
-    "park": 2518,
-    "library_culture": 2656
-  },
-  "excessive_network_detour_fallback_total": 23210,
   "scoring_method": "full_score_with_decay_after_800m",
   "distance_score_method": "full_score_with_decay_after_800m",
   "full_score_distance_m": 800.0,
@@ -1706,8 +1691,7 @@
   },
   "score_distance_method_summary": {
     "euclidean_fallback": 66061,
-    "euclidean_fallback_excessive_detour": 23210,
-    "pedestrian_network": 11009,
+    "pedestrian_network": 34219,
     "unavailable": 10028
   },
   "origin_destination_role_note": "공원은 여가 목적지로 사용하지만, 공원 내부 격자는 생활 출발지 가중치에서 제외 또는 낮은 가중치로 처리합니다.",
