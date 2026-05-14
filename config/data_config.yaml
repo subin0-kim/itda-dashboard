@@ -269,8 +269,8 @@ scoring:
   grid_weights:
     medical: 0.30
     education: 0.30
-    administration: 0.20
-    leisure: 0.20
+    administration: 0.10
+    leisure: 0.30
 
 category_weights:
   medical:
@@ -291,8 +291,8 @@ category_weights:
   overall:
     medical_score: 0.30
     education_score: 0.30
-    admin_score: 0.20
-    leisure_score: 0.20
+    admin_score: 0.10
+    leisure_score: 0.30
 
 pedestrian_network:
   enabled: true
@@ -360,8 +360,8 @@ weights:
   grid:
     medical: 0.30
     education: 0.30
-    administration: 0.20
-    leisure: 0.20
+    administration: 0.10
+    leisure: 0.30
 
 land_use:
   zoning:

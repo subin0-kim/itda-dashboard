@@ -23,7 +23,7 @@ export function FormulaSection() {
         </p>
         <FormulaBlock
           title="격자 통합 점수"
-          formula="GridStrollerScore = 0.30 × MedicalScore + 0.30 × EducationScore + 0.20 × AdminScore + 0.20 × LeisureScore"
+          formula="GridStrollerScore = 0.30 × MedicalScore + 0.30 × EducationScore + 0.10 × AdminScore + 0.30 × LeisureScore"
         />
         <FormulaBlock
           title="구별 점수"

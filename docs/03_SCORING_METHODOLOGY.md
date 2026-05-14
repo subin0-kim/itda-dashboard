@@ -124,8 +124,8 @@ LeisureScore = min(100,
 GridStrollerScore =
   0.30 × MedicalScore
   + 0.30 × EducationScore
-  + 0.20 × AdminScore
-  + 0.20 × LeisureScore
+  + 0.10 × AdminScore
+  + 0.30 × LeisureScore
 ```
 
 ## 구별 점수 산식
