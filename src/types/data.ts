@@ -38,6 +38,7 @@ export type CategorySummary = Partial<Record<CategoryId, CategorySummaryItem[]>>
 
 export interface Metadata {
   source_datasets?: Record<string, string> | MetadataSourceDataset[];
+  pedestrian_network_source_datasets?: MetadataSourceDataset[];
   unavailable_optional_datasets?: string[] | MetadataUnavailableDataset[];
   generated_at?: string | null;
   coordinate_systems?: Record<string, string>;
@@ -90,6 +91,9 @@ export interface MetadataSourceDataset {
   기준시점?: string | null;
   reference_date?: string | null;
   collected_at?: string | null;
+  service_name?: string | null;
+  role?: string | null;
+  usage_note?: string | null;
 }
 
 export interface MetadataUnavailableDataset {

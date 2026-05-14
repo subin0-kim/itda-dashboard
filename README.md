@@ -166,7 +166,7 @@ DistanceAdjustedScore(W, D) = W × max(0, min(1, 2 - D / 800))
 
 기본 최대 점수는 소아청소년과 80, 가정의학과 40, 종합병원 20, 주민센터 80, 구청 20, 어린이집 80, 유치원 20, 공원 70, 도서관/문화시설 30이다.
 
-도보 네트워크 overlay 파일이 생성되면 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson` 형태로 저장된다. 구 상세 페이지에서 "보행 네트워크 보기" 토글로 표시할 수 있으며, 웹에서는 시각화만 수행한다.
+도보 네트워크 overlay 파일이 생성되면 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson` 형태로 저장된다. 구 상세 페이지에서 "보행 네트워크 보기" 토글로 표시할 수 있으며, overlay 레이어는 베이스맵과 250m 격자 히트맵 사이에 배치된다(파랑은 도보 네트워크 링크, 주황은 횡단보도 보조 링크). 토글 ON일 때 히트맵 투명도가 자동으로 낮아져 네트워크가 잘 보이도록 한다. 웹에서는 시각화만 수행한다.
 
 TbHospitalInfo 원천에 별도 진료과목 컬럼이 없어 `scripts/extract_family_medicine.py`는 DUTYNAME(기관명)에 "가정의학"이 포함된 행을 `facility_name_fallback` 방식으로 추출한다.
 

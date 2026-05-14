@@ -141,6 +141,12 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       ensureNetworkLayers(instance, networkData.links, networkData.nodes);
 
       instance.setPaintProperty(DISTRICT_GRID_FILL_LAYER_ID, "fill-color", getMapLibreScoreExpression(categoryId));
+      instance.setPaintProperty(DISTRICT_GRID_FILL_LAYER_ID, "fill-opacity", [
+        "case",
+        ["boolean", ["feature-state", "hover"], false],
+        showNetwork ? 0.7 : 0.85,
+        showNetwork ? 0.4 : 0.62,
+      ]);
       setVisibility(instance, DISTRICT_GRID_FILL_LAYER_ID, hasGrid);
       setVisibility(instance, DISTRICT_GRID_LINE_LAYER_ID, hasGrid);
       if (instance.getLayer(DISTRICT_FACILITY_LAYER_ID)) {
@@ -276,13 +282,22 @@ export function DistrictGridMap({ boundary, grids, facilities, categoryId, selec
       <div className="relative overflow-hidden rounded-lg border border-slate-200">
         <div ref={containerRef} className="h-[620px] w-full" />
         {basemapError ? <BasemapErrorBanner /> : null}
-        <button
-          type="button"
-          onClick={() => setShowNetwork((value) => !value)}
-          className="absolute left-4 top-4 rounded-md border border-slate-200 bg-white/95 px-3 py-2 text-xs font-medium text-slate-700 shadow-sm hover:bg-slate-50"
-        >
-          {showNetwork ? "보행 네트워크 숨기기" : "보행 네트워크 보기"}
-        </button>
+        <div className="absolute left-4 top-4 max-w-[220px] rounded-md border border-slate-200 bg-white/95 p-2 shadow-sm">
+          <button
+            type="button"
+            onClick={() => setShowNetwork((value) => !value)}
+            className="block w-full rounded px-2 py-1 text-xs font-medium text-slate-700 hover:bg-slate-50"
+          >
+            {showNetwork ? "보행 네트워크 숨기기" : "보행 네트워크 보기"}
+          </button>
+          {showNetwork && networkData.links ? (
+            <div className="mt-2 space-y-1 border-t border-slate-100 pt-2 text-[11px] leading-tight text-slate-600">
+              <div className="flex items-center gap-1.5"><span className="inline-block h-0.5 w-3.5 bg-[#1d4ed8]" />도보 네트워크 링크</div>
+              <div className="flex items-center gap-1.5"><span className="inline-block h-0.5 w-3.5 bg-[#f97316]" />횡단보도 보조 링크</div>
+              <p className="text-[10px] text-slate-500">노드는 확대 시 표시됩니다.</p>
+            </div>
+          ) : null}
+        </div>
         <div className="absolute right-4 top-4 w-44">
           <FacilityLegend categories={categoryId === "overall" ? undefined : [categoryId as CategoryId]} />
         </div>
@@ -326,6 +341,7 @@ function ensureNetworkLayers(
   nodes: GeoJsonFeatureCollection | null,
 ) {
   if (!links) return;
+  const beforeId = map.getLayer(DISTRICT_GRID_FILL_LAYER_ID) ? DISTRICT_GRID_FILL_LAYER_ID : undefined;
   upsertGeoJsonSource(map, NETWORK_LINK_SOURCE_ID, links);
   if (!map.getLayer(NETWORK_LINK_LAYER_ID)) {
     map.addLayer(
@@ -334,10 +350,16 @@ function ensureNetworkLayers(
         type: "line",
         source: NETWORK_LINK_SOURCE_ID,
         layout: { visibility: "none" },
-        paint: { "line-color": "#475569", "line-width": 1, "line-opacity": 0.32 },
+        paint: {
+          "line-color": ["match", ["get", "source_service"], "tbTraficCrsng", "#f97316", "#1d4ed8"],
+          "line-width": ["match", ["get", "source_service"], "tbTraficCrsng", 1.6, 0.9],
+          "line-opacity": 0.78,
+        },
       },
-      DISTRICT_FACILITY_LAYER_ID,
+      beforeId,
     );
+  } else {
+    map.moveLayer(NETWORK_LINK_LAYER_ID, beforeId);
   }
   if (nodes) {
     upsertGeoJsonSource(map, NETWORK_NODE_SOURCE_ID, nodes);
@@ -347,12 +369,14 @@ function ensureNetworkLayers(
           id: NETWORK_NODE_LAYER_ID,
           type: "circle",
           source: NETWORK_NODE_SOURCE_ID,
-          minzoom: 14,
+          minzoom: 13,
           layout: { visibility: "none" },
-          paint: { "circle-radius": 2, "circle-color": "#334155", "circle-opacity": 0.45 },
+          paint: { "circle-radius": 2.2, "circle-color": "#1e293b", "circle-stroke-width": 0.6, "circle-stroke-color": "#ffffff", "circle-opacity": 0.85 },
         },
-        DISTRICT_FACILITY_LAYER_ID,
+        beforeId,
       );
+    } else {
+      map.moveLayer(NETWORK_NODE_LAYER_ID, beforeId);
     }
   }
 }

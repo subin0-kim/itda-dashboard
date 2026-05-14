@@ -19,15 +19,15 @@ export function ActualDataSourceTable({ metadata }: ActualDataSourceTableProps) 
         </p>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-md border border-slate-200">
-          <table className="min-w-[920px] w-full text-left text-sm">
+          <table className="min-w-[960px] w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-500">
               <tr>
                 <th className="px-3 py-2">데이터명</th>
                 <th className="px-3 py-2">제공처</th>
                 <th className="px-3 py-2">원본 파일명</th>
                 <th className="px-3 py-2">카테고리</th>
-                <th className="px-3 py-2">시설 유형</th>
-                <th className="px-3 py-2">기준시점</th>
+                <th className="px-3 py-2">시설 유형 / 역할</th>
+                <th className="px-3 py-2">서비스명 / 비고</th>
                 <th className="px-3 py-2">사용 여부</th>
                 <th className="px-3 py-2">원본 URL</th>
               </tr>
@@ -39,8 +39,8 @@ export function ActualDataSourceTable({ metadata }: ActualDataSourceTableProps) 
                   <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.provider)}</td>
                   <td className="px-3 py-2 font-mono text-xs text-slate-600">{readMetadataValue(source.raw_file)}</td>
                   <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.category)}</td>
-                  <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.facility_type)}</td>
-                  <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.기준시점 ?? source.reference_date ?? source.collected_at)}</td>
+                  <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.facility_type ?? source.role)}</td>
+                  <td className="px-3 py-2 text-slate-600">{readMetadataValue(source.service_name ?? source.usage_note)}</td>
                   <td className="px-3 py-2 text-slate-600">{source.used === false ? "미사용" : "사용"}</td>
                   <td className="px-3 py-2 text-slate-600">
                     {source.source_url ? (

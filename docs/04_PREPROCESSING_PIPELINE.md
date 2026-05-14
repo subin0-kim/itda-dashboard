@@ -75,13 +75,17 @@ scripts/preprocess/
 ├─ 01_generate_grid.py
 ├─ 02_prepare_facilities.py
 ├─ 03_calculate_distances.py
+├─ 03b_prepare_pedestrian_network.py
+├─ 03c_calculate_network_distances_by_district.py
+├─ 03d_merge_network_distances.py
 ├─ 04_calculate_scores.py
 ├─ 05_calculate_living_weight.py
 ├─ 06_aggregate_district_scores.py
 └─ 08_export_public_data.py
 
 scripts/validation/
-└─ validate_processed_data.py
+├─ validate_processed_data.py
+└─ validate_pedestrian_network.py
 
 scripts/
 ├─ fetch_seoul_open_data.py
@@ -136,11 +140,15 @@ python scripts/run_preprocessing.py
 python scripts/preprocess/01_generate_grid.py --config config/data_config.yaml
 python scripts/preprocess/02_prepare_facilities.py --config config/data_config.yaml
 python scripts/preprocess/03_calculate_distances.py --config config/data_config.yaml
+python scripts/preprocess/03b_prepare_pedestrian_network.py --config config/data_config.yaml
+python scripts/preprocess/03c_calculate_network_distances_by_district.py --config config/data_config.yaml
+python scripts/preprocess/03d_merge_network_distances.py --config config/data_config.yaml
 python scripts/preprocess/04_calculate_scores.py --config config/data_config.yaml
 python scripts/preprocess/05_calculate_living_weight.py --config config/data_config.yaml
 python scripts/preprocess/06_aggregate_district_scores.py --config config/data_config.yaml
 python scripts/preprocess/08_export_public_data.py --config config/data_config.yaml
 python scripts/validation/validate_processed_data.py --config config/data_config.yaml
+python scripts/validation/validate_pedestrian_network.py --config config/data_config.yaml
 ```
 
 원천 데이터가 없으면 스크립트는 가짜 데이터를 만들지 않고 명확한 에러를 출력한다.
@@ -187,8 +195,8 @@ python scripts/geocode_admin_facilities.py
 
 - `large_retail_optional`, `family_medicine`, 그리고 토지이용 폴리곤(`zoning`, `parks_origin_mask`, `land_cover_optional`, `rivers_optional`, `forest_mountain_optional`)이 optional이다.
 - 파일이 없으면 전처리를 중단하지 않고 `metadata.json`의 `unavailable_optional_datasets`에 기록한다.
-- 대형상업시설 데이터가 없으면 여가 가산식에서 해당 항목은 0으로 기여한다. 현재 여가 산식은 `min(100, 0.70 x ParkScore + 0.30 x LibraryCultureScore [+ 0.30 x LargeRetailScore])`다.
-- 가정의학과 데이터가 없으면 의료 가산식에서 해당 항목은 0으로 기여한다. 현재 의료 산식은 `min(100, 0.80 x PediatricScore + 0.60 x FamilyMedicineScore + 0.20 x GeneralHospitalScore)`다.
+- 대형상업시설 데이터가 없으면 여가 가산식에서 해당 항목은 0으로 기여한다. 현재 여가 산식은 `min(100, ParkScore + LibraryCultureScore [+ LargeRetailScore])`이며, 최대 점수는 공원 70, 도서관/문화시설 30, 대형상업시설 0(optional)이다.
+- 가정의학과 데이터가 없으면 의료 가산식에서 해당 항목은 0으로 기여한다. 현재 의료 산식은 `min(100, PediatricScore + FamilyMedicineScore + GeneralHospitalScore)`이며, 최대 점수는 소아청소년과 80, 가정의학과 40, 종합병원/대학병원 20이다.
 - 토지이용 폴리곤이 모두 없으면 LivingWeight를 계산하지 않고 구별 점수는 `simple_average` fallback을 사용한다.
 - 어떤 여가 산식이 적용되었는지는 `metadata.json`의 `applied_leisure_formula`에 기록한다.
 - 어떤 의료 산식이 적용되었는지는 `metadata.json`의 `applied_medical_formula`와 `family_medicine_used`에 기록한다.

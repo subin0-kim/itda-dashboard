@@ -158,14 +158,17 @@ Optional 데이터가 없더라도 기본 점수 산출은 가능해야 한다. 
 
 전처리에서는 `LNKG_WKT`와 시작/종료 노드 ID를 기준으로 링크를 만들고, 링크 endpoint에서 노드 좌표를 파생한다. 이는 API geometry에서 얻은 값이며 임의 노드 생성이 아니다. 링크 유형코드 엑셀을 참조해 `보행자`가 포함된 링크만 계산용 네트워크에 사용한다. 데이터가 없거나 특정 구 계산이 실패하면 `pedestrian_network_status`와 `distance_method`에 기록하고 직선거리 fallback을 사용한다.
 
-참조 가능한 연관 OpenAPI:
+현재 적용 중인 연관 보조 OpenAPI:
 
-- OA-21209: `tbTraficCrsng`
+- OA-21209: `tbTraficCrsng` — 횡단보도. `LNKG_WKT` LineString을 보조 링크로 표준화해 같은 자치구 도보 네트워크 그래프에 병합한다. `config.pedestrian_network.supplemental_services.crosswalk.include_in_graph`로 활성화하며 `metadata.pedestrian_network_source_datasets`에 기록한다.
+
+향후 검토 가능한 연관 OpenAPI(현재 미사용):
+
 - OA-21211: `tbTraficEntrcLft`
 - OA-21212: `tbTraficElvtr`
 - OA-21213: `tbTraficUndpass`
 
-위 연관 데이터는 향후 도보 경로 해석 보조 데이터로 검토할 수 있으나, 현재 유모차 생활보행 점수의 최단거리 그래프는 OA-21208의 노드/링크를 기준으로 계산한다.
+유모차 생활보행 점수의 최단거리 그래프는 OA-21208 도보 네트워크 노드/링크에 OA-21209 횡단보도 보조 링크를 더해 자치구 단위로 구성한다. 임의 연결선은 만들지 않는다.
 
 ## 데이터 원칙
 

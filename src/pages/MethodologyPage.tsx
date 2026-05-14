@@ -45,6 +45,9 @@ export function MethodologyPage() {
         />
       ) : null}
 
+      <ActualDataSourceTable metadata={metadataValue} />
+      <OptionalDataStatusTable metadata={metadataValue} />
+
       <ProcessSteps />
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="space-y-6">
@@ -60,9 +63,6 @@ export function MethodologyPage() {
 
       <PedestrianNetworkSection metadata={metadataValue} />
       <LivingWeightSection metadata={metadataValue} />
-
-      <ActualDataSourceTable metadata={metadataValue} />
-      <OptionalDataStatusTable metadata={metadataValue} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <SeoulDataHubUsageGuide />

@@ -73,3 +73,4 @@
 - 도보 네트워크 기반 거리도 실제 유모차 통행 가능 여부를 확정하지 않는다.
 - 보도 폭, 단차, 계단, 경사, 공사, 노면 상태 등은 별도 데이터가 없으면 반영되지 않을 수 있다.
 - 도보 네트워크 데이터가 없거나 일부 구에서 계산이 실패하면 직선거리 fallback을 사용하며, 그 비율은 `metadata.network_distance_coverage`와 `metadata.euclidean_fallback_coverage`에 기록한다.
+- OA-21209 횡단보도 보조 링크는 OpenAPI 응답에 포함된 실제 LineString geometry만 병합하며, 임의 횡단보도 연결선을 만들지 않는다.

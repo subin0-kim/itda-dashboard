@@ -2,12 +2,21 @@ import type { Metadata, MetadataSourceDataset, MetadataUnavailableDataset } from
 
 export function normalizeSourceDatasets(metadata: Metadata | null): MetadataSourceDataset[] {
   const source = metadata?.source_datasets;
-  if (!source) return [];
-  if (Array.isArray(source)) return source.map((item) => ({ ...item }));
-  return Object.entries(source).map(([name, rawFile]) => ({
-    name,
-    raw_file: String(rawFile),
+  const base: MetadataSourceDataset[] = !source
+    ? []
+    : Array.isArray(source)
+      ? source.map((item) => ({ ...item }))
+      : Object.entries(source).map(([name, rawFile]) => ({ name, raw_file: String(rawFile) }));
+
+  const networkSources = (metadata?.pedestrian_network_source_datasets ?? []).map((item) => ({
+    ...item,
+    category: item.category ?? "pedestrian_network",
   }));
+  const livingWeightSources = (metadata?.living_weight_source_datasets ?? []).map((item) => ({
+    ...item,
+    category: item.category ?? "living_weight",
+  }));
+  return [...base, ...networkSources, ...livingWeightSources];
 }
 
 export function normalizeUnavailableOptionalDatasets(metadata: Metadata | null): MetadataUnavailableDataset[] {

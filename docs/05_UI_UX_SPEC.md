@@ -45,12 +45,13 @@
 
 1. 베이스맵 raster
 2. 서울시 또는 선택 구 경계 fill
-3. 250m 격자 heatmap fill (반투명 분석 레이어)
-4. 격자 outline
-5. 주요 시설 포인트
-6. 구 경계 line (선택 구 강조)
-7. hover / selected highlight
-8. popup / tooltip
+3. 보행 네트워크 링크/노드 overlay (DistrictDetailPage에서 토글 ON일 때만, 베이스맵과 히트맵 사이에 배치)
+4. 250m 격자 heatmap fill (반투명 분석 레이어. 네트워크 overlay가 켜지면 fill-opacity가 자동으로 낮아진다)
+5. 격자 outline
+6. 주요 시설 포인트
+7. 구 경계 line (선택 구 강조)
+8. hover / selected highlight
+9. popup / tooltip
 
 - 격자 heatmap은 단독 지도가 아니라 베이스맵 위에 올라가는 분석 레이어다.
 - 시설 포인트는 카테고리별 색상(의료, 행정, 교육, 여가)과 흰색 outline으로 베이스맵과 heatmap 위에서도 잘 보이도록 표시한다.
@@ -132,4 +133,4 @@
 - `MissingDataNotice`
 ## 보행 네트워크 overlay
 
-DistrictDetailPage는 구별 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson`가 있을 때만 보행 네트워크 레이어를 표시한다. 기본값은 OFF이며 사용자가 "보행 네트워크 보기" 토글을 켤 때 해당 구의 파일만 로드한다. 웹은 최단거리나 점수를 계산하지 않고 전처리 결과를 시각화만 한다.
+DistrictDetailPage는 구별 `public/data/network/{district_code}_nodes.geojson`, `public/data/network/{district_code}_links.geojson`가 있을 때만 보행 네트워크 레이어를 표시한다. 기본값은 OFF이며 사용자가 "보행 네트워크 보기" 토글을 켤 때 해당 구의 파일만 로드한다. overlay 레이어는 베이스맵과 250m 격자 히트맵 사이에 배치되어 히트맵이 가려지지 않으며, 토글 ON 상태에서 격자 히트맵 투명도가 낮아져 네트워크가 잘 보이도록 한다. 링크 색상은 OA-21208 도보 네트워크는 파랑, OA-21209 횡단보도 보조 링크는 주황으로 구분한다. 노드 포인트는 확대(zoom ≥ 13) 시 자동으로 노출된다. 웹은 최단거리나 점수를 계산하지 않고 전처리 결과를 시각화만 한다.
